@@ -9,8 +9,8 @@ golf.o: golf.cpp golf.h
 parser.o: parser.cpp parser.h
 	g++ -c parser.cpp
 
-lex.o: lex.cpp lex.h
-	g++ -c lex.cpp
+lexer.o: lexer.cpp lexer.h
+	g++ -c lexer.cpp
 
 clean:
 	-rm *.o golf	
