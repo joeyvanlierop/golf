@@ -1,10 +1,11 @@
 #include "parser.h"
+#include <iostream>
 
 Parser::Parser() {
     this->lexer = new Lexer();
 }
 
-NumericLiteralNode Parser::Parse(std::string input) {
+Node Parser::Parse(std::string input) {
     this->input = input;
     this->lexer->Init(this->input);
 
@@ -13,7 +14,7 @@ NumericLiteralNode Parser::Parse(std::string input) {
     return this->Program();
 }
 
-NumericLiteralNode Parser::Program() {
+Node Parser::Program() {
     if(lookahead->type == "NUMBER")
         return NumericLiteral();
 
@@ -23,7 +24,7 @@ NumericLiteralNode Parser::Program() {
 NumericLiteralNode Parser::NumericLiteral() {
     auto token = Eat("NUMBER");
     return {
-        .value = std::stoi(token.value)
+            .value = std::stoi(token.value)
     };
 }
 

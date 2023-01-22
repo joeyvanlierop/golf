@@ -1,10 +1,16 @@
 #include <string>
 #include "lexer.h"
 
-class Node {
+enum NodeType {
+    NumericLiteral
+};
+
+struct Node {
+    NodeType type;
 };
 
 struct NumericLiteralNode : public Node  {
+    NodeType type = NumericLiteral;
     long value;
 };
 
@@ -13,10 +19,10 @@ private:
     Lexer* lexer;
     std::string input;
     std::optional<Token> lookahead;
-    NumericLiteralNode Program();
+    Node Program();
     NumericLiteralNode NumericLiteral();
 public:
     Parser();
-    NumericLiteralNode Parse(std::string input);
+    Node Parse(std::string input);
     Token Eat(std::string tokenType);
 };

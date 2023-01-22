@@ -1,5 +1,6 @@
 # Build files
 golf
+golf.exe
 *.o
 
 # Vim stuff
