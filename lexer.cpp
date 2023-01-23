@@ -24,12 +24,11 @@ std::optional<Token> Lexer::GetNextToken() {
         auto tokenValue = Match(currentInput, regexp);
 
         // Couldn't match this rule, continue
-        if(!tokenValue) {
+        if(!tokenValue)
             continue;
-        }
 
-        // Matched type should be ignored, return next match
-        if(tokenType == "null")
+        // Matched kind should be ignored, return next match
+        if(tokenType == "ignore")
             return GetNextToken();
 
         // We return the token
@@ -44,7 +43,7 @@ std::optional<Token> Lexer::GetNextToken() {
 
 std::optional<std::string> Lexer::Match(std::string input, std::string regexp) {
     std::smatch match;
-    if(!std::regex_match(input, match,std::regex(regexp)))
+    if(!std::regex_search(input, match,std::regex(regexp)))
         return std::nullopt;
 
     cursor += match[0].length();

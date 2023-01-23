@@ -1,8 +1,10 @@
-#include <string>
 #include "lexer.h"
+#include <string>
 
 enum NodeType {
-    NumericLiteral
+    NumericLiteral,
+    StringLiteral,
+    IdentifierLiteral,
 };
 
 struct Node {
@@ -11,7 +13,17 @@ struct Node {
 
 struct NumericLiteralNode : public Node  {
     NodeType type = NumericLiteral;
-    long value;
+    int value;
+};
+
+struct StringLiteralNode : public Node  {
+    NodeType type = StringLiteral;
+    std::string value;
+};
+
+struct IdentifierLiteralNode : public Node  {
+    NodeType type = StringLiteral;
+    std::string value;
 };
 
 class Parser {
@@ -20,7 +32,10 @@ private:
     std::string input;
     std::optional<Token> lookahead;
     Node Program();
-    NumericLiteralNode NumericLiteral();
+    Node DummyNode();
+    NumericLiteralNode IntegerLiteral();
+    StringLiteralNode StringLiteral();
+    IdentifierLiteralNode IdentifierLiteral();
 public:
     Parser();
     Node Parse(std::string input);
