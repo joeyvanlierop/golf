@@ -39,7 +39,7 @@ std::optional<Token> Lexer::GetNextToken() {
     }
 
     cursor += 1;
-    std::cout << "warning: skipping unknown character '" << currentInput[0] << "'" << std::endl;
+    std::cerr << "warning: skipping unknown character '" << currentInput[0] << "'" << std::endl;
     return GetNextToken();
 }
 
