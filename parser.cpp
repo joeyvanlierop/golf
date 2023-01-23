@@ -13,7 +13,6 @@ Node Parser::Parse(std::string input) {
     Node n;
     while(lookahead.has_value())
         n = Program();
-
     return n;
 }
 

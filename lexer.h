@@ -71,6 +71,10 @@ static std::pair<std::string, std::string> Spec[] =  {
         {"^;", ";"},        // Semicolon
         {"^:", ":"},        // Colon
         {"^=", "="},        // Assignment
+
+        // Errors
+        {"[^\\x00-\\x7F]+", "skipping non-ASCII input character"},
+        {"^&\b", "bitwise AND not supported in GoLF"},
 };
 
 class Lexer {

@@ -9,6 +9,9 @@ int main() {
 4 213
 "abc"
 var cole
+^
+^
+Þ­¾ï
 if {
     var test = 0;
 })";

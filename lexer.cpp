@@ -27,6 +27,12 @@ std::optional<Token> Lexer::GetNextToken() {
         if(!tokenValue)
             continue;
 
+        // Matched kind is an error, halt immediately
+        if(tokenType == "error"){
+            std::cout << "error: " << currentInput[0] << "'" << std::endl;
+        }
+            return GetNextToken();
+
         // Matched kind should be ignored, return next match
         if(tokenType == "ignore")
             return GetNextToken();
@@ -38,7 +44,9 @@ std::optional<Token> Lexer::GetNextToken() {
         };
     }
 
-    throw std::runtime_error("Unexpected token:" + currentInput[0]);
+    cursor += 1;
+    std::cout << "warning: skipping unknown character '" << currentInput[0] << "'" << std::endl;
+    return GetNextToken();
 }
 
 std::optional<std::string> Lexer::Match(std::string input, std::string regexp) {
