@@ -27,12 +27,6 @@ std::optional<Token> Lexer::GetNextToken() {
         if(!tokenValue)
             continue;
 
-        // Matched kind is an error, halt immediately
-        if(tokenType == "error"){
-            std::cout << "error: " << currentInput[0] << "'" << std::endl;
-        }
-            return GetNextToken();
-
         // Matched kind should be ignored, return next match
         if(tokenType == "ignore")
             return GetNextToken();

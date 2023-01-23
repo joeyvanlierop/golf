@@ -10,8 +10,7 @@ int main() {
 "abc"
 var cole
 ^
-^
-Þ­¾ï
+//Þ­¾ï
 if {
     var test = 0;
 })";

@@ -24,22 +24,22 @@ static std::pair<std::string, std::string> Spec[] =  {
         {"^\\/\\/.*", "ignore"},
 
         // Keywords
-        {"^break", "break"},
-        {"^else", "else"},
-        {"^for", "for"},
-        {"^func", "func"},
-        {"^if", "if"},
-        {"^return", "return"},
-        {"^var", "var"},
-
-        // Integer literals
-        {"^\\d+\\b", "int"},
+        {"^break\\b", "break"},
+        {"^else\\b", "else"},
+        {"^for\\b", "for"},
+        {"^func\\b", "func"},
+        {"^if\\b", "if"},
+        {"^return\\b", "return"},
+        {"^var\\b", "var"},
 
         // Double-quoted strings
         {"^\"[^\"]*\"", "string"},
 
+        // Integer literals
+        {"^[0-9]+\\b", "int"},
+
         // Identifiers
-        {"^\\w+\\b", "id"},
+        {"^[a-zA-Z_]\\w*\\b", "id"},
 
         // Algebraic operators
         {"^\\+$", "+"},     // Addition
@@ -73,8 +73,8 @@ static std::pair<std::string, std::string> Spec[] =  {
         {"^=", "="},        // Assignment
 
         // Errors
-        {"[^\\x00-\\x7F]+", "skipping non-ASCII input character"},
-        {"^&\b", "bitwise AND not supported in GoLF"},
+        // {"[^\\x00-\\x7F]+", "skipping non-ASCII input character"},
+        // {"^&\b", "bitwise AND not supported in GoLF"},
 };
 
 class Lexer {
