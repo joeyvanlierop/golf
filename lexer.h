@@ -3,78 +3,65 @@
 #include <regex>
 #include <iostream>
 #include <iomanip>
+#include "token.h"
 
-struct Token {
-    std::string type;
-    std::string value;
-    int line = 0;
-    int column = 0;
+//struct Token {
+//    std::string type;
+//    std::string value;
+//    int line = 0;
+//    int column = 0;
+//
+//    friend std::ostream& operator<<(std::ostream &os, const Token& t) {
+//        os << std::setw(8) << std::left  << t.type << " [" << t.value << "] " << "@ (" << t.line << ", " << t.column << ")";
+//        return os;
+//    }
+//};
 
-    friend std::ostream& operator<<(std::ostream &os, const Token& t) {
-        os << std::setw(8) << std::left  << t.type << " [" << t.value << "] " << "@ (" << t.line << ", " << t.column << ")";
-        return os;
-    }
-};
-
-static std::pair<std::string, std::string> Spec[] =  {
+static std::pair<std::string, TokenType> Spec[] =  {
         // Whitespace
-        {"^\\s+", "ignore"},
+        {"^\\s+", Unknown},
 
         // Single-line comments
-        {"^\\/\\/.*", "ignore"},
+        {"^\\/\\/.*", Unknown},
 
         // Keywords
-        {"^break\\b", "break"},
-        {"^else\\b", "else"},
-        {"^for\\b", "for"},
-        {"^func\\b", "func"},
-        {"^if\\b", "if"},
-        {"^return\\b", "return"},
-        {"^var\\b", "var"},
+        {"^break\\b", Break},
+        {"^else\\b", Else},
+        {"^for\\b", For},
+        {"^func\\b", Func},
+        {"^if\\b", If},
+        {"^return\\b", Return},
+        {"^var\\b", Var},
 
         // Double-quoted strings
-        {"^\"[^\"]*\"", "string"},
+        {"^\"[^\"]*\"", String},
 
         // Integer literals
-        {"^[0-9]+\\b", "int"},
+        {"^[0-9]+\\b", Integer},
 
         // Identifiers
-        {"^[a-zA-Z_]\\w*\\b", "id"},
+        {"^[a-zA-Z_]\\w*\\b", Identifier},
 
         // Algebraic operators
-        {"^\\+$", "+"},     // Addition
-        {"^-$", "-"},       // Subtraction
-        {"^\\*$", "*"},     // Multiplication
-        {"^/$", "/"},       // Division
-        {"^%$", "%"},       // Modulus
+        {"^\\+$", Add},     // Addition
+        {"^-$", Subtract},       // Subtraction
+        {"^\\*$", Multiply},     // Multiplication
+        {"^/$", Divide},       // Division
+        {"^%$", Modulo},       // Modulus
 
         // Relational operators
-        {"^>", ">"},        // Greater than
-        {"^>=", ">="},      // Greater than or equals
-        {"^<", "<"},        // Less than
-        {"^<=", "<="},      // Less than or equals
-        {"==", "=="},       // Equals
-        {"!=", "!="},       // Not equals
+        {"^>", Greater},        // Greater than
+        {"^>=", GreaterEqual},      // Greater than or equals
+        {"^<", Less},        // Less than
+        {"^<=", LessEqual},      // Less than or equals
+        {"==", Equal},       // Equals
+        {"!=", NotEqual},       // Not equals
 
         // Logical operators
-        {"^&&", "&&"},      // AND
-        {"^\\|\\|", "||"},  // OR
-        {"^!", "!"},        // NOT
-
-        // Punctuation
-        {"^\\(", "("},      // Left parenthesis
-        {"^\\)", ")"},      // Right parenthesis
-        {"^\\{", "{"},      // Left curly brace
-        {"^\\}", "}"},      // Right curly brace
-        {"^,", ","},        // Comma
-        {"^\\.", "."},      // Dot
-        {"^;", ";"},        // Semicolon
-        {"^:", ":"},        // Colon
-        {"^=", "="},        // Assignment
-
-        // Errors
-        // {"[^\\x00-\\x7F]+", "skipping non-ASCII input character"},
-        // {"^&\b", "bitwise AND not supported in GoLF"},
+        {"^&&", And},      // AND
+        {"^\\|\\|", Or},  // OR
+        {"^!", Not},        // NOT
+        {"^=", Equal},        // Assignment
 };
 
 class Lexer {

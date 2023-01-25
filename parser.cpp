@@ -29,14 +29,14 @@ Node Parser::Program() {
     throw std::runtime_error("Unexpected kind: " + lookahead->type);
 }
 
-Token Parser::Eat(std::string tokenType) {
+Token Parser::Eat(TokenType tokenType) {
     auto token = lookahead;
 
     if(!token)
         throw std::runtime_error("Unexpected end of input, expected:" + tokenType);
 
     if(token->type != tokenType)
-        throw std::runtime_error("Unexpected token: " + token->type + ", expected:" + tokenType);
+        throw std::runtime_error("Unexpected token: " + to_string(token->type) + ", expected:" + to_string(tokenType));
 
     // Advance lookahead
     this->lookahead = lexer->GetNextToken();
@@ -52,21 +52,21 @@ Node Parser::DummyNode() {
 }
 
 NumericLiteralNode Parser::IntegerLiteral() {
-    auto token = Eat("int");
+    auto token = Eat(TokenType::Integer);
     return {
             .value = std::stoi(token.value)
     };
 }
 
 StringLiteralNode Parser::StringLiteral() {
-    auto token = Eat("string");
+    auto token = Eat(TokenType::String);
     return {
             .value = token.value
     };
 }
 
 IdentifierLiteralNode Parser::IdentifierLiteral() {
-    auto token = Eat("id");
+    auto token = Eat(TokenType::Identifier);
     return {
             .value = token.value
     };

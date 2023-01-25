@@ -28,7 +28,7 @@ std::optional<Token> Lexer::GetNextToken() {
             continue;
 
         // Matched kind should be ignored, return next match
-        if(tokenType == "ignore")
+        if(tokenType == Unknown)
             return GetNextToken();
 
         // We return the token

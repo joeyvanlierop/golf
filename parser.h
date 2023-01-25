@@ -39,5 +39,5 @@ private:
 public:
     Parser();
     Node Parse(std::string input);
-    Token Eat(std::string tokenType);
+    Token Eat(TokenType tokenType);
 };
