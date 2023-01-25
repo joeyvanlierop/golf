@@ -5,18 +5,6 @@
 #include <iomanip>
 #include "token.h"
 
-//struct Token {
-//    std::string type;
-//    std::string value;
-//    int line = 0;
-//    int column = 0;
-//
-//    friend std::ostream& operator<<(std::ostream &os, const Token& t) {
-//        os << std::setw(8) << std::left  << t.type << " [" << t.value << "] " << "@ (" << t.line << ", " << t.column << ")";
-//        return os;
-//    }
-//};
-
 static std::pair<std::string, TokenType> Spec[] =  {
         // Whitespace
         {"^\\s+", Unknown},
