@@ -55,7 +55,7 @@ enum TokenType {
 
 std::ostream &operator<<(std::ostream &os, TokenType tokenType);
 
-std::string to_string(TokenType const& tokenType);
+std::string to_string(TokenType const &tokenType);
 
 struct Token {
     TokenType type;
