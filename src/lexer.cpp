@@ -115,7 +115,7 @@ std::optional<Token> Lexer::match_token() {
                 return identifier();
             // Unknown
             } else {
-                return create_token(Warning, "unknown character " + std::string(1, c));
+                return create_token(Warning, "unknown character '" + std::string(1, c) + "'");
             }
     }
 }
