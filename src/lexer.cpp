@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include <iostream>
+#include <set>
 
 Lexer::Lexer(const std::string &input) : input(input) {}
 
@@ -8,11 +9,82 @@ bool Lexer::is_at_end() {
 }
 
 char Lexer::advance() {
+    column++;
     return input[current++];
 }
 
-std::vector<Token> Lexer::match_tokens() {
+bool Lexer::match(char expected) {
+    if (peek() != expected)
+        return false;
 
+    advance();
+    return true;
+}
+
+TokenType Lexer::either(char expected, TokenType matched, TokenType unmatched) {
+    return match(expected) ? matched : unmatched;
+}
+
+char Lexer::peek() {
+    return input.at(current);
+}
+
+std::optional<Token> Lexer::newline() {
+    std::optional<Token> token;
+    const std::set<TokenType> valid = {
+            Identifier, Integer, String, Break, Return, RightParen, RightBracket
+    };
+    if (tokens.size() > 0)
+        if (valid.contains(tokens.back().type))
+            token = create_token(Semicolon, "\\n");
+    line++;
+    column = 1;
+    return token;
+}
+
+Token Lexer::number() {
+    while (!is_at_end() && is_digit(peek()))
+        advance();
+    return create_token(Integer);
+}
+
+Token Lexer::identifier() {
+    while (!is_at_end() && is_alphanumeric(peek()))
+        advance();
+
+    auto lexeme = input.substr(start, (current - start));
+    if (Keywords.count(lexeme))
+        return create_token(Keywords[lexeme]);
+    return create_token(Identifier);
+}
+
+Token Lexer::create_token(TokenType token_type) {
+    return create_token(token_type, start, current);
+}
+
+Token Lexer::create_token(TokenType token_type, int start, int end) {
+    return Token(token_type, input.substr(start, (end - start)), line, column - current + start);
+}
+
+Token Lexer::create_token(TokenType token_type, std::string lexeme) {
+    return Token(token_type, lexeme, line, column - current + start);
+}
+
+bool Lexer::is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+bool Lexer::is_alpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+           c == '_';
+}
+
+bool Lexer::is_alphanumeric(char c) {
+    return is_alpha(c) || is_digit(c);
+}
+
+std::vector<Token> Lexer::match_tokens() {
     while (!is_at_end()) {
         start = current;
         auto token = match_token();
@@ -32,16 +104,11 @@ std::optional<Token> Lexer::match_token() {
         case '\t':
             return std::nullopt;
 
-        // Newline
+            // Newline (with semicolon inference)
         case '\n':
-            line++;
-            if(tokens.size() > 0)
-                for(auto valid : {Identifier , Integer , String , Break , Return , RightParen , RightBracket})
-                    if(tokens.back().type == valid)
-                        return create_token(Semicolon, "\\n");
-            return std::nullopt;
+            return newline();
 
-        // Single character
+            // Single character
         case '{':
             return create_token(LeftBracket);
         case '}':
@@ -59,7 +126,7 @@ std::optional<Token> Lexer::match_token() {
         case '*':
             return create_token(Multiply);
 
-        // Either
+            // Either
         case '!':
             return create_token(either('=', NotEqual, Not));
         case '=':
@@ -69,7 +136,7 @@ std::optional<Token> Lexer::match_token() {
         case '<':
             return create_token(either('=', LessEqual, Less));
 
-        // Binary
+            // Binary
         case '&':
             if (match('&'))
                 return std::nullopt;
@@ -81,7 +148,7 @@ std::optional<Token> Lexer::match_token() {
             else
                 return create_token(Error, "bitwise OR not supported");
 
-        // Comment
+            // Comment
         case '/':
             if (match('/')) {
                 while (!is_at_end() && peek() != '\n')
@@ -91,7 +158,7 @@ std::optional<Token> Lexer::match_token() {
                 return create_token(Divide);
             }
 
-        // String literal
+            // String literal
         case '"':
             while (!is_at_end() && peek() != '"') {
                 if (peek() == '\n')
@@ -105,78 +172,18 @@ std::optional<Token> Lexer::match_token() {
             advance();
             return create_token(String, start + 1, current - 1);
 
-        // Non-trivial
+            // Non-trivial
         default:
             // Integer literal
             if (is_digit(c))
                 return number();
 
-            // Identifier
+                // Identifier
             else if (is_alpha(c))
                 return identifier();
 
-            // Unknown
+                // Unknown
             else
                 return create_token(Warning, "unknown character '" + std::string(1, c) + "'");
     }
 }
-
-Token Lexer::identifier() {
-    while (!is_at_end() && is_alphanumeric(peek()))
-        advance();
-
-    auto lexeme = input.substr(start, (current - start));
-    if (Keywords.count(lexeme))
-        return create_token(Keywords[lexeme]);
-    return create_token(Identifier);
-}
-
-Token Lexer::number() {
-    while (!is_at_end() && is_digit(peek()))
-        advance();
-    return create_token(Integer);
-}
-
-Token Lexer::create_token(TokenType token_type) {
-    return create_token(token_type, start, current);
-}
-
-Token Lexer::create_token(TokenType token_type, int start, int end) {
-    return Token(token_type, input.substr(start, (end - start)), line);
-}
-
-Token Lexer::create_token(TokenType token_type, std::string lexeme) {
-    return Token(token_type, lexeme, line);
-}
-
-bool Lexer::match(char expected) {
-    if (peek() != expected)
-        return false;
-
-    advance();
-    return true;
-}
-
-TokenType Lexer::either(char expected, TokenType matched, TokenType unmatched) {
-    return match(expected) ? matched : unmatched;
-}
-
-char Lexer::peek() {
-    return input.at(current);
-}
-
-
-bool Lexer::is_digit(char c) {
-    return c >= '0' && c <= '9';
-}
-
-bool Lexer::is_alpha(char c) {
-    return (c >= 'a' && c <= 'z') ||
-           (c >= 'A' && c <= 'Z') ||
-           c == '_';
-}
-
-bool Lexer::is_alphanumeric(char c) {
-    return is_alpha(c) || is_digit(c);
-}
-

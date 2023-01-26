@@ -13,6 +13,7 @@ private:
     int start = 0;
     int current = 0;
     int line = 1;
+    int column = 1;
     std::string input;
     std::vector<Token> tokens;
 
@@ -29,4 +30,5 @@ private:
     bool is_alphanumeric(char c);
     Token number();
     Token identifier();
+    std::optional<Token> newline();
 };

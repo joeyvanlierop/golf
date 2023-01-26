@@ -1,7 +1,8 @@
 #include "token.h"
 #include <iomanip>
 
-Token::Token(TokenType type, const std::string &lexeme, int line) : type(type), lexeme(lexeme), line(line) {}
+Token::Token(TokenType type, const std::string &lexeme, int line, int column) : type(type), lexeme(lexeme), line(line),
+                                                                                column(column) {}
 
 std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     switch (tokenType) {

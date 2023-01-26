@@ -69,9 +69,9 @@ struct Token {
     TokenType type;
     std::string lexeme;
     int line;
-    int column = 0;
+    int column;
 
-    Token(TokenType type, const std::string &lexeme, int line);
+    Token(TokenType type, const std::string &lexeme, int line, int column);
 };
 
 std::ostream &operator<<(std::ostream &os, Token token);
