@@ -12,7 +12,6 @@ char Lexer::advance() {
 }
 
 std::vector<Token> Lexer::match_tokens() {
-    std::vector<Token> tokens;
 
     while (!is_at_end()) {
         start = current;
@@ -36,6 +35,8 @@ std::optional<Token> Lexer::match_token() {
         // Newline
         case '\n':
             line++;
+            if(tokens.size() > 0 && tokens.back().type & (Identifier | Integer | String | Break | Return | RightParen | RightBracket) > 0)
+                return create_token(Semicolon, current, current);
             return std::nullopt;
 
         // Single character
@@ -104,10 +105,13 @@ std::optional<Token> Lexer::match_token() {
 
         // Non-trivial
         default:
+            // Integer literal
             if (is_digit(c)) {
                 return number();
+            // Identifier
             } else if (is_alpha(c)) {
                 return identifier();
+            // Unknown
             } else {
                 std::cerr << "warning: skipping unknown character '" << c << "'" << " on line " << line << std::endl;
                 return std::nullopt;

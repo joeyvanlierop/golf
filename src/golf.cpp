@@ -7,7 +7,7 @@ int main() {
     std::string input = R"(
 42
 4 213 ^
-"abc"
+"abc";
 var cole
 ^
 Þ­¾ï

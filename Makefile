@@ -1,15 +1,15 @@
 .PHONY: clean
 
-golf: golf.o lexer.o token.o
-	g++ -g golf.o lexer.o token.o -o golf
+golf: obj/golf.o obj/lexer.o obj/token.o
+	g++ -g obj/golf.o obj/lexer.o obj/token.o -o golf
 
-golf.o: golf.cpp golf.h
+obj/golf.o: src/golf.cpp src/golf.h
 	g++ -c golf.cpp
 
-lexer.o: lexer.cpp lexer.h token.o
+obj/lexer.o: src/lexer.cpp src/lexer.h obj/token.o
 	g++ -c lexer.cpp
 
-token.o: token.cpp token.h
+obj/token.o: src/token.cpp src/token.h
 	g++ -c token.cpp
 
 clean:

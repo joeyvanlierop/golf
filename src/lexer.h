@@ -14,6 +14,7 @@ private:
     int current = 0;
     int line = 1;
     std::string input;
+    std::vector<Token> tokens;
 
     bool is_at_end();
     char advance();

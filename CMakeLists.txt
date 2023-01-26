@@ -3,4 +3,4 @@ project(cpsc_411)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(cpsc_411 golf.cpp lexer.cpp token.cpp)
+add_executable(cpsc_411 src/golf.cpp src/lexer.cpp src/token.cpp)
