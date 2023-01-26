@@ -1,77 +1,172 @@
 #include "lexer.h"
 #include <iostream>
 
-void Lexer::Init(std::string input) {
-    this->input = input;
-    this->cursor = 0;
-}
+Lexer::Lexer(const std::string &input) : input(input) {}
 
 bool Lexer::is_at_end() {
     return current >= input.length();
 }
 
 char Lexer::advance() {
-	return input[current++];
+    return input[current++];
 }
-
-Token Lexer::match_token() {
-	char c = advance();
-	switch(c) {
-		case:	
-	} 
-}
-
 
 std::vector<Token> Lexer::match_tokens() {
-	std::vector<Token> tokens;
+    std::vector<Token> tokens;
 
-	while(!is_at_end()) {
-		start = current();
-		token = match_token();
-		tokens.push_back(token);		
-	}
-
-	return tokens;
-}
-
-std::optional<Token> Lexer::GetNextToken() {
-    // We are out of tokens
-    if(!HasMoreTokens()) {
-        return std::nullopt;
+    while (!is_at_end()) {
+        start = current;
+        auto token = match_token();
+        if (token.has_value()) tokens.push_back(token.value());
     }
+    tokens.push_back(create_token(Eof, current, current));
 
-    // Slice the input to begin at the cursor
-    auto currentInput = input.substr(cursor);
+    return tokens;
+}
 
-    // Iterate over our specification rules
-    for(auto [regexp, tokenType] : Spec) {
-        auto tokenValue = Match(currentInput, regexp);
+std::optional<Token> Lexer::match_token() {
+    char c = advance();
+    switch (c) {
+        // Whitespace
+        case ' ':
+        case '\r':
+        case '\t':
+            return std::nullopt;
 
-        // Couldn't match this rule, continue
-        if(!tokenValue)
-            continue;
+        // Newline
+        case '\n':
+            line++;
+            return std::nullopt;
 
-        // Matched kind should be ignored, return next match
-        if(tokenType == Unknown)
-            return GetNextToken();
+        // Single character
+        case '{':
+            return create_token(LeftBracket);
+        case '}':
+            return create_token(RightBracket);
+        case '(':
+            return create_token(LeftParen);
+        case ')':
+            return create_token(RightParen);
+        case ';':
+            return create_token(Semicolon);
+        case ',':
+            return create_token(Comma);
+        case '+':
+            return create_token(Add);
+        case '*':
+            return create_token(Multiply);
 
-        // We return the token
-        return (Token){
-            .type = tokenType,
-            .value = tokenValue.value(),
-        };
+        // Either
+        case '!':
+            return create_token(either('=', NotEqual, Not));
+        case '=':
+            return create_token(either('=', EqualEqual, Equal));
+        case '>':
+            return create_token(either('=', GreaterEqual, Greater));
+        case '<':
+            return create_token(either('=', LessEqual, Less));
+
+        // Binary
+        case '&':
+            if (match('&'))
+                return std::nullopt;
+            else
+                throw std::runtime_error("error: bitwise AND not supported in GoLF at line " + line);
+        case '|':
+            if (match('|'))
+                return std::nullopt;
+            else
+                throw std::runtime_error("error: bitwise AND not supported in GoLF at line " + line);
+
+        // Comment
+        case '/':
+            if (match('/')) {
+                while (!is_at_end() && peek() != '\n')
+                    advance();
+                return std::nullopt;
+            } else {
+                return create_token(Divide);
+            }
+
+        // String literal
+        case '"':
+            while (!is_at_end() && peek() != '"') {
+                if (peek() == '\n')
+                    throw std::runtime_error("error: string contains newline on line " + line);
+                advance();
+            }
+
+            if (is_at_end())
+                throw std::runtime_error("error: unterminated string on line " + line);
+
+            advance();
+            return create_token(String, start + 1, current - 1);
+
+        // Non-trivial
+        default:
+            if (is_digit(c)) {
+                return number();
+            } else if (is_alpha(c)) {
+                return identifier();
+            } else {
+                std::cerr << "warning: skipping unknown character '" << c << "'" << " on line " << line << std::endl;
+                return std::nullopt;
+            }
     }
-
-    cursor += 1;
-    std::cerr << "warning: skipping unknown character '" << currentInput[0] << "'" << std::endl;
-    return GetNextToken();
 }
 
-std::optional<std::string> Lexer::Match(std::string input, std::string regexp) {
-    std::smatch match;
-    if(!std::regex_search(input, match,std::regex(regexp)))
-        return std::nullopt;
+Token Lexer::identifier() {
+    while (!is_at_end() && is_alphanumeric(peek()))
+        advance();
 
-    cursor += match[0].length();
-    return match[0];
+    auto lexeme = input.substr(start, (current - start));
+    if (Keywords.count(lexeme))
+        return create_token(Keywords[lexeme]);
+    return create_token(Identifier);
 }
+
+Token Lexer::number() {
+    while (!is_at_end() && is_digit(peek()))
+        advance();
+    return create_token(Integer);
+}
+
+Token Lexer::create_token(TokenType token_type) {
+    return create_token(token_type, start, current);
+}
+
+Token Lexer::create_token(TokenType token_type, int start, int end) {
+    return Token(token_type, input.substr(start, (end - start)), line);
+}
+
+bool Lexer::match(char expected) {
+    if (peek() != expected)
+        return false;
+
+    advance();
+    return true;
+}
+
+TokenType Lexer::either(char expected, TokenType matched, TokenType unmatched) {
+    return match(expected) ? matched : unmatched;
+}
+
+char Lexer::peek() {
+    return input.at(current);
+}
+
+
+bool Lexer::is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+bool Lexer::is_alpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+           c == '_';
+}
+
+bool Lexer::is_alphanumeric(char c) {
+    return is_alpha(c) || is_digit(c);
+}
+

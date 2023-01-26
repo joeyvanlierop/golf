@@ -5,3 +5,6 @@ golf.exe
 
 # Vim stuff
 *.swp
+
+# CLion stuff
+cmake-build-debug/

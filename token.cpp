@@ -1,6 +1,8 @@
 #include "token.h"
 #include <iomanip>
 
+Token::Token(TokenType type, const std::string &lexeme, int line) : type(type), lexeme(lexeme), line(line) {}
+
 std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     switch (tokenType) {
         case TokenType::LeftBracket :
@@ -73,14 +75,8 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     return os << static_cast<std::uint16_t>(tokenType);
 }
 
-std::string to_string(TokenType const& tokenType)
-{
-    std::ostringstream ss;
-    ss << tokenType;
-    return std::move(ss).str();
+std::ostream &operator<<(std::ostream &os, Token token) {
+    return os << std::setw(8) << std::left << token.type << " [" << token.lexeme << "] " << "@ (" << token.line << ", "
+              << token.column << ")";
 }
 
-std::ostream &operator<<(std::ostream &os, Token token) {
-    return os << std::setw(8) << std::left << token.type << " [" << token.value << "] " << "@ (" << token.line << ", "
-       << token.column << ")";
-}

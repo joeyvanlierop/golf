@@ -1,67 +1,30 @@
 #include <string>
+#include <vector>
 #include <optional>
-#include <regex>
-#include <iostream>
-#include <iomanip>
 #include "token.h"
 
-static std::pair<std::string, TokenType> Spec[] =  {
-        // Whitespace
-        {"^\\s+", Unknown},
-
-        // Single-line comments
-        {"^\\/\\/.*", Unknown},
-
-        // Keywords
-        {"^break\\b", Break},
-        {"^else\\b", Else},
-        {"^for\\b", For},
-        {"^func\\b", Func},
-        {"^if\\b", If},
-        {"^return\\b", Return},
-        {"^var\\b", Var},
-
-        // Double-quoted strings
-        {"^\"[^\"]*\"", String},
-
-        // Integer literals
-        {"^[0-9]+\\b", Integer},
-
-        // Identifiers
-        {"^[a-zA-Z_]\\w*\\b", Identifier},
-
-        // Algebraic operators
-        {"^\\+$", Add},     // Addition
-        {"^-$", Subtract},       // Subtraction
-        {"^\\*$", Multiply},     // Multiplication
-        {"^/$", Divide},       // Division
-        {"^%$", Modulo},       // Modulus
-
-        // Relational operators
-        {"^>", Greater},        // Greater than
-        {"^>=", GreaterEqual},      // Greater than or equals
-        {"^<", Less},        // Less than
-        {"^<=", LessEqual},      // Less than or equals
-        {"==", Equal},       // Equals
-        {"!=", NotEqual},       // Not equals
-
-        // Logical operators
-        {"^&&", And},      // AND
-        {"^\\|\\|", Or},  // OR
-        {"^!", Not},        // NOT
-        {"^=", Equal},        // Assignment
-};
-
 class Lexer {
+public:
+    Lexer(const std::string &input);
+    std::optional<Token> match_token();
+    std::vector<Token> match_tokens();
+
 private:
-    std::string input;
     int start = 0;
     int current = 0;
     int line = 1;
+    std::string input;
+
     bool is_at_end();
     char advance();
-public:
-    //void Init(std::string input);
-    //std::optional<Token> GetNextToken();
-    std::optional<std::string> match_token();
+    Token create_token(TokenType token_type);
+    Token create_token(TokenType token_type, int start, int end);
+    bool match(char expected);
+    TokenType either(char expected, TokenType matched, TokenType unmatched);
+    char peek();
+    bool is_digit(char c);
+    bool is_alpha(char c);
+    bool is_alphanumeric(char c);
+    Token number();
+    Token identifier();
 };

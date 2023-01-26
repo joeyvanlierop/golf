@@ -1,16 +1,6 @@
-#include <set>
+#include <map>
 #include <string>
 #include <iostream>
-
-const std::set<std::string> Keywords = {
-        "break",
-        "else",
-        "for",
-        "func",
-        "if",
-        "return",
-        "var",
-};
 
 enum TokenType {
     // Punctuation
@@ -61,18 +51,25 @@ enum TokenType {
     Unknown,
 };
 
-std::ostream &operator<<(std::ostream &os, TokenType tokenType);
+static std::map<std::string, TokenType> Keywords = {
+        {"break", Break},
+        {"else", Else},
+        {"for", For},
+        {"func", Func},
+        {"if", If},
+        {"return", Return},
+        {"var", Var},
+};
 
-std::string to_string(TokenType const &tokenType);
+std::ostream &operator<<(std::ostream &os, TokenType tokenType);
 
 struct Token {
     TokenType type;
-    std::string value;
+    std::string lexeme;
     int line;
-    int column;
+    int column = 0;
 
-    Token(TokenType type);
-    Token(TokenType)
+    Token(TokenType type, const std::string &lexeme, int line);
 };
 
 std::ostream &operator<<(std::ostream &os, Token token);

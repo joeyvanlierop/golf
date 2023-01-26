@@ -1,19 +1,24 @@
+#include <string>
+#include <iostream>
 #include "golf.h"
-#include "parser.h"
+#include "lexer.h"
 
 int main() {
-    Parser *parser = new Parser();
-
     std::string input = R"(
 42
 4 213 ^
 "abc"
 var cole
 ^
-//Þ­¾ï
+Þ­¾ï
 if {
     var test = 0;
 }
 ^)";
-    parser->Parse(input);
+//std::string input = R"(42 abc break "123")";
+    Lexer lexer = Lexer(input);
+    auto tokens = lexer.match_tokens();
+    for(auto token : tokens) {
+        std::cout << token << std::endl;
+    }
 }
