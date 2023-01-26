@@ -1,0 +1,6 @@
+input:
+// string escape followed by EOF
+"abc\
+
+output:
+error: string terminated by EOF at or near line 2

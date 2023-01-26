@@ -1,0 +1,9 @@
+input:
+// another error with pairs
+
+&//comment
+&
+
+
+output:
+error: bitwise AND not supported in GoLF at or near line 3

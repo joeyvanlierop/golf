@@ -3,6 +3,18 @@
 
 std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     switch (tokenType) {
+        case TokenType::LeftBracket :
+            return os << "{";
+        case TokenType::RightBracket :
+            return os << "}";
+        case TokenType::LeftParen :
+            return os << "(";
+        case TokenType::RightParen :
+            return os << ")";
+        case TokenType::Semicolon :
+            return os << ";";
+        case TokenType::Comma :
+            return os << ",";
         case TokenType::Or :
             return os << "||";
         case TokenType::And :

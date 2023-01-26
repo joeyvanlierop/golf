@@ -1,0 +1,11 @@
+input:
+// anything apart from 7-bit ASCII not allowed
+Þ­¾ï
+
+
+
+output:
+warning: skipping non-ASCII input character at or near line 2
+warning: skipping non-ASCII input character at or near line 2
+warning: skipping non-ASCII input character at or near line 2
+warning: skipping non-ASCII input character at or near line 2

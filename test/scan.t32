@@ -1,0 +1,8 @@
+input:
+// illegal string escape
+
+"ab\u1234cd"
+
+
+output:
+error: bad string escape 'u' at or near line 3

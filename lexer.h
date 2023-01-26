@@ -55,10 +55,13 @@ static std::pair<std::string, TokenType> Spec[] =  {
 class Lexer {
 private:
     std::string input;
-    int cursor;
-    bool HasMoreTokens();
-    std::optional<std::string> Match(std::string regexp, std::string input);
+    int start = 0;
+    int current = 0;
+    int line = 1;
+    bool is_at_end();
+    char advance();
 public:
-    void Init(std::string input);
-    std::optional<Token> GetNextToken();
+    //void Init(std::string input);
+    //std::optional<Token> GetNextToken();
+    std::optional<std::string> match_token();
 };

@@ -13,6 +13,14 @@ const std::set<std::string> Keywords = {
 };
 
 enum TokenType {
+    // Punctuation
+    LeftBracket,
+    RightBracket,
+    LeftParen,
+    RightParen,
+    Semicolon,
+    Comma,
+
     // Binary operators
     Or,
     And,
@@ -62,6 +70,9 @@ struct Token {
     std::string value;
     int line;
     int column;
+
+    Token(TokenType type);
+    Token(TokenType)
 };
 
 std::ostream &operator<<(std::ostream &os, Token token);

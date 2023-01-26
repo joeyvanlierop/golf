@@ -1,0 +1,10 @@
+input:
+// sample of illegal characters
+
+\ ^ #
+
+
+output:
+warning: skipping unknown character '\\' at or near line 3
+warning: skipping unknown character '^' at or near line 3
+warning: skipping unknown character '#' at or near line 3

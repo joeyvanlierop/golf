@@ -1,0 +1,8 @@
+input:
+// string escape followed by newline
+"abc\
+"
+
+
+output:
+error: string contains newline at or near line 2

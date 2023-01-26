@@ -6,8 +6,32 @@ void Lexer::Init(std::string input) {
     this->cursor = 0;
 }
 
-bool Lexer::HasMoreTokens() {
-    return cursor < input.length();
+bool Lexer::is_at_end() {
+    return current >= input.length();
+}
+
+char Lexer::advance() {
+	return input[current++];
+}
+
+Token Lexer::match_token() {
+	char c = advance();
+	switch(c) {
+		case:	
+	} 
+}
+
+
+std::vector<Token> Lexer::match_tokens() {
+	std::vector<Token> tokens;
+
+	while(!is_at_end()) {
+		start = current();
+		token = match_token();
+		tokens.push_back(token);		
+	}
+
+	return tokens;
 }
 
 std::optional<Token> Lexer::GetNextToken() {

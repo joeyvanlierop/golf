@@ -1,0 +1,8 @@
+input:
+// string containing newline is a no-no
+"abc
+"
+
+
+output:
+error: string contains newline at or near line 2

@@ -1,0 +1,10 @@
+input:
+// what constitutes whitespace is in the spec
+
+
+
+
+
+output:
+warning: skipping unknown character '\v' at or near line 2
+warning: skipping unknown character '\f' at or near line 3
