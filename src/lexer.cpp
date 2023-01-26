@@ -35,8 +35,10 @@ std::optional<Token> Lexer::match_token() {
         // Newline
         case '\n':
             line++;
-            if(tokens.size() > 0 && tokens.back().type & (Identifier | Integer | String | Break | Return | RightParen | RightBracket) > 0)
-                return create_token(Semicolon, current, current);
+            if(tokens.size() > 0)
+                for(auto valid : {Identifier , Integer , String , Break , Return , RightParen , RightBracket})
+                    if(tokens.back().type == valid)
+                        return create_token(Semicolon, current, current);
             return std::nullopt;
 
         // Single character
@@ -72,12 +74,12 @@ std::optional<Token> Lexer::match_token() {
             if (match('&'))
                 return std::nullopt;
             else
-                throw std::runtime_error("error: bitwise AND not supported in GoLF at line " + line);
+                return create_token(Error, "bitwise AND not supported");
         case '|':
             if (match('|'))
                 return std::nullopt;
             else
-                throw std::runtime_error("error: bitwise AND not supported in GoLF at line " + line);
+                return create_token(Error, "bitwise OR not supported");
 
         // Comment
         case '/':
@@ -93,12 +95,12 @@ std::optional<Token> Lexer::match_token() {
         case '"':
             while (!is_at_end() && peek() != '"') {
                 if (peek() == '\n')
-                    throw std::runtime_error("error: string contains newline on line " + line);
+                    return create_token(Error, "string contains newline");
                 advance();
             }
 
             if (is_at_end())
-                throw std::runtime_error("error: unterminated string on line " + line);
+                return create_token(Error, "unterminated string");
 
             advance();
             return create_token(String, start + 1, current - 1);
@@ -113,8 +115,7 @@ std::optional<Token> Lexer::match_token() {
                 return identifier();
             // Unknown
             } else {
-                std::cerr << "warning: skipping unknown character '" << c << "'" << " on line " << line << std::endl;
-                return std::nullopt;
+                return create_token(Warning, "unknown character " + std::string(1, c));
             }
     }
 }
@@ -141,6 +142,10 @@ Token Lexer::create_token(TokenType token_type) {
 
 Token Lexer::create_token(TokenType token_type, int start, int end) {
     return Token(token_type, input.substr(start, (end - start)), line);
+}
+
+Token Lexer::create_token(TokenType token_type, std::string lexeme) {
+    return Token(token_type, lexeme, line);
 }
 
 bool Lexer::match(char expected) {

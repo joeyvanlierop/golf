@@ -19,6 +19,7 @@ private:
     bool is_at_end();
     char advance();
     Token create_token(TokenType token_type);
+    Token create_token(TokenType token_type, std::string lexeme);
     Token create_token(TokenType token_type, int start, int end);
     bool match(char expected);
     TokenType either(char expected, TokenType matched, TokenType unmatched);

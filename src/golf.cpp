@@ -5,20 +5,20 @@
 
 int main() {
     std::string input = R"(
-42
-4 213 ^
-"abc";
-var cole
-^
-Þ­¾ï
+"test"
+"unterminated
 if {
-    var test = 0;
+    var hello = 42;
 }
-^)";
+^
+"another^)";
 //std::string input = R"(42 abc break "123")";
     Lexer lexer = Lexer(input);
     auto tokens = lexer.match_tokens();
     for(auto token : tokens) {
-        std::cout << token << std::endl;
+        if(token.type == Error || token.type == Warning)
+            std::cerr << token << std::endl;
+        else
+            std::cout << token << std::endl;
     }
 }

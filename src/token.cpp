@@ -71,6 +71,10 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
             return os << "eof";
         case TokenType::Unknown :
             return os << "unknown";
+        case TokenType::Warning :
+            return os << "warning";
+        case TokenType::Error :
+            return os << "error";
     }
     return os << static_cast<std::uint16_t>(tokenType);
 }
