@@ -1,6 +1,5 @@
 #include "lexer.h"
 #include <iostream>
-#include <format>
 
 Lexer::Lexer(const std::string &input) : input(input) {}
 
@@ -118,7 +117,7 @@ std::optional<Token> Lexer::match_token() {
 
             // Unknown
             else
-                return create_token(Warning, std::format("unknown character '{}'", c));
+                return create_token(Warning, "unknown character '" + std::string(1, c) + "'");
     }
 }
 
