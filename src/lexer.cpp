@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include <iostream>
+#include <format>
 
 Lexer::Lexer(const std::string &input) : input(input) {}
 
@@ -38,7 +39,7 @@ std::optional<Token> Lexer::match_token() {
             if(tokens.size() > 0)
                 for(auto valid : {Identifier , Integer , String , Break , Return , RightParen , RightBracket})
                     if(tokens.back().type == valid)
-                        return create_token(Semicolon, current, current);
+                        return create_token(Semicolon, "\\n");
             return std::nullopt;
 
         // Single character
@@ -108,15 +109,16 @@ std::optional<Token> Lexer::match_token() {
         // Non-trivial
         default:
             // Integer literal
-            if (is_digit(c)) {
+            if (is_digit(c))
                 return number();
+
             // Identifier
-            } else if (is_alpha(c)) {
+            else if (is_alpha(c))
                 return identifier();
+
             // Unknown
-            } else {
-                return create_token(Warning, "unknown character '" + std::string(1, c) + "'");
-            }
+            else
+                return create_token(Warning, std::format("unknown character '{}'", c));
     }
 }
 
