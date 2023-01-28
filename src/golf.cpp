@@ -12,12 +12,8 @@ int main(int, char* argv[]) {
 
     // Debugging
     auto tokens = lexer.match_tokens();
-    for(auto token : tokens) {
-        if(token.type == Error || token.type == Warning)
-            std::cerr << token << std::endl;
-        else
-            std::cout << token << std::endl;
-    }
+    for(auto token : tokens)
+        std::cout << token << std::endl;
 
     return EXIT_SUCCESS;
 }

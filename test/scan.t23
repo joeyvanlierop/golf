@@ -1,4 +1,5 @@
 input:
+
 // string terminated by EOF
 "abc
 

@@ -49,9 +49,6 @@ enum TokenType {
 
     // Other
     Eof,
-    Unknown,
-    Warning,
-    Error,
 };
 
 static std::map<std::string, TokenType> Keywords = {

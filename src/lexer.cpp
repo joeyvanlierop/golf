@@ -6,7 +6,7 @@
  * Lexer class constructor
  * @param filereader pointer to a FileReader object
  */
-Lexer::Lexer(FileReader* filereader) : filereader(filereader) {
+Lexer::Lexer(FileReader *filereader) : filereader(filereader) {
     input = filereader->read_all();
 }
 
@@ -70,7 +70,7 @@ std::optional<Token> Lexer::newline() {
     };
     if (tokens.size() > 0)
         if (valid.count(tokens.back().type))
-            token = create_token(Semicolon, "\\n");
+            token = create_token(Semicolon, "");
     line++;
     column = 0;
     return token;
@@ -181,7 +181,7 @@ std::vector<Token> Lexer::match_tokens() {
  */
 std::optional<Token> Lexer::match_token() {
     char c = advance();
-switch (c) {
+    switch (c) {
         // Whitespace
         case ' ':
         case '\r':
@@ -251,8 +251,16 @@ switch (c) {
             // String literal
         case '"':
             while (!is_at_end() && peek() != '"') {
+                if (match('\\'))
+                    if (match('b') || match('f') || match('n') || match('r') ||
+                        match('t') || match('\\') || match('\"'))
+                        continue;
+                    else
+                        error(filereader, line, column - current + start + 1, current - start + 1,
+                              "bad string escape '" + std::string(1, c) + "'");
                 if (peek() == '\n')
-                    error(filereader, line, column - current + start + 1, current - start + 1, "string contains newline");
+                    error(filereader, line, column - current + start + 1, current - start + 1,
+                          "string contains newline");
                 advance();
             }
 
