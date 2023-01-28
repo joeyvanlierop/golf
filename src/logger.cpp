@@ -15,16 +15,17 @@ void log(std::ostream& ostream, FileReader* filereader, int line, int column, in
 
     // Explanation line
     message.insert(message.begin(), column, ' ');
-    message.insert(message.begin() + column - 1, width, '^');
+    message.insert(message.begin() + column - 1, 1, '^');
+    message.insert(message.begin() + column, width - 1, '~');
     print_line(ostream, message);
 }
 
 void warning(FileReader* filereader, int line, int column, int width, std::string message) {
-    log(std::cerr, filereader, line, column, width, message);
+    log(std::cerr, filereader, line, column, width, "warning: " + message);
 }
 
 void error(FileReader* filereader, int line, int column, int width, std::string message) {
-    log(std::cerr, filereader, line, column, width, message);
+    log(std::cerr, filereader, line, column, width, "error: " + message);
     exit(EXIT_FAILURE);
 }
 
