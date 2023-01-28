@@ -69,7 +69,7 @@ std::optional<Token> Lexer::newline() {
             Identifier, Integer, String, Break, Return, RightParen, RightBracket
     };
     if (tokens.size() > 0)
-        if (valid.contains(tokens.back().type))
+        if (valid.count(tokens.back().type))
             token = create_token(Semicolon, "\\n");
     line++;
     column = 0;
