@@ -3,7 +3,7 @@
 #include "lexer.h"
 #include "filereader.h"
 
-int main(int argc, char*argv[]) {
+int main(int, char* argv[]) {
     // Read input
     FileReader reader(argv[1]);
 
@@ -18,4 +18,6 @@ int main(int argc, char*argv[]) {
         else
             std::cout << token << std::endl;
     }
+
+    return EXIT_SUCCESS;
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
-project(cpsc_411)
+project(golf)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(cpsc_411 src/golf.cpp src/lexer.cpp src/token.cpp src/logger.cpp src/filereader.cpp)
+add_executable(golf src/golf.cpp src/lexer.cpp src/token.cpp src/logger.cpp src/filereader.cpp)
