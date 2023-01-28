@@ -3,10 +3,9 @@
 #include "lexer.h"
 #include "filereader.h"
 
-int main() {
+int main(int argc, char*argv[]) {
     // Read input
-    // TODO: Get filename from args
-    FileReader reader("../test/scan.t7");
+    FileReader reader(argv[1]);
 
     // Lex input
     Lexer lexer(&reader);
