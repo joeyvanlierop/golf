@@ -256,8 +256,8 @@ std::optional<Token> Lexer::match_token() {
                         match('t') || match('\\') || match('\"'))
                         continue;
                     else
-                        error(filereader, line, column - current + start + 1, current - start + 1,
-                              "bad string escape '" + std::string(1, c) + "'");
+                        error(filereader, line, column, 2,
+                              "bad string escape '\\" + std::string(1, peek()) + "'");
                 if (peek() == '\n')
                     error(filereader, line, column - current + start + 1, current - start + 1,
                           "string contains newline");
