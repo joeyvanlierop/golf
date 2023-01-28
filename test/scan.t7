@@ -1,6 +1,9 @@
 input:
 // warning cascade
-^
+?
+$
+@
+var a = "test a = 10
 ^
 ^
 ^
@@ -269,4 +272,4 @@ warning: skipping unknown character '^' at or near line 9
 warning: skipping unknown character '^' at or near line 10
 warning: skipping unknown character '^' at or near line 11
 warning: skipping unknown character '^' at or near line 12
-error: too many warnings at or near line 12
+log: too many warnings at or near line 12

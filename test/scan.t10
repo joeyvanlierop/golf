@@ -4,4 +4,4 @@ input:
 
 
 output:
-error: bitwise AND not supported in GoLF at or near line 2
+log: bitwise AND not supported in GoLF at or near line 2

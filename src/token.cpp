@@ -16,6 +16,8 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
             return os << ")";
         case TokenType::Semicolon :
             return os << ";";
+        case TokenType::Colon :
+            return os << ":";
         case TokenType::Comma :
             return os << ",";
         case TokenType::Or :
@@ -75,7 +77,7 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
         case TokenType::Warning :
             return os << "warning";
         case TokenType::Error :
-            return os << "error";
+            return os << "log";
     }
     return os << static_cast<std::uint16_t>(tokenType);
 }

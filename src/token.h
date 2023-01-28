@@ -9,6 +9,7 @@ enum TokenType {
     LeftParen,
     RightParen,
     Semicolon,
+    Colon,
     Comma,
 
     // Binary operators

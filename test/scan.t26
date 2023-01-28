@@ -6,4 +6,4 @@ input:
 output:
 string	[abc] @ line 2
 id	[def] @ line 2
-error: string contains newline at or near line 2
+log: string contains newline at or near line 2

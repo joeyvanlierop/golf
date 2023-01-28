@@ -4,4 +4,4 @@ input:
 
 
 output:
-error: string contains newline at or near line 2
+log: string contains newline at or near line 2

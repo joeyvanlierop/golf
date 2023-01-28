@@ -5,4 +5,4 @@ input:
 
 
 output:
-error: bad string escape 'u' at or near line 3
+log: bad string escape 'u' at or near line 3

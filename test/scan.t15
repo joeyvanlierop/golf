@@ -1,4 +1,4 @@
-input:
+// input:
 // singletons - pay attention throughout that semicolons get added per spec!
 
 +
@@ -70,89 +70,89 @@ _42
 
 
 
-output:
-+	[+] @ line 3
--	[-] @ line 4
-*	[*] @ line 5
-/	[/] @ line 6
-%	[%] @ line 7
-(	[(] @ line 8
-)	[)] @ line 9
-;	[] @ line 9
-{	[{] @ line 10
-;	[] @ line 11
-}	[}] @ line 11
-;	[] @ line 11
-;	[;] @ line 12
-,	[,] @ line 13
-!	[!] @ line 17
-!=	[!=] @ line 17
-=	[=] @ line 18
-==	[==] @ line 18
-<	[<] @ line 19
-<=	[<=] @ line 19
->	[>] @ line 20
->=	[>=] @ line 20
->	[>] @ line 22
-=	[=] @ line 22
-&&	[&&] @ line 26
-||	[||] @ line 27
-break	[break] @ line 31
-;	[] @ line 31
-else	[else] @ line 32
-for	[for] @ line 33
-func	[func] @ line 34
-if	[if] @ line 35
-return	[return] @ line 36
-;	[] @ line 36
-var	[var] @ line 37
-id	[Break] @ line 41
-;	[] @ line 41
-id	[switch] @ line 42
-;	[] @ line 42
-id	[case] @ line 43
-;	[] @ line 43
-id	[goto] @ line 44
-;	[] @ line 44
-id	[continue] @ line 45
-;	[] @ line 45
-id	[while] @ line 46
-;	[] @ line 46
-id	[prints] @ line 47
-;	[] @ line 47
-id	[printi] @ line 48
-;	[] @ line 48
-id	[printb] @ line 49
-;	[] @ line 49
-id	[printc] @ line 50
-;	[] @ line 50
-id	[halt] @ line 51
-;	[] @ line 51
-id	[getchar] @ line 52
-;	[] @ line 52
-id	[true] @ line 53
-;	[] @ line 53
-id	[bool] @ line 54
-;	[] @ line 54
-id	[false] @ line 55
-;	[] @ line 55
-id	[string] @ line 56
-;	[] @ line 56
-id	[int] @ line 57
-;	[] @ line 57
-id	[main] @ line 58
-;	[] @ line 58
-id	[abcdef] @ line 59
-;	[] @ line 59
-id	[abc123] @ line 60
-;	[] @ line 60
-id	[_] @ line 61
-;	[] @ line 61
-id	[_abc_0] @ line 62
-;	[] @ line 62
-id	[_42] @ line 63
-;	[] @ line 63
-int	[0] @ line 67
-;	[] @ line 67
-int	[12345678901234567890] @ line 68
-;	[] @ line 68
+// output:
+// +	[+] @ line 3
+// -	[-] @ line 4
+// *	[*] @ line 5
+// /	[/] @ line 6
+// %	[%] @ line 7
+// (	[(] @ line 8
+// )	[)] @ line 9
+// ;	[] @ line 9
+// {	[{] @ line 10
+// ;	[] @ line 11
+// }	[}] @ line 11
+// ;	[] @ line 11
+// ;	[;] @ line 12
+// ,	[,] @ line 13
+// !	[!] @ line 17
+// !=	[!=] @ line 17
+// =	[=] @ line 18
+// ==	[==] @ line 18
+// <	[<] @ line 19
+// <=	[<=] @ line 19
+// >	[>] @ line 20
+// >=	[>=] @ line 20
+// >	[>] @ line 22
+// =	[=] @ line 22
+// &&	[&&] @ line 26
+// ||	[||] @ line 27
+// break	[break] @ line 31
+// ;	[] @ line 31
+// else	[else] @ line 32
+// for	[for] @ line 33
+// func	[func] @ line 34
+// if	[if] @ line 35
+// return	[return] @ line 36
+// ;	[] @ line 36
+// var	[var] @ line 37
+// id	[Break] @ line 41
+// ;	[] @ line 41
+// id	[switch] @ line 42
+// ;	[] @ line 42
+// id	[case] @ line 43
+// ;	[] @ line 43
+// id	[goto] @ line 44
+// ;	[] @ line 44
+// id	[continue] @ line 45
+// ;	[] @ line 45
+// id	[while] @ line 46
+// ;	[] @ line 46
+// id	[prints] @ line 47
+// ;	[] @ line 47
+// id	[printi] @ line 48
+// ;	[] @ line 48
+// id	[printb] @ line 49
+// ;	[] @ line 49
+// id	[printc] @ line 50
+// ;	[] @ line 50
+// id	[halt] @ line 51
+// ;	[] @ line 51
+// id	[getchar] @ line 52
+// ;	[] @ line 52
+// id	[true] @ line 53
+// ;	[] @ line 53
+// id	[bool] @ line 54
+// ;	[] @ line 54
+// id	[false] @ line 55
+// ;	[] @ line 55
+// id	[string] @ line 56
+// ;	[] @ line 56
+// id	[int] @ line 57
+// ;	[] @ line 57
+// id	[main] @ line 58
+// ;	[] @ line 58
+// id	[abcdef] @ line 59
+// ;	[] @ line 59
+// id	[abc123] @ line 60
+// ;	[] @ line 60
+// id	[_] @ line 61
+// ;	[] @ line 61
+// id	[_abc_0] @ line 62
+// ;	[] @ line 62
+// id	[_42] @ line 63
+// ;	[] @ line 63
+// int	[0] @ line 67
+// ;	[] @ line 67
+// int	[12345678901234567890] @ line 68
+// ;	[] @ line 68

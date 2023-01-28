@@ -2,18 +2,17 @@
 #include <iostream>
 #include "golf.h"
 #include "lexer.h"
+#include "filereader.h"
 
 int main() {
-    std::string input = R"(
-"test"
-"unterminated
-if {
-    var hello = 42;
-}
-^
-"another^)";
-//std::string input = R"(42 abc break "123")";
-    Lexer lexer = Lexer(input);
+    // Read input
+    // TODO: Get filename from args
+    FileReader reader("../test/scan.t7");
+
+    // Lex input
+    Lexer lexer(&reader);
+
+    // Debugging
     auto tokens = lexer.match_tokens();
     for(auto token : tokens) {
         if(token.type == Error || token.type == Warning)
