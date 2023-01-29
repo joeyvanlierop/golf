@@ -28,6 +28,27 @@ char Lexer::advance() {
 }
 
 /**
+ * Creates a token of the given type with the given range
+ * @param token_type the type of token to create
+ * @param start the start index of the substring
+ * @param end the end index of the substring
+ * @return the created token
+ */
+Token Lexer::create_token(TokenType token_type, int start, int end) {
+    return Token(token_type, input.substr(start, (end - start)), line, column - current + start);
+}
+
+/**
+ * Creates a token of the given type with the given lexeme
+ * @param token_type the type of token to create
+ * @param lexeme the lexeme of the token
+ * @return the created token
+ */
+Token Lexer::create_token(TokenType token_type, std::string lexeme) {
+    return Token(token_type, lexeme, line, column - current + start);
+}
+
+/**
  * Check if the next character in the input matches the expected character
  * @param expected character to match
  * @return true if the next character matches the expected character, false otherwise
@@ -110,27 +131,6 @@ Token Lexer::create_token(TokenType token_type) {
 }
 
 /**
- * Creates a token of the given type with the given range
- * @param token_type the type of token to create
- * @param start the start index of the substring
- * @param end the end index of the substring
- * @return the created token
- */
-Token Lexer::create_token(TokenType token_type, int start, int end) {
-    return Token(token_type, input.substr(start, (end - start)), line, column - current + start);
-}
-
-/**
- * Creates a token of the given type with the given lexeme
- * @param token_type the type of token to create
- * @param lexeme the lexeme of the token
- * @return the created token
- */
-Token Lexer::create_token(TokenType token_type, std::string lexeme) {
-    return Token(token_type, lexeme, line, column - current + start);
-}
-
-/**
  * Returns true if the given character is a digit
  * @param c the character to check
  * @return true if the character is a digit, false otherwise
@@ -185,48 +185,31 @@ std::optional<Token> Lexer::match_token() {
         // Whitespace
         case ' ':
         case '\r':
-        case '\t':
-            return std::nullopt;
+        case '\t': return std::nullopt;
 
-            // Newline (with semicolon inference)
-        case '\n':
-            return newline();
+        // Newline (with semicolon inference)
+        case '\n': return newline();
 
-            // Single character
-        case '{':
-            return create_token(LeftBracket);
-        case '}':
-            return create_token(RightBracket);
-        case '(':
-            return create_token(LeftParen);
-        case ')':
-            return create_token(RightParen);
-        case ';':
-            return create_token(Semicolon);
-        case ':':
-            return create_token(Colon);
-        case ',':
-            return create_token(Comma);
-        case '+':
-            return create_token(Add);
-        case '-':
-            return create_token(Subtract);
-        case '*':
-            return create_token(Multiply);
-        case '%':
-            return create_token(Modulo);
+        // Single character
+        case '{': return create_token(LeftBracket);
+        case '}': return create_token(RightBracket);
+        case '(': return create_token(LeftParen);
+        case ')': return create_token(RightParen);
+        case ';': return create_token(Semicolon);
+        case ':': return create_token(Colon);
+        case ',': return create_token(Comma);
+        case '+': return create_token(Add);
+        case '-': return create_token(Subtract);
+        case '*': return create_token(Multiply);
+        case '%': return create_token(Modulo);
 
-            // Either
-        case '!':
-            return create_token(either('=', NotEqual, Not));
-        case '=':
-            return create_token(either('=', EqualEqual, Equal));
-        case '>':
-            return create_token(either('=', GreaterEqual, Greater));
-        case '<':
-            return create_token(either('=', LessEqual, Less));
+        // Either
+        case '!': return create_token(either('=', NotEqual, Not));
+        case '=': return create_token(either('=', EqualEqual, Equal));
+        case '>': return create_token(either('=', GreaterEqual, Greater));
+        case '<': return create_token(either('=', LessEqual, Less));
 
-            // Binary
+        // Binary
         case '&':
             if (match('&'))
                 return create_token(And);
@@ -238,17 +221,16 @@ std::optional<Token> Lexer::match_token() {
             else
                 error(filereader, line, column, 1, "bitwise OR not supported");
 
-            // Comment
+        // Comment
         case '/':
             if (match('/')) {
                 while (!is_at_end() && peek() != '\n')
                     advance();
                 return std::nullopt;
-            } else {
+            } else
                 return create_token(Divide);
-            }
 
-            // String literal
+        // String literal
         case '"':
             while (!is_at_end() && peek() != '"') {
                 if (match('\\'))
@@ -270,18 +252,22 @@ std::optional<Token> Lexer::match_token() {
             advance();
             return create_token(String, start + 1, current - 1);
 
-            // Non-trivial
+        // Non-trivial
         default:
             // Integer literal
             if (is_digit(c))
                 return number();
 
-                // Identifier
+            // Identifier
             else if (is_alpha(c))
                 return identifier();
 
-                // Unknown
+            // Non-ascii character
+            else if (!isascii(c))
+                warning(filereader, line, column, 1, "skipping non-ascii character '" + std::string(1, c) + "'");
+
+            // Unknown
             else
-                warning(filereader, line, column, 1, "unknown character '" + std::string(1, c) + "'");
+                warning(filereader, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
     }
 }
