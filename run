@@ -1,0 +1,205 @@
+#!/usr/bin/python3
+
+# Run this script from the directory corresponding to the root of your
+# code repo.  In other words, when your TA pulls the code from your repo,
+# goes to its root directory, and runs this script, it should work.
+#
+# Output is logged in the file "run.output", WHICH WILL BE OVERWRITTEN
+# EACH TIME THIS SCRIPT IS RUN.
+#
+# Output from the standard output and standard error streams is collected
+# separately, and as a result won't be intermingled as might be seen when
+# running a command directly from the terminal.
+#
+# To best show off your program's construction, be sure to remove all
+# object/executable/class/jar files before running this script (or, ideally,
+# you'll have a "clean" target in your Makefile and you can just "make clean"
+# first.
+#
+# Needs Python 3.8 or higher.
+
+import os
+import sys
+import time
+import signal
+import socket
+import subprocess
+
+TESTPATH = '/home/profs/aycock/411/TEST/ms1'
+LOGFILE = 'run.output'
+JARCLASS = 'golf'
+JAR = 'golf.jar'
+EXE = './golf'
+
+JAVA = '/usr/bin/java'
+MAKE = '/usr/bin/make'
+
+WIDTH = 79
+
+#
+# Test files
+#
+
+TESTS = (
+	( 'scan.t1',	'empty file' ),
+	( 'scan.t2',	'comment ending in EOF' ),
+	( 'scan.t3',	'comment only' ),
+	( 'scan.t4',	'illegal whitespace' ),
+	( 'scan.t5',	'legal whitespace' ),
+	( 'scan.t6',	'"}" with no previous token' ),
+	( 'scan.t7',	'the carat schtick' ),
+	( 'scan.t8',	'NUL character' ),
+	( 'scan.t9',	'non-7-bit chars' ),
+	( 'scan.t10',	'whitespace inside && token pair' ),
+	( 'scan.t11',	'whitespace inside || token pair' ),
+	( 'scan.t12',	'leading 0 on number' ),
+	( 'scan.t13',	'comment inside && token pair' ),
+	( 'scan.t14',	'illegal characters' ),
+	( 'scan.t15',	'legit token salad' ),
+	( 'scan.t16',	'semicolon insertion post-break at EOF' ),
+	( 'scan.t17',	'semicolon insertion post-return at EOF' ),
+	( 'scan.t18',	'semicolon insertion post-id at EOF' ),
+	( 'scan.t19',	'semicolon insertion post-number at EOF' ),
+	( 'scan.t20',	'semicolon insertion post-string at EOF' ),
+	( 'scan.t21',	'semicolon insertion post-) at EOF' ),
+	( 'scan.t22',	'semicolon insertion post-} at EOF' ),
+	( 'scan.t23',	'string ending in EOF' ),
+	( 'scan.t24',	'partial string containing newline' ),
+	( 'scan.t25',	'string containing newline' ),
+	( 'scan.t26',	'unescaped double quote in string' ),
+	( 'scan.t27',	'string escape at EOF' ),
+	( 'scan.t28',	'string escape then newline' ),
+	( 'scan.t29',	'legal strings' ),
+	( 'scan.t30',	'illegal "x" string escape' ),
+	( 'scan.t31',	'illegal "a" string escape' ),
+	( 'scan.t32',	'illegal "u" string escape' ),
+)
+
+#
+# Utility routines
+#
+
+f = None
+
+def log(s):
+	global f
+	if f is None:
+		try:
+			f = open(LOGFILE, 'w')
+		except IOError as e:
+			print(f'{LOGFILE}: {e.strerror}', file=sys.stderr)
+			sys.exit(1)
+	print(s, file=f)
+	print(file=f)
+
+def die(s):
+	log(f'*** ABNORMAL TERMINATION: {s}')
+	print(f'{sys.argv[0]}: {s}', file=sys.stderr)
+	sys.exit(1)
+
+def timestamp(reason):
+	log(f'Run {reason} on {time.ctime()}')
+	
+def banner(title):
+	# his friends call him Bruce
+	s = '-' * WIDTH + '\n'
+	s += title + ' |\n'
+	s += '-' * (len(title) + 2)
+	log(s)
+
+	# make progress visible to user
+	print(title, file=sys.stderr)
+
+def run(cmd):
+	# XXX no timeouts set currently
+	log('% ' + ' '.join(cmd))
+
+	try:
+		# XXX this enables the universal_newlines "feature", which
+		#	means that \r will be erronously converted into a
+		#	newline for printing (otoh, it might be easier to
+		#	read in this context, so there's that)
+		cp = subprocess.run(cmd, text=True, capture_output=True)
+	except subprocess.SubprocessError:
+		die('unexpected exception running command')
+	except IOError as e:
+		die(f'unexpected I/O error running command: {e.strerror}')
+	except UnicodeDecodeError:
+		die('check that input characters are being filtered per spec')
+
+	log('STDOUT:\n' + cp.stdout)
+	log('STDERR:\n' + cp.stderr)
+	
+	if cp.returncode < 0:
+		# rarely a good sign, let's be honest
+		which = signal.strsignal(-cp.returncode)
+		log(f'*** TERMINATION VIA SIGNAL: {which}')
+	else:
+		log(f'RETURN CODE: {cp.returncode}')
+
+#
+# Figure out what form the executable code's in
+#
+
+cmd = []
+
+def findcompiler():
+	global cmd
+	is_exe = is_jar = False
+
+	if os.access(EXE, os.X_OK):
+		is_exe = True
+		cmd = [ EXE ]
+	if os.access(JAR, os.R_OK):
+		is_jar = True
+		cmd = [ JAVA, '-cp', JAR, JARCLASS ]
+
+	if not is_exe and not is_jar:
+		die('no compiler found with name per spec')
+	if is_exe and is_jar:
+		die('multiple compiler candidates found')
+
+	log('Compiler will be run as ' + ' '.join(cmd))
+
+#
+# Testing, one, two, three, testing
+#
+
+def main():
+	timestamp('started')
+
+	# must be run on CPSC Linux machine
+	log(f'Hostname: {socket.gethostname()}')
+
+	# build it; this'll also permit variants on "Makefile" like "makefile"
+	banner('Running make')
+	run([ MAKE ])
+
+	# figure out how to run the compiler
+	banner('Locating GoLF compiler')
+	findcompiler()
+
+	# no-argument case
+	banner('Test: too few arguments')
+	run(cmd)
+
+	# extra-argument case
+	banner('Test: too many arguments')
+	run(cmd + [ '/dev/null', '/dev/zero' ])
+
+	# nonexistent case
+	banner('Test: nonexistent file')
+	run(cmd + [ '/i/do/not/exist' ])
+
+	# now the fun begins
+	for file, description in TESTS:
+		banner(f'Test: {description}')
+		run(cmd + [ f'{TESTPATH}/{file}' ])
+
+	timestamp('ended')
+
+if __name__ == '__main__':
+	try:
+		main()
+	except KeyboardInterrupt:
+		die('terminated via keyboard interrupt')

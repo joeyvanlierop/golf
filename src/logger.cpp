@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <iomanip>
 #include "logger.h"
 
@@ -15,18 +16,21 @@ void log(std::ostream& ostream, FileReader* filereader, int line, int column, in
     // File name and location
     ostream << "--> " << filereader->filename << ":" << line << ":" << column << std::endl;
 
+    // Calculate how much to indent the vertical lines
+    auto indent = log10(line) + 2;
+
     // Padding
-    print_line(ostream, "");
+    print_line(ostream, "", indent);
 
     // Error line
     auto error_line = get_line(filereader->filestream, line);
-    print_line(ostream, error_line, line);
+    print_line(ostream, error_line, line, indent);
 
     // Explanation line
     message.insert(message.begin(), column, ' ');
     message.insert(message.begin() + column - 1, 1, '^');
     message.insert(message.begin() + column, width - 1, '~');
-    print_line(ostream, message);
+    print_line(ostream, message, indent);
 }
 
 /**
@@ -59,8 +63,8 @@ void error(FileReader* filereader, int line, int column, int width, std::string 
  * @param ostream output stream to print the line to.
  * @param content the string to print.
  */
-void print_line(std::ostream& ostream, std::string content) {
-    ostream << std::setw(2) << " " << "| " << content << std::endl;
+void print_line(std::ostream& ostream, std::string content, int indent) {
+    ostream << std::setw(indent) << " " << "| " << content << std::endl;
 }
 
 /**
@@ -69,8 +73,8 @@ void print_line(std::ostream& ostream, std::string content) {
  * @param content the string to print
  * @param line line number to print
  */
-void print_line(std::ostream& ostream, std::string content, int line) {
-    ostream << std::setw(2) << std::left << line << "| " << content << std::endl;
+void print_line(std::ostream& ostream, std::string content, int line, int indent) {
+    ostream << std::setw(indent) << std::left << line << "| " << content << std::endl;
 }
 
 /**

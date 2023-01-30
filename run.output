@@ -1,0 +1,1233 @@
+Run started on Mon Jan 30 13:54:29 2023
+
+Hostname: csx3.cs.ucalgary.ca
+
+-------------------------------------------------------------------------------
+Running make |
+--------------
+
+% /usr/bin/make
+
+STDOUT:
+make: 'golf' is up to date.
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Locating GoLF compiler |
+------------------------
+
+Compiler will be run as ./golf
+
+-------------------------------------------------------------------------------
+Test: too few arguments |
+-------------------------
+
+% ./golf
+
+STDOUT:
+
+
+STDERR:
+terminate called after throwing an instance of 'std::logic_error'
+  what():  basic_string: construction from null is not valid
+
+
+*** TERMINATION VIA SIGNAL: Aborted
+
+-------------------------------------------------------------------------------
+Test: too many arguments |
+--------------------------
+
+% ./golf /dev/null /dev/zero
+
+STDOUT:
+eof      [] @ (1, 0)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: nonexistent file |
+------------------------
+
+% ./golf /i/do/not/exist
+
+STDOUT:
+
+
+STDERR:
+File /i/do/not/exist not found: "/home/ugb/joseph.vanlierop/Documents/cpsc-411"
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: empty file |
+------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t1
+
+STDOUT:
+eof      [] @ (1, 0)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: comment ending in EOF |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t2
+
+STDOUT:
+eof      [] @ (1, 28)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: comment only |
+--------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t3
+
+STDOUT:
+eof      [] @ (2, 0)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: illegal whitespace |
+--------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t4
+
+STDOUT:
+eof      [] @ (5, 0)
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms1/scan.t4:2:1
+  | 
+2 | 
+  | ^ warning: unknown character ''
+--> /home/profs/aycock/411/TEST/ms1/scan.t4:3:1
+  | 
+3 | 
+  | ^ warning: unknown character ''
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: legal whitespace |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t5
+
+STDOUT:
+eof      [] @ (5, 0)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: "}" with no previous token |
+----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t6
+
+STDOUT:
+}        [}] @ (1, 0)
+;        [] @ (1, 1)
+eof      [] @ (4, 0)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: the carat schtick |
+-------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t7
+
+STDOUT:
+eof      [] @ (257, 0)
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:2:1
+  | 
+2 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:3:1
+  | 
+3 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:4:1
+  | 
+4 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:5:1
+  | 
+5 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:6:1
+  | 
+6 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:7:1
+  | 
+7 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:8:1
+  | 
+8 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:9:1
+  | 
+9 | ^
+  | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:10:1
+   | 
+10 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:11:1
+   | 
+11 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:12:1
+   | 
+12 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:13:1
+   | 
+13 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:14:1
+   | 
+14 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:15:1
+   | 
+15 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:16:1
+   | 
+16 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:17:1
+   | 
+17 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:18:1
+   | 
+18 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:19:1
+   | 
+19 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:20:1
+   | 
+20 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:21:1
+   | 
+21 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:22:1
+   | 
+22 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:23:1
+   | 
+23 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:24:1
+   | 
+24 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:25:1
+   | 
+25 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:26:1
+   | 
+26 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:27:1
+   | 
+27 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:28:1
+   | 
+28 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:29:1
+   | 
+29 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:30:1
+   | 
+30 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:31:1
+   | 
+31 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:32:1
+   | 
+32 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:33:1
+   | 
+33 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:34:1
+   | 
+34 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:35:1
+   | 
+35 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:36:1
+   | 
+36 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:37:1
+   | 
+37 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:38:1
+   | 
+38 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:39:1
+   | 
+39 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:40:1
+   | 
+40 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:41:1
+   | 
+41 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:42:1
+   | 
+42 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:43:1
+   | 
+43 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:44:1
+   | 
+44 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:45:1
+   | 
+45 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:46:1
+   | 
+46 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:47:1
+   | 
+47 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:48:1
+   | 
+48 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:49:1
+   | 
+49 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:50:1
+   | 
+50 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:51:1
+   | 
+51 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:52:1
+   | 
+52 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:53:1
+   | 
+53 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:54:1
+   | 
+54 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:55:1
+   | 
+55 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:56:1
+   | 
+56 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:57:1
+   | 
+57 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:58:1
+   | 
+58 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:59:1
+   | 
+59 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:60:1
+   | 
+60 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:61:1
+   | 
+61 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:62:1
+   | 
+62 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:63:1
+   | 
+63 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:64:1
+   | 
+64 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:65:1
+   | 
+65 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:66:1
+   | 
+66 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:67:1
+   | 
+67 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:68:1
+   | 
+68 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:69:1
+   | 
+69 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:70:1
+   | 
+70 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:71:1
+   | 
+71 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:72:1
+   | 
+72 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:73:1
+   | 
+73 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:74:1
+   | 
+74 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:75:1
+   | 
+75 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:76:1
+   | 
+76 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:77:1
+   | 
+77 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:78:1
+   | 
+78 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:79:1
+   | 
+79 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:80:1
+   | 
+80 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:81:1
+   | 
+81 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:82:1
+   | 
+82 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:83:1
+   | 
+83 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:84:1
+   | 
+84 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:85:1
+   | 
+85 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:86:1
+   | 
+86 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:87:1
+   | 
+87 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:88:1
+   | 
+88 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:89:1
+   | 
+89 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:90:1
+   | 
+90 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:91:1
+   | 
+91 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:92:1
+   | 
+92 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:93:1
+   | 
+93 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:94:1
+   | 
+94 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:95:1
+   | 
+95 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:96:1
+   | 
+96 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:97:1
+   | 
+97 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:98:1
+   | 
+98 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:99:1
+   | 
+99 | ^
+   | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:100:1
+    | 
+100 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:101:1
+    | 
+101 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:102:1
+    | 
+102 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:103:1
+    | 
+103 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:104:1
+    | 
+104 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:105:1
+    | 
+105 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:106:1
+    | 
+106 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:107:1
+    | 
+107 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:108:1
+    | 
+108 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:109:1
+    | 
+109 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:110:1
+    | 
+110 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:111:1
+    | 
+111 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:112:1
+    | 
+112 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:113:1
+    | 
+113 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:114:1
+    | 
+114 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:115:1
+    | 
+115 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:116:1
+    | 
+116 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:117:1
+    | 
+117 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:118:1
+    | 
+118 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:119:1
+    | 
+119 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:120:1
+    | 
+120 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:121:1
+    | 
+121 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:122:1
+    | 
+122 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:123:1
+    | 
+123 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:124:1
+    | 
+124 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:125:1
+    | 
+125 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:126:1
+    | 
+126 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:127:1
+    | 
+127 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:128:1
+    | 
+128 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:129:1
+    | 
+129 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:130:1
+    | 
+130 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:131:1
+    | 
+131 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:132:1
+    | 
+132 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:133:1
+    | 
+133 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:134:1
+    | 
+134 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:135:1
+    | 
+135 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:136:1
+    | 
+136 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:137:1
+    | 
+137 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:138:1
+    | 
+138 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:139:1
+    | 
+139 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:140:1
+    | 
+140 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:141:1
+    | 
+141 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:142:1
+    | 
+142 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:143:1
+    | 
+143 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:144:1
+    | 
+144 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:145:1
+    | 
+145 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:146:1
+    | 
+146 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:147:1
+    | 
+147 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:148:1
+    | 
+148 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:149:1
+    | 
+149 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:150:1
+    | 
+150 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:151:1
+    | 
+151 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:152:1
+    | 
+152 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:153:1
+    | 
+153 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:154:1
+    | 
+154 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:155:1
+    | 
+155 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:156:1
+    | 
+156 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:157:1
+    | 
+157 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:158:1
+    | 
+158 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:159:1
+    | 
+159 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:160:1
+    | 
+160 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:161:1
+    | 
+161 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:162:1
+    | 
+162 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:163:1
+    | 
+163 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:164:1
+    | 
+164 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:165:1
+    | 
+165 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:166:1
+    | 
+166 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:167:1
+    | 
+167 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:168:1
+    | 
+168 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:169:1
+    | 
+169 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:170:1
+    | 
+170 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:171:1
+    | 
+171 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:172:1
+    | 
+172 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:173:1
+    | 
+173 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:174:1
+    | 
+174 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:175:1
+    | 
+175 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:176:1
+    | 
+176 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:177:1
+    | 
+177 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:178:1
+    | 
+178 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:179:1
+    | 
+179 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:180:1
+    | 
+180 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:181:1
+    | 
+181 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:182:1
+    | 
+182 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:183:1
+    | 
+183 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:184:1
+    | 
+184 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:185:1
+    | 
+185 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:186:1
+    | 
+186 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:187:1
+    | 
+187 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:188:1
+    | 
+188 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:189:1
+    | 
+189 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:190:1
+    | 
+190 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:191:1
+    | 
+191 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:192:1
+    | 
+192 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:193:1
+    | 
+193 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:194:1
+    | 
+194 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:195:1
+    | 
+195 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:196:1
+    | 
+196 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:197:1
+    | 
+197 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:198:1
+    | 
+198 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:199:1
+    | 
+199 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:200:1
+    | 
+200 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:201:1
+    | 
+201 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:202:1
+    | 
+202 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:203:1
+    | 
+203 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:204:1
+    | 
+204 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:205:1
+    | 
+205 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:206:1
+    | 
+206 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:207:1
+    | 
+207 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:208:1
+    | 
+208 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:209:1
+    | 
+209 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:210:1
+    | 
+210 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:211:1
+    | 
+211 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:212:1
+    | 
+212 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:213:1
+    | 
+213 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:214:1
+    | 
+214 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:215:1
+    | 
+215 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:216:1
+    | 
+216 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:217:1
+    | 
+217 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:218:1
+    | 
+218 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:219:1
+    | 
+219 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:220:1
+    | 
+220 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:221:1
+    | 
+221 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:222:1
+    | 
+222 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:223:1
+    | 
+223 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:224:1
+    | 
+224 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:225:1
+    | 
+225 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:226:1
+    | 
+226 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:227:1
+    | 
+227 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:228:1
+    | 
+228 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:229:1
+    | 
+229 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:230:1
+    | 
+230 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:231:1
+    | 
+231 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:232:1
+    | 
+232 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:233:1
+    | 
+233 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:234:1
+    | 
+234 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:235:1
+    | 
+235 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:236:1
+    | 
+236 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:237:1
+    | 
+237 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:238:1
+    | 
+238 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:239:1
+    | 
+239 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:240:1
+    | 
+240 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:241:1
+    | 
+241 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:242:1
+    | 
+242 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:243:1
+    | 
+243 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:244:1
+    | 
+244 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:245:1
+    | 
+245 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:246:1
+    | 
+246 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:247:1
+    | 
+247 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:248:1
+    | 
+248 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:249:1
+    | 
+249 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:250:1
+    | 
+250 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:251:1
+    | 
+251 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:252:1
+    | 
+252 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:253:1
+    | 
+253 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:254:1
+    | 
+254 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:255:1
+    | 
+255 | ^
+    | ^ warning: unknown character '^'
+--> /home/profs/aycock/411/TEST/ms1/scan.t7:256:1
+    | 
+256 | ^
+    | ^ warning: unknown character '^'
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: NUL character |
+---------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t8
+
+STDOUT:
+eof      [] @ (4, 0)
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms1/scan.t8:2:1
+  | 
+2 |  
+  | ^ warning: unknown character ' '
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: non-7-bit chars |
+-----------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms1/scan.t9
+
+*** ABNORMAL TERMINATION: check that input characters are being filtered per spec
+
