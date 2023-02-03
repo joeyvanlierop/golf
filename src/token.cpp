@@ -1,9 +1,23 @@
 #include "token.h"
 #include <iomanip>
 
+/**
+ * Constructs a new `Token` object with the given type, lexeme, line and column.
+ * @param type the type of token
+ * @param lexeme the string representation of the token
+ * @param line the line number in the source code where the token is found
+ * @param column the column number in the source code where the token is found
+ */
 Token::Token(TokenType type, const std::string &lexeme, int line, int column) : type(type), lexeme(lexeme), line(line),
                                                                                 column(column) {}
 
+/**
+ * Overloading the output stream operator to print the `TokenType`
+ * Formats as a human-readable string
+ * @param os the output stream
+ * @param tokenType the token type to print
+ * @return the updated output stream
+ */
 std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     switch (tokenType) {
         case TokenType::LeftBracket :
@@ -76,6 +90,13 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
     return os << static_cast<std::uint16_t>(tokenType);
 }
 
+/**
+ * Overloading the output stream operator to print the `Token`.
+ * Example format: id      [test] @ (4, 0)
+ * @param os the output stream
+ * @param token the token to print
+ * @return the updated output stream
+ */
 std::ostream &operator<<(std::ostream &os, Token token) {
     return os << std::setw(8) << std::left << token.type << " [" << token.lexeme << "] " << "@ (" << token.line << ", "
               << token.column << ")";
