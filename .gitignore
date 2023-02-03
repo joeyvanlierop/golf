@@ -8,3 +8,6 @@ golf.exe
 
 # CLion stuff
 cmake-build-debug/
+
+# Testing stuff
+run.output
