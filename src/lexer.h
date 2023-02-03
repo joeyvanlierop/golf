@@ -7,7 +7,7 @@
 class Lexer {
 public:
     Lexer(FileReader* filereader);
-    std::vector<Token> match_tokens();
+    std::vector<Token> match_tokens(bool verbose);
 
 private:
     int start = 0;

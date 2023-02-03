@@ -160,7 +160,7 @@ bool Lexer::is_alpha(char c) {
 
 /**
  * Returns true if the given character is alphanumeric
- * @param c - the character to check
+ * @param c the character to check
  * @return true if the character is alphanumeric, false otherwise
  */
 bool Lexer::is_alphanumeric(char c) {
@@ -170,13 +170,18 @@ bool Lexer::is_alphanumeric(char c) {
 /**
  * Iterates through the input string, matching a token at each iteration
  * When the end of the input string is reached, the function adds a Eof token to the tokens vector and returns it
+ * @param verbose should the token be printed
  * @return a vector of all the matched tokens
 */
-std::vector<Token> Lexer::match_tokens() {
+std::vector<Token> Lexer::match_tokens(bool verbose) {
     while (!is_at_end()) {
         start = current;
         auto token = match_token();
-        if (token.has_value()) tokens.push_back(token.value());
+        if (token.has_value()) {
+            tokens.push_back(token.value());
+            if (verbose)
+                std::cout << token.value() << std::endl;
+        }
     }
     if(infer_semicolon().has_value())
         tokens.push_back(infer_semicolon().value());
