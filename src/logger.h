@@ -12,3 +12,5 @@ void print_line(std::ostream& ostream, std::string content, int indent);
 void print_line(std::ostream& ostream, std::string content, int line, int indent);
 
 std::string get_line(std::ifstream& filestream, int line);
+
+bool is_printable(const std::string &str);

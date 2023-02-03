@@ -264,7 +264,7 @@ std::optional<Token> Lexer::match_token() {
 
             // Non-ascii character
             else if (!isascii(c))
-                warning(filereader, line, column, 1, "skipping non-ascii character '" + std::string(1, c) + "'");
+                warning(filereader, line, column, 1, "skipping non-ascii character");
 
             // Unknown
             else

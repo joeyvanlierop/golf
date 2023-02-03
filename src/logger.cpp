@@ -12,9 +12,17 @@
  * @param width width of the error mark
  * @param message the message to log
  */
-void log(std::ostream& ostream, FileReader* filereader, int line, int column, int width, std::string message) {
+void log(std::ostream &ostream, FileReader *filereader, int line, int column, int width, std::string message) {
     // File name and location
     ostream << "--> " << filereader->filename << ":" << line << ":" << column << std::endl;
+
+    // Extract error line
+    auto error_line = get_line(filereader->filestream, line);
+
+    if(!is_printable(error_line)) {
+        print_line(ostream, message, 0);
+        return;
+    }
 
     // Calculate how much to indent the vertical lines
     auto indent = log10(line) + 2;
@@ -23,7 +31,8 @@ void log(std::ostream& ostream, FileReader* filereader, int line, int column, in
     print_line(ostream, "", indent);
 
     // Error line
-    auto error_line = get_line(filereader->filestream, line);
+    if(!is_printable(error_line))
+        error_line = "<encoding error>";
     print_line(ostream, error_line, line, indent);
 
     // Explanation line
@@ -41,7 +50,7 @@ void log(std::ostream& ostream, FileReader* filereader, int line, int column, in
  * @param width width of the error mark
  * @param message the warning message to log
  */
-void warning(FileReader* filereader, int line, int column, int width, std::string message) {
+void warning(FileReader *filereader, int line, int column, int width, std::string message) {
     log(std::cerr, filereader, line, column, width, "warning: " + message);
 }
 
@@ -53,7 +62,7 @@ void warning(FileReader* filereader, int line, int column, int width, std::strin
  * @param width width of the error mark
  * @param message the error message to log
  */
-void error(FileReader* filereader, int line, int column, int width, std::string message) {
+void error(FileReader *filereader, int line, int column, int width, std::string message) {
     log(std::cerr, filereader, line, column, width, "error: " + message);
     exit(EXIT_FAILURE);
 }
@@ -63,7 +72,7 @@ void error(FileReader* filereader, int line, int column, int width, std::string 
  * @param ostream output stream to print the line to.
  * @param content the string to print.
  */
-void print_line(std::ostream& ostream, std::string content, int indent) {
+void print_line(std::ostream &ostream, std::string content, int indent) {
     ostream << std::setw(indent) << " " << "| " << content << std::endl;
 }
 
@@ -73,7 +82,7 @@ void print_line(std::ostream& ostream, std::string content, int indent) {
  * @param content the string to print
  * @param line line number to print
  */
-void print_line(std::ostream& ostream, std::string content, int line, int indent) {
+void print_line(std::ostream &ostream, std::string content, int line, int indent) {
     ostream << std::setw(indent) << std::left << line << "| " << content << std::endl;
 }
 
@@ -83,13 +92,26 @@ void print_line(std::ostream& ostream, std::string content, int line, int indent
  * @param line the line number to get the content from
  * @return a string representing the specified line of the input file
 */
-std::string get_line(std::ifstream& filestream, int line) {
+std::string get_line(std::ifstream &filestream, int line) {
     std::string out;
     filestream.seekg(std::ios::beg);
-    for(int i=0; i < line; i++){
+    for (int i = 0; i < line; i++) {
         std::getline(filestream, out);
     }
     return out;
+}
+
+
+/**
+ * Determines if a given string is printable.
+ * @param str the string to check
+ * @return true if the string is printable, false otherwise
+*/
+bool is_printable(const std::string &str) {
+    for (char c: str)
+        if (!std::isprint(c))
+            return false;
+    return true;
 }
 
 
