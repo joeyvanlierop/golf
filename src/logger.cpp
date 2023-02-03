@@ -3,6 +3,9 @@
 #include <iomanip>
 #include "logger.h"
 
+// Initialize warning counter
+int Logger::warnings = 0;
+
 /**
  * Log a message to an output stream along with the file name, line, and column of the error
  * @param ostream output stream to log the message to
@@ -44,6 +47,7 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
 
 /**
  * Log a warning message to the standard error stream
+ * Error if too many warnings have been emitted
  * @param filereader FileReader object containing the file name and stream
  * @param line line number of the error
  * @param column column number of the error

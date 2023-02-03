@@ -92,7 +92,7 @@ std::ostream &operator<<(std::ostream &os, TokenType tokenType) {
 
 /**
  * Overloading the output stream operator to print the `Token`.
- * Example format: id      [test] @ (4, 0)
+ * Output format: <token type> [<lexeme>] @ (<line>, <column>)
  * @param os the output stream
  * @param token the token to print
  * @return the updated output stream
