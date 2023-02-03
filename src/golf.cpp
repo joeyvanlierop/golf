@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
     // Validate input
-    if (argc < 2)
+    if (argc != 2)
     {
         printf("Usage: %s [filename]\n", argv[0]);
         exit(EXIT_FAILURE);
