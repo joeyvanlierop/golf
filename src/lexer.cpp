@@ -224,12 +224,12 @@ std::optional<Token> Lexer::match_token() {
             if (match('&'))
                 return create_token(And);
             else
-                error(filereader, line, column, 1, "bitwise AND not supported");
+                Logger::error(filereader, line, column, 1, "bitwise AND not supported");
         case '|':
             if (match('|'))
                 return create_token(Or);
             else
-                error(filereader, line, column, 1, "bitwise OR not supported");
+                Logger::error(filereader, line, column, 1, "bitwise OR not supported");
 
         // Comment
         case '/':
@@ -248,16 +248,16 @@ std::optional<Token> Lexer::match_token() {
                         match('t') || match('\\') || match('\"'))
                         continue;
                     else
-                        error(filereader, line, column, 2,
+                        Logger::error(filereader, line, column, 2,
                               "bad string escape '\\" + std::string(1, peek()) + "'");
                 if (peek() == '\n')
-                    error(filereader, line, column - current + start + 1, current - start + 1,
+                    Logger::error(filereader, line, column - current + start + 1, current - start + 1,
                           "string contains newline");
                 advance();
             }
 
             if (is_at_end())
-                error(filereader, line, column - current + start + 1, current - start + 1, "unterminated string");
+                Logger::error(filereader, line, column - current + start + 1, current - start + 1, "unterminated string");
 
             advance();
             return create_token(String, start + 1, current - 1);
@@ -274,11 +274,11 @@ std::optional<Token> Lexer::match_token() {
 
             // Non-ascii character
             else if (!isascii(c))
-                warning(filereader, line, column, 1, "skipping non-ascii character");
+                Logger::warning(filereader, line, column, 1, "skipping non-ascii character");
 
             // Unknown
             else
-                warning(filereader, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
+                Logger::warning(filereader, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
     }
 
     // Couldn't match any character, ignore
