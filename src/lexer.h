@@ -7,7 +7,6 @@
 class Lexer {
 public:
     Lexer(FileReader* filereader);
-    std::optional<Token> match_token();
     std::vector<Token> match_tokens();
 
 private:
@@ -32,5 +31,7 @@ private:
     bool is_alphanumeric(char c);
     Token number();
     Token identifier();
+    std::optional<Token> infer_semicolon();
     std::optional<Token> newline();
+    std::optional<Token> match_token();
 };

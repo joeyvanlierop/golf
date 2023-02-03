@@ -81,20 +81,27 @@ char Lexer::peek() {
 }
 
 /**
- * Creates a semicolon token if the last token is a valid token, and increments the line and column count
+ * Infers if a semicolon token should be inserted
  * @return the semicolon token if the last token is valid, otherwise nullopt
  */
-std::optional<Token> Lexer::newline() {
-    std::optional<Token> token;
+std::optional<Token> Lexer::infer_semicolon() {
     const std::set<TokenType> valid = {
             Identifier, Integer, String, Break, Return, RightParen, RightBracket
     };
     if (tokens.size() > 0)
         if (valid.count(tokens.back().type))
-            token = create_token(Semicolon, "");
+            return create_token(Semicolon, "");
+    return std::nullopt;
+}
+
+/**
+ * Creates a semicolon token if the last token is a valid token, and increments the line and column count
+ * @return the semicolon token if the last token is valid, otherwise nullopt
+ */
+std::optional<Token> Lexer::newline() {
     line++;
     column = 0;
-    return token;
+    return infer_semicolon();
 }
 
 /**
@@ -170,6 +177,8 @@ std::vector<Token> Lexer::match_tokens() {
         auto token = match_token();
         if (token.has_value()) tokens.push_back(token.value());
     }
+    if(infer_semicolon().has_value())
+        tokens.push_back(infer_semicolon().value());
     tokens.push_back(create_token(Eof, current, current));
 
     return tokens;
