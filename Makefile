@@ -19,4 +19,4 @@ filereader.o: src/filereader.cpp src/filereader.h
 	g++ -c src/filereader.cpp
 
 clean:
-	-rm *.o golf.exe
+	-rm *.o golf
