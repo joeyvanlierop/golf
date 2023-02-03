@@ -10,4 +10,5 @@ golf.exe
 cmake-build-debug/
 
 # Testing stuff
+run
 run.output
