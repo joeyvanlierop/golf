@@ -2,6 +2,6 @@ input:
 // semicolons get added at EOF too per spec
 return
 
-output:
+//output:
 return	[return] @ line 2
 ;	[] @ line 2

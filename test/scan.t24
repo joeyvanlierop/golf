@@ -1,6 +1,6 @@
-input:
+// input:
 // string containing newline is a no-no
-"abc
+    var test = "abc
 
 
 output:

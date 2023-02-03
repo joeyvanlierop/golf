@@ -99,9 +99,10 @@ std::optional<Token> Lexer::infer_semicolon() {
  * @return the semicolon token if the last token is valid, otherwise nullopt
  */
 std::optional<Token> Lexer::newline() {
+    auto token = infer_semicolon();
     line++;
     column = 0;
-    return infer_semicolon();
+    return token;
 }
 
 /**
@@ -279,4 +280,7 @@ std::optional<Token> Lexer::match_token() {
             else
                 warning(filereader, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
     }
+
+    // Couldn't match any character, ignore
+    return std::nullopt;
 }
