@@ -1,13 +1,21 @@
-#include <string.h>
-#include <vector.h>
+#pragma once
+
+#include <string>
+#include <vector>
 
 class AST {
 public:
-    AST(std::string type, std::string type, int line, int column);
+    AST(std::string type);
+    AST(std::string type, std::string attr, int line, int column);
+    void add_child(AST* child);
+    void print();
 
 private:
+    std::vector<AST*> children;
     std::string type;
-    std::string type;
+    std::string attr;
     int line;
     int column;
+
+    void print(int indent);
 };

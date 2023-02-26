@@ -2,6 +2,7 @@
 #include "golf.h"
 #include "lexer.h"
 #include "filereader.h"
+#include "parser.h"
 
 /**
  * The main function of the program
@@ -24,7 +25,12 @@ int main(int argc, char* argv[]) {
 
     // Lex input
     Lexer lexer(&reader);
-    lexer.match_tokens(true);
+    auto tokens = lexer.match_tokens(false);
+
+    // Parse tokens
+    Parser parser(&reader, tokens);
+    auto ast = parser.parse();
+    ast->print();
 
     return EXIT_SUCCESS;
 }

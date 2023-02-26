@@ -1,0 +1,6 @@
+//func foo() asdf {
+//        x = 2 + 3 * 5
+//        y = (2 + 3) * 5
+//}
+var a int
+var b int
