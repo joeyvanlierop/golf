@@ -19,12 +19,16 @@ Token Parser::peek() {
 }
 
 Token Parser::consume(TokenType type) {
-    if(check(type))
-        return advance();
+    auto curr = peek();
+    if(check(type)){
+        advance();
+        return curr;
+    }
 
-    std::ostringstream buffer;
-    buffer << "expected " << type << ", got " << peek().type << std::endl;
-    Logger::error(filereader, peek().line, peek().column, 1, buffer.str());
+    std::stringstream ss;
+    ss << "expected " << type << ", got " << peek().type;
+
+    Logger::error(filereader, curr.line, curr.column + 1, curr.lexeme.length(), ss.str());
 }
 
 bool Parser::check(TokenType type) {
@@ -55,14 +59,15 @@ AST *Parser::decl() {
         case Func:
             return func_decl();
         default:
-            Logger::error(filereader, peek().line, peek().column, 1, "unexpected token");
+            Logger::error(filereader, peek().line, peek().column + 1, 1, "unexpected token [" + peek().lexeme + "]");
     }
 }
 
 /**
- * VarDecl ::= "var" identifier [ identifier ]
+ * VarDecl ::= "var" identifier [ identifier ] ";"
  */
 AST *Parser::var_decl() {
+    consume(Var);
     auto ast = new AST("var");
 
     // Token representing the name of the variable
@@ -76,6 +81,7 @@ AST *Parser::var_decl() {
         ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
     }
 
+    consume(Semicolon);
     return ast;
 }
 

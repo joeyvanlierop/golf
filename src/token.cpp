@@ -10,7 +10,6 @@
  */
 Token::Token(TokenType type, const std::string &lexeme, int line, int column) : type(type), lexeme(lexeme), line(line),
                                                                                 column(column) {}
-
 /**
  * Overloading the output stream operator to print the `TokenType`
  * Formats as a human-readable string
