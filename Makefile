@@ -1,7 +1,7 @@
 .PHONY: clean
 
-golf: golf.o lexer.o token.o logger.o filereader.o ast.o parse.o
-	g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parse.o -o golf
+golf: golf.o lexer.o token.o logger.o filereader.o ast.o parser.o
+	g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 golf.o: src/golf.cpp src/golf.h
 	g++ -c src/golf.cpp
@@ -21,8 +21,8 @@ filereader.o: src/filereader.cpp src/filereader.h
 ast.o: src/ast.cpp src/ast.h
 	g++ -c src/ast.cpp
 
-parse.o: src/parse.cpp src/parse.h
-	g++ -c src/parse.cpp
+parser.o: src/parser.cpp src/parser.h
+	g++ -c src/parser.cpp
 
 clean:
 	-rm *.o golf
