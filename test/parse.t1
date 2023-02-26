@@ -3,4 +3,6 @@
 //        y = (2 + 3) * 5
 //}
 var a int
-var var int
+var b int
+
+func test(a int, b int, c int)

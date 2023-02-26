@@ -27,6 +27,7 @@ private:
     Token peek();
     Token consume(TokenType type);
     bool check(TokenType type);
+    bool match(TokenType expected);
     AST* decls();
     AST* decl();
     AST* var_decl();

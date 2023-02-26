@@ -37,6 +37,13 @@ bool Parser::check(TokenType type) {
     return peek().type == type;
 }
 
+bool Parser::match(TokenType expected) {
+    if (peek().type != expected)
+        return false;
+    advance();
+    return true;
+}
+
 /**
  * Program ::= { Declaration } EOF
  */
@@ -67,14 +74,14 @@ AST *Parser::decl() {
  * VarDecl ::= "var" identifier [ identifier ] ";"
  */
 AST *Parser::var_decl() {
-    consume(Var);
     auto ast = new AST("var");
+    consume(Var);
 
-    // Token representing the name of the variable
+    // Variable name
     auto id = consume(Identifier);
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
-    // Optional token representing the type of the variable
+    // Optional variable type
     auto has_type = check(Identifier);
     if (has_type){
         auto type = consume(Identifier);
@@ -90,6 +97,21 @@ AST *Parser::var_decl() {
  */
 AST *Parser::func_decl() {
     auto ast = new AST("func");
+    consume(Func);
+
+    // Function name
+    auto id = consume(Identifier);
+    ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
+
+    // Function signature
+    auto signature = func_sig();
+    ast->add_child(signature);
+
+    // Function body
+//    auto body = block();
+//    ast->add_child(body);
+
+    consume(Semicolon);
     return ast;
 }
 
@@ -98,6 +120,36 @@ AST *Parser::func_decl() {
  */
 AST *Parser::func_sig() {
     auto ast = new AST("sig");
+
+    // Opening paren
+    consume(LeftParen);
+
+    // Formals
+    auto formals = new AST("formals");
+    ast->add_child(formals);
+    do {
+        auto formal = new AST("formal");
+
+        auto id = consume(Identifier);
+        formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
+        auto type = consume(Identifier);
+        formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
+
+        formals->add_child(formal);
+    } while(match(Comma));
+
+    // Closing paren
+    consume(RightParen);
+
+    // Optional return type
+    auto has_type = check(Identifier);
+    if (has_type){
+        auto type = consume(Identifier);
+        ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
+    } else {
+        ast->add_child(new AST("typeid", "$void"));
+    }
+
     return ast;
 }
 
