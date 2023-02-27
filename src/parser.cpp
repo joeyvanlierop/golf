@@ -47,7 +47,7 @@ Token Parser::previous() {
  * Consumes the current token and advances
  * Throws an error if the current token does not match the expected type
  * @param type expected token type
- * @return the next token
+ * @return the consumed token
  */
 Token Parser::consume(TokenType type) {
     auto curr = peek();
@@ -168,16 +168,17 @@ AST *Parser::func_sig() {
     // Formals
     auto formals = new AST("formals");
     ast->add_child(formals);
-    do {
+    while(check(Identifier)) {
         auto formal = new AST("formal");
-
         auto id = consume(Identifier);
         formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
         auto type = consume(Identifier);
         formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
-
         formals->add_child(formal);
-    } while (match(Comma));
+
+        if(!match(Comma))
+            break;
+    };
 
     // Closing paren
     consume(RightParen);

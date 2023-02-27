@@ -1,5 +1,2 @@
-func test(a int) {
-    if (2 + 3) * 4 <= 10 {
-
-    }
+func test() {
 }
