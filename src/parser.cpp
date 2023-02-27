@@ -18,6 +18,10 @@ Token Parser::peek() {
     return tokens.at(current);
 }
 
+Token Parser::previous() {
+    return tokens.at(current - 1);
+}
+
 Token Parser::consume(TokenType type) {
     auto curr = peek();
     if (check(type)) {
@@ -187,6 +191,7 @@ AST *Parser::stmt() {
         case Break:return break_stmt();
         case Return:return return_stmt();
         case LeftBracket:return block();
+        default:return expr_stmt();
     }
 }
 
@@ -206,14 +211,16 @@ AST *Parser::if_stmt() {
     ast->add_child(body);
 
     // Optional else/else-if
-    if (match(Else))
+    if (match(Else)) {
         // Else-if
         if (check(If))
             ast->add_child(if_stmt());
-        // Else
+            // Else
         else
             ast->add_child(block());
+    }
 
+    consume(Semicolon);
     return ast;
 }
 
@@ -263,16 +270,25 @@ AST *Parser::return_stmt() {
 }
 
 /**
- * Expression ::= UnaryExpr | Expression binary_op Expression
+ * Expression ::= Expression ";"
  */
-AST *Parser::expr() {
-    auto ast = or_expr();
+AST *Parser::expr_stmt() {
+    auto ast = expr();
     consume(Semicolon);
     return ast;
 }
 
+
 /**
- * Assignment ::= Expression "=" Expression
+ * Expression ::= Assignment
+ */
+AST *Parser::expr() {
+    auto ast = or_expr();
+    return ast;
+}
+
+/**
+ * Assignment ::= identifier "=" Assignment | OrExpr
  */
 AST *Parser::assignment() {
     auto ast = new AST("assignment");
@@ -285,76 +301,98 @@ AST *Parser::assignment() {
 }
 
 /**
- * OrExpr ::= UnaryExpr | Expression binary_op Expression
+ * OrExpr ::= AndExpr { "||" AndExpr }
  */
 AST *Parser::or_expr() {
-    auto ast = or_expr();
-    consume(Semicolon);
-    return ast;
+    auto l = and_expr();
+
+    while(match(Or)) {
+        auto op = previous();
+        auto r = and_expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
+
+    return l;
 }
 
 /**
- * UnaryExpr ::= PrimaryExpr | unary_op UnaryExpr
+ * AndExpr ::= RelExpr { "&&" RelExpr }
+ */
+AST *Parser::and_expr() {
+    auto l = rel_expr();
+
+    while(match(And)) {
+        auto op = previous();
+        auto r = rel_expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
+
+    return l;
+}
+
+/**
+ * RelExpr ::= AddExpr { ("==" | "!=" | "<" | "<=" | ">" | ">=") AddExpr }
+ */
+AST *Parser::rel_expr() {
+    auto l = add_expr();
+
+    while(match(EqualEqual) || match(NotEqual) || match(Less) || match(LessEqual) || match(Greater) || match(GreaterEqual)) {
+        auto op = previous();
+        auto r = add_expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
+
+    return l;
+}
+
+/**
+ * AddExpr ::= MulExpr { ("+" | "-") MulExpr }
+ */
+AST *Parser::add_expr() {
+    auto l = mul_expr();
+
+    while(match(Add) || match(Subtract)) {
+        auto op = previous();
+        auto r = mul_expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
+
+    return l;
+}
+
+/**
+ * MulExpr ::= UnaryExpr { ("*" | "/" | "%") UnaryExpr }
+ */
+AST *Parser::mul_expr() {
+    auto l = unary_expr();
+
+    while(match(Multiply) || match(Divide) || match(Modulo)) {
+        auto op = previous();
+        auto r = unary_expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
+
+    return l;
+}
+
+/**
+ * UnaryExpr ::= int_lit | string_lit | identifier | "(" Expression ")"
  */
 AST *Parser::unary_expr() {
-    auto curr = peek();
-    switch(curr.type) {
-        case Subtract: {
-            auto ast = new AST("u-", curr.line, curr.column);
-            ast->add_child(unary_expr());
-            return ast;
-        }
-        case Not: {
-            auto ast = new AST("!", curr.line, curr.column);
-            ast->add_child(unary_expr());
-            return ast;
-        }
-        default:
-            return primary_expr();
+    if(match(Integer))
+        return new AST("int", previous().lexeme, previous().line, previous().column);
+
+    if(match(String))
+        return new AST("string", previous().lexeme, previous().line, previous().column);
+
+    if(match(Identifier))
+        return new AST("id", previous().lexeme, previous().line, previous().column);
+
+    if(match(LeftParen)) {
+        auto ast = new AST("id", previous().lexeme, previous().line, previous().column);
+        consume(RightParen);
+        return ast;
     }
-}
 
-/**
- * PrimaryExpr ::= Operand | PrimaryExpr Arguments
- */
-AST *Parser::primary_expr() {
-    auto ast = new AST("primary");
-    return ast;
-}
-
-/**
- * Operand ::= int_lit | string_lit | identifier | "(" Expression ")"
- */
-AST *Parser::operand() {
-    auto curr = peek();
-    switch(curr.type) {
-        case Integer:
-            return new AST("string", curr.lexeme, curr.line, curr.column);
-        case String:
-            return new AST("int", curr.lexeme, curr.line, curr.column);
-        case Identifier:
-            return new AST("id", curr.lexeme, curr.line, curr.column);
-        default: {
-            consume(LeftParen);
-            auto child = expr();
-            consume(RightParen);
-            return child;
-        }
-    }
-}
-
-/**
- * Arguments ::= "(" Expression { "," Expression } [ "," ] ")"
- */
-AST *Parser::arguments() {
-    auto ast = new AST("arguments");
-    consume(LeftParen);
-
-    // TODO: Review trailing comma
-    do {
-        ast->add_child(expr());
-    } while(match(Comma));
-
-    consume(RightParen);
-    return ast;
+    Logger::error(filereader, peek().line, peek().column, 1, "expected expression");
 }

@@ -25,6 +25,7 @@ private:
     bool is_at_end();
     Token advance();
     Token peek();
+    Token previous();
     Token consume(TokenType type);
     bool check(TokenType type);
     bool match(TokenType expected);
@@ -41,11 +42,13 @@ private:
     AST* for_stmt();
     AST* break_stmt();
     AST* return_stmt();
+    AST* expr_stmt();
     AST* expr();
-    AST* assignment();
-    AST* or_expr();
-    AST* and_expr();
-    AST* and_expr();
-    AST* operand();
-    AST* arguments();
+    AST *assignment();
+    AST *or_expr();
+    AST *and_expr();
+    AST *rel_expr();
+    AST *add_expr();
+    AST *mul_expr();
+    AST *unary_expr();
 };

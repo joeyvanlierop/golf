@@ -9,7 +9,7 @@ public:
     AST(std::string type, std::string attr);
     AST(std::string type, std::string attr, int line, int column);
     AST(std::string type, int line, int column);
-    void add_child(AST* child);
+    AST* add_child(AST* child);
     void print();
 
 private:

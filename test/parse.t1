@@ -2,7 +2,8 @@
 //        x = 2 + 3 * 5
 //        y = (2 + 3) * 5
 //}
-func test(a int, b int, c int) int {
-    var a
-    var b int
+func test(a int) {
+    if 2 + 3 * 4 <= 10 {
+
+    }
 }
