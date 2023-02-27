@@ -1,0 +1,9 @@
+// unary and binary minuses, also integer literal handling
+
+func main() {
+        x = a--123
+        x = a--(123)
+        x = a---123
+        x = a--b
+        x = -------x
+}

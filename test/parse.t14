@@ -1,0 +1,7 @@
+// can't have opening brace on the next line
+// ensure error message is appropriate when semicolon not automatically inserted
+
+func main() {
+	if true; {
+	}
+}

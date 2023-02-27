@@ -1,0 +1,39 @@
+// statements
+
+func asdf() {
+	var i int
+	;
+	x = 123
+	foo(d)
+	(((bar)))(d)
+	return
+	return 12345
+	break
+	{
+		ego
+	}
+	if true {
+		42
+	}
+	if false {
+		111
+	} else if fallse {
+		222
+	} else {
+		333
+	}
+	if (false) {
+		444
+	} else {
+		555
+	}
+	for {
+		666
+	}
+	for some_expr {
+		777
+	}
+	// ok in terms of syntax but not semantics
+	"abc" = def
+	asdf + 12 == 4 = bcd
+}

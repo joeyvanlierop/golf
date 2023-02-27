@@ -1,0 +1,7 @@
+// precedence check, mostly - lack of main() and
+// undeclared vars are semantic checks
+
+func foo() asdf {
+	x = 2 + 3 * 5
+	y = (2 + 3) * 5
+}

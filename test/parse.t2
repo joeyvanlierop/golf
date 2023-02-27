@@ -1,0 +1,8 @@
+// here you *can* have opening brace on the next line in Go and
+// consequently GoLF - yes, this is inconsistent design
+
+func main() {
+	for
+	{
+	}
+}

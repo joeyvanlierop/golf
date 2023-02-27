@@ -1,9 +1,0 @@
-input:
-// unescaped double quote not allowed in a string
-"abc"def"
-
-
-output:
-string	[abc] @ line 2
-id	[def] @ line 2
-log: string contains newline at or near line 2

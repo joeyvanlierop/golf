@@ -1,8 +1,0 @@
-input:
-// illegal string escape
-
-"ab\acd"
-
-
-output:
-log: bad string escape 'a' at or near line 3

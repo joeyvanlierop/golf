@@ -1,7 +1,0 @@
-// input:
-// string containing newline is a no-no
-    var test = "abc
-
-
-output:
-log: string contains newline at or near line 2

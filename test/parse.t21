@@ -1,0 +1,12 @@
+// check that associativity is structured correctly
+
+func a_sock() {
+	var a int
+	var b int
+	var c int
+	var d int
+	var e int
+
+	a + b + c + d + e
+	a / b / d / d / e
+}

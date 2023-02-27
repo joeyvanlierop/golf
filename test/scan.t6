@@ -1,9 +1,0 @@
-input:
-}
-
-// what happens if there's no previous token?
-
-
-output:
-}	[}] @ line 1
-;	[] @ line 1

@@ -1,5 +1,7 @@
 // can't have opening brace on the next line
 
-func main()
-{
+func main() {
+	if true
+	{
+	}
 }

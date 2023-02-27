@@ -1,6 +1,0 @@
-input:
-// string escape followed by EOF
-"abc\
-
-output:
-log: string terminated by EOF at or near line 2

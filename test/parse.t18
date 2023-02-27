@@ -1,0 +1,9 @@
+// an optional trailing comma allows this formatting in Go (and GoLF)
+// it should fail without the trailing comma, though
+
+func foo() {
+	garbled(a,
+		b,
+		c
+	)
+}

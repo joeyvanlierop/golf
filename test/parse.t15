@@ -1,0 +1,6 @@
+// an optional trailing comma allows this formatting in Go (and GoLF)
+
+func foo(a int,
+	b int,
+	c int,
+) { }

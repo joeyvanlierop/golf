@@ -1,0 +1,15 @@
+// formal and actual arg structure
+
+func foo() {}
+
+// type checking is semantic, not syntactic
+func bar(a1 int, a2 bool, a3 sometype) returntype {
+}
+
+func baz() int {
+	blarg(
+		123 + 456,
+		garble(789),
+		true,
+		greep(false, "eek"))
+}

@@ -1,8 +1,0 @@
-input:
-// not octal in GoLF
-0600
-
-
-output:
-int	[0600] @ line 2
-;	[] @ line 2

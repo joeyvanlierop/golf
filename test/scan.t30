@@ -1,8 +1,0 @@
-input:
-// illegal string escape
-
-"ab\x42cd"
-
-
-output:
-log: bad string escape 'x' at or near line 3

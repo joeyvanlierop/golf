@@ -1,0 +1,8 @@
+// ensure assignment is implemented correctly
+
+func main() {
+	var a int
+	var b int
+	var c int
+	a = b = c
+}

@@ -1,0 +1,9 @@
+// odd formatting but doesn't trigger semicolon insertion at the wrong time
+
+func main(
+) {
+	if 2 +
+		3 ==
+			5 {
+		}
+}
