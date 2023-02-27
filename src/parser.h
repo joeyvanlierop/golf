@@ -7,11 +7,6 @@
 #include <set>
 #include <optional>
 
-static std::set<TokenType> DECL_START({
-    Var,
-    Func,
-});
-
 class Parser {
 public:
     Parser(FileReader *filereader, std::vector<Token> tokens);
@@ -29,14 +24,11 @@ private:
     Token consume(TokenType type);
     bool check(TokenType type);
     bool match(TokenType expected);
-    AST* decls();
     AST* decl();
     AST* var_decl();
-    AST* var_spec();
     AST* func_decl();
     AST* func_sig();
     AST* block();
-    AST* stmts();
     AST* stmt();
     AST* if_stmt();
     AST* for_stmt();

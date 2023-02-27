@@ -2,26 +2,53 @@
 #include "parser.h"
 #include "logger.h"
 
+/**
+ * Parser class constructor
+ * @param filereader pointer to a FileReader object
+ * @param tokens list of tokens to parse
+ */
 Parser::Parser(FileReader *filereader, std::vector<Token> tokens) : filereader(filereader), tokens(tokens) {}
 
+/**
+ * Check if parser has reached the final token
+ * @return true if parser has reached the final token, false otherwise
+ */
 bool Parser::is_at_end() {
     return peek().type == Eof;
 }
 
+/**
+ * Advance the parser to the next token
+ * @return the next token
+ */
 Token Parser::advance() {
     if (!is_at_end())
         current++;
     return peek();
 }
 
+/**
+ * Returns the next token without advancing the current position
+ * @return the next token
+ */
 Token Parser::peek() {
     return tokens.at(current);
 }
 
+/**
+ * Returns the previous token without reducing the current position
+ * @return the previous token
+ */
 Token Parser::previous() {
     return tokens.at(current - 1);
 }
 
+/**
+ * Consumes the current token and advances
+ * Throws an error if the current token does not match the expected type
+ * @param type expected token type
+ * @return the next token
+ */
 Token Parser::consume(TokenType type) {
     auto curr = peek();
     if (check(type)) {
@@ -31,16 +58,25 @@ Token Parser::consume(TokenType type) {
 
     std::stringstream ss;
     ss << "expected " << type << ", got " << peek().type;
-
     Logger::error(filereader, curr.line, curr.column + 1, curr.lexeme.length(), ss.str());
 }
 
+/**
+ * Check if the current token is of the given type
+ * @param type token type to match
+ * @return true if the current token matches the given type, false otherwise
+ */
 bool Parser::check(TokenType type) {
     if (is_at_end())
         return false;
     return peek().type == type;
 }
 
+/**
+ * Advance if the the current token is of the given type
+ * @param type token type to match
+ * @return true if the current token matches the given type, false otherwise
+ */
 bool Parser::match(TokenType expected) {
     if (peek().type != expected)
         return false;
@@ -50,6 +86,9 @@ bool Parser::match(TokenType expected) {
 
 /**
  * Program ::= { Declaration } EOF
+ *
+ * Parses the list of tokens given to the parser
+ * @return abstract syntax tree (AST) representing the given list of tokens
  */
 AST *Parser::parse() {
     auto ast = new AST("program");
@@ -389,7 +428,7 @@ AST *Parser::unary_expr() {
         return new AST("id", previous().lexeme, previous().line, previous().column);
 
     if(match(LeftParen)) {
-        auto ast = new AST("id", previous().lexeme, previous().line, previous().column);
+        auto ast = expr();
         consume(RightParen);
         return ast;
     }
