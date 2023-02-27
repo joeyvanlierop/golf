@@ -1,4 +1,4 @@
-Run started on Sun Feb 26 19:41:38 2023
+Run started on Sun Feb 26 19:53:29 2023
 
 Hostname: csx3.cs.ucalgary.ca
 
@@ -9,10 +9,29 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-make: 'golf' is up to date.
+g++ -c src/golf.cpp
+g++ -c src/lexer.cpp
+g++ -c src/token.cpp
+g++ -c src/logger.cpp
+g++ -c src/filereader.cpp
+g++ -c src/ast.cpp
+g++ -c src/parser.cpp
+g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 
 STDERR:
+src/parser.cpp: In member function ‘Token Parser::consume(TokenType)’:
+src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn-type]
+   62 | }
+      | ^
+src/parser.cpp: In member function ‘AST* Parser::decl()’:
+src/parser.cpp:112:1: warning: control reaches end of non-void function [-Wreturn-type]
+  112 | }
+      | ^
+src/parser.cpp: In member function ‘AST* Parser::unary_expr()’:
+src/parser.cpp:438:1: warning: control reaches end of non-void function [-Wreturn-type]
+  438 | }
+      | ^
 
 
 RETURN CODE: 0
@@ -81,11 +100,10 @@ STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t1:3:12
   | 
 3 | func main()
-terminate called after throwing an instance of 'std::length_error'
-  what():  basic_string::_M_replace_aux
+  |            ^ error: expected {, got ;
 
 
-*** TERMINATION VIA SIGNAL: Aborted
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: "for" open brace exception |
@@ -493,5 +511,5 @@ STDERR:
 
 RETURN CODE: 1
 
-Run ended on Sun Feb 26 19:41:38 2023
+Run ended on Sun Feb 26 19:53:30 2023
 
