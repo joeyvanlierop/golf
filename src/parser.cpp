@@ -323,21 +323,23 @@ AST *Parser::expr_stmt() {
  * Expression ::= Assignment
  */
 AST *Parser::expr() {
-    auto ast = or_expr();
+    auto ast = assignment();
     return ast;
 }
 
 /**
- * Assignment ::= identifier "=" Assignment | OrExpr
+ * Assignment ::= OrExpr "=" Expr | OrExpr
  */
 AST *Parser::assignment() {
-    auto ast = new AST("assignment");
+    auto l = or_expr();
 
-    ast->add_child(expr());
-    consume(Equal);
-    ast->add_child(expr());
+    if(match(Equal)) {
+        auto op = previous();
+        auto r = expr();
+        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+    }
 
-    return ast;
+    return l;
 }
 
 /**
