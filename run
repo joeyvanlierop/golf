@@ -1,0 +1,193 @@
+#!/usr/bin/python3
+
+# Run this script from the directory corresponding to the root of your
+# code repo.  In other words, when your TA pulls the code from your repo,
+# goes to its root directory, and runs this script, it should work.
+#
+# Output is logged in the file "run.output", WHICH WILL BE OVERWRITTEN
+# EACH TIME THIS SCRIPT IS RUN.
+#
+# Output from the standard output and standard error streams is collected
+# separately, and as a result won't be intermingled as might be seen when
+# running a command directly from the terminal.
+#
+# To best show off your program's construction, be sure to remove all
+# object/executable/class/jar files before running this script (or, ideally,
+# you'll have a "clean" target in your Makefile and you can just "make clean"
+# first.
+#
+# Needs Python 3.8 or higher.
+
+import os
+import sys
+import time
+import signal
+import socket
+import subprocess
+
+TESTPATH = '/home/profs/aycock/411/TEST/ms2'
+LOGFILE = 'run.output'
+JARCLASS = 'golf'
+JAR = 'golf.jar'
+EXE = './golf'
+
+JAVA = '/usr/bin/java'
+MAKE = '/usr/bin/make'
+
+WIDTH = 79
+
+#
+# Test files
+#
+
+TESTS = (
+	( 'parse.t1',	'func open brace in wrong place' ),
+	( 'parse.t2',	'"for" open brace exception' ),
+	( 'parse.t3',	'"for" open brace in wrong place' ),
+	( 'parse.t4',	'"if" open brace in wrong place' ),
+	( 'parse.t5',	'weird but correct formatting' ),
+	( 'parse.t6',	'precedence check' ),
+	( 'parse.t7',	'formal and actual params' ),
+	( 'parse.t8',	'unary and binary minus' ),
+	( 'parse.t9',	'func open brace in wrong place, with semicolon' ),
+	( 'parse.t10',	'func open brace with bonus semicolon' ),
+	( 'parse.t11',	'"for" open brace in wrong place, with semicolon' ),
+	( 'parse.t12',	'"for" with bonus semicolon' ),
+	( 'parse.t13',	'"if" open brace in wrong place, with semicolon' ),
+	( 'parse.t14',	'"if" with bonus semicolon' ),
+	( 'parse.t15',	'func line breaks using trailing commas' ),
+	( 'parse.t16',	'func line breaks sans trailing comma' ),
+	( 'parse.t17',	'func call line breaks with trailing commas' ),
+	( 'parse.t18',	'func call line breaks sans trailing comma' ),
+	( 'parse.t19',	'legit syntax salad' ),
+	( 'parse.t20',	'assignment' ),
+	( 'parse.t21',	'associativity test' ),
+	# oh hai how did you get in here
+	( 'gen.t18',	'a calculated move' ),
+)
+
+#
+# Utility routines
+#
+
+f = None
+
+def log(s):
+	global f
+	if f is None:
+		try:
+			# ensure Python doesn't try to alter output
+			f = open(LOGFILE, 'w', encoding='iso-8859-1')
+		except IOError as e:
+			print(f'{LOGFILE}: {e.strerror}', file=sys.stderr)
+			sys.exit(1)
+	print(s, file=f)
+	print(file=f)
+
+def die(s):
+	log(f'*** ABNORMAL TERMINATION: {s}')
+	print(f'{sys.argv[0]}: {s}', file=sys.stderr)
+	sys.exit(1)
+
+def timestamp(reason):
+	log(f'Run {reason} on {time.ctime()}')
+	
+def banner(title):
+	# his friends call him Bruce
+	s = '-' * WIDTH + '\n'
+	s += title + ' |\n'
+	s += '-' * (len(title) + 2)
+	log(s)
+
+	# make progress visible to user
+	print(title, file=sys.stderr)
+
+def run(cmd):
+	# XXX no timeouts set currently
+	log('% ' + ' '.join(cmd))
+
+	try:
+		cp = subprocess.run(cmd, capture_output=True)
+	except subprocess.SubprocessError:
+		die('unexpected exception running command')
+	except IOError as e:
+		die(f'unexpected I/O error running command: {e.strerror}')
+
+	# encoding should effectively act as a passthrough with no
+	# possibility of encoding errors
+	log('STDOUT:\n' + str(cp.stdout, encoding='iso-8859-1'))
+	log('STDERR:\n' + str(cp.stderr, encoding='iso-8859-1'))
+	
+	if cp.returncode < 0:
+		# rarely a good sign, let's be honest
+		which = signal.strsignal(-cp.returncode)
+		log(f'*** TERMINATION VIA SIGNAL: {which}')
+	else:
+		log(f'RETURN CODE: {cp.returncode}')
+
+#
+# Figure out what form the executable code's in
+#
+
+cmd = []
+
+def findcompiler():
+	global cmd
+	is_exe = is_jar = False
+
+	if os.access(EXE, os.X_OK):
+		is_exe = True
+		cmd = [ EXE ]
+	if os.access(JAR, os.R_OK):
+		is_jar = True
+		cmd = [ JAVA, '-cp', JAR, JARCLASS ]
+
+	if not is_exe and not is_jar:
+		die('no compiler found with name per spec')
+	if is_exe and is_jar:
+		die('multiple compiler candidates found')
+
+	log('Compiler will be run as ' + ' '.join(cmd))
+
+#
+# Testing, one, two, three, testing
+#
+
+def main():
+	timestamp('started')
+
+	# must be run on CPSC Linux machine
+	log(f'Hostname: {socket.gethostname()}')
+
+	# build it; this'll also permit variants on "Makefile" like "makefile"
+	banner('Running make')
+	run([ MAKE ])
+
+	# figure out how to run the compiler
+	banner('Locating GoLF compiler')
+	findcompiler()
+
+	# no-argument case
+	banner('Test: too few arguments')
+	run(cmd)
+
+	# extra-argument case
+	banner('Test: too many arguments')
+	run(cmd + [ '/dev/null', '/dev/zero' ])
+
+	# nonexistent case
+	banner('Test: nonexistent file')
+	run(cmd + [ '/i/do/not/exist' ])
+
+	# now the fun begins
+	for file, description in TESTS:
+		banner(f'Test: {description}')
+		run(cmd + [ f'{TESTPATH}/{file}' ])
+
+	timestamp('ended')
+
+if __name__ == '__main__':
+	try:
+		main()
+	except KeyboardInterrupt:
+		die('terminated via keyboard interrupt')

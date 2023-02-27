@@ -1,0 +1,497 @@
+Run started on Sun Feb 26 19:41:38 2023
+
+Hostname: csx3.cs.ucalgary.ca
+
+-------------------------------------------------------------------------------
+Running make |
+--------------
+
+% /usr/bin/make
+
+STDOUT:
+make: 'golf' is up to date.
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Locating GoLF compiler |
+------------------------
+
+Compiler will be run as ./golf
+
+-------------------------------------------------------------------------------
+Test: too few arguments |
+-------------------------
+
+% ./golf
+
+STDOUT:
+Usage: ./golf [filename]
+
+
+STDERR:
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: too many arguments |
+--------------------------
+
+% ./golf /dev/null /dev/zero
+
+STDOUT:
+Usage: ./golf [filename]
+
+
+STDERR:
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: nonexistent file |
+------------------------
+
+% ./golf /i/do/not/exist
+
+STDOUT:
+
+
+STDERR:
+File /i/do/not/exist not found: "/home/ugb/joseph.vanlierop/Documents/cpsc-411"
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func open brace in wrong place |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t1
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t1:3:12
+  | 
+3 | func main()
+terminate called after throwing an instance of 'std::length_error'
+  what():  basic_string::_M_replace_aux
+
+
+*** TERMINATION VIA SIGNAL: Aborted
+
+-------------------------------------------------------------------------------
+Test: "for" open brace exception |
+----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t2
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t2:6:1
+ | error: expected expression
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "for" open brace in wrong place |
+---------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t3
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t3:4:10
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "if" open brace in wrong place |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t4
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t4:4:9
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: weird but correct formatting |
+------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t5
+
+STDOUT:
+program
+	func
+		newid [main] @ (3, 5)
+		sig
+			formals
+			typeid [$void]
+		block
+			if
+				== @ (6, 4)
+					+ @ (5, 6)
+						int [2] @ (5, 4)
+						int [3] @ (6, 2)
+					int [5] @ (7, 3)
+				block
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: precedence check |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t6
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t6:5:4
+ | error: expected ;, got =
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: formal and actual params |
+--------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t7
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t7:10:7
+ | error: expected ;, got (
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: unary and binary minus |
+------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t8
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t8:4:11
+  | 
+4 |         x = a--123
+  |           ^ error: expected ;, got =
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func open brace in wrong place, with semicolon |
+------------------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t9
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t9:4:12
+  | 
+4 | func main();
+  |            ^ error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func open brace with bonus semicolon |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t10
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t10:4:12
+  | 
+4 | func main(); {
+  |            ^ error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "for" open brace in wrong place, with semicolon |
+-------------------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t11
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t11:5:10
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "for" with bonus semicolon |
+----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t12
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t12:5:10
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "if" open brace in wrong place, with semicolon |
+------------------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t13
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t13:5:9
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "if" with bonus semicolon |
+---------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t14
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t14:5:9
+ | error: expected {, got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func line breaks using trailing commas |
+----------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t15
+
+STDOUT:
+program
+	func
+		newid [foo] @ (3, 5)
+		sig
+			formals
+				formal
+					newid [a] @ (3, 9)
+					typeid [int] @ (3, 11)
+				formal
+					newid [b] @ (4, 1)
+					typeid [int] @ (4, 3)
+				formal
+					newid [c] @ (5, 1)
+					typeid [int] @ (5, 3)
+			typeid [$void]
+		block
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: func line breaks sans trailing comma |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t16
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t16:6:7
+ | error: expected ), got ;
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func call line breaks with trailing commas |
+--------------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t17
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t17:4:9
+ | error: expected ;, got (
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: func call line breaks sans trailing comma |
+-------------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t18
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t18:5:9
+ | error: expected ;, got (
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: legit syntax salad |
+--------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t19
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t19:5:1
+ | error: expected expression
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: assignment |
+------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t20
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t20:7:4
+ | error: expected ;, got =
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: associativity test |
+--------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/parse.t21
+
+STDOUT:
+program
+	func
+		newid [a_sock] @ (3, 5)
+		sig
+			formals
+			typeid [$void]
+		block
+			var
+				newid [a] @ (4, 5)
+				typeid [int] @ (4, 7)
+			var
+				newid [b] @ (5, 5)
+				typeid [int] @ (5, 7)
+			var
+				newid [c] @ (6, 5)
+				typeid [int] @ (6, 7)
+			var
+				newid [d] @ (7, 5)
+				typeid [int] @ (7, 7)
+			var
+				newid [e] @ (8, 5)
+				typeid [int] @ (8, 7)
+			+ @ (10, 15)
+				+ @ (10, 11)
+					+ @ (10, 7)
+						+ @ (10, 3)
+							id [a] @ (10, 1)
+							id [b] @ (10, 5)
+						id [c] @ (10, 9)
+					id [d] @ (10, 13)
+				id [e] @ (10, 17)
+			/ @ (11, 15)
+				/ @ (11, 11)
+					/ @ (11, 7)
+						/ @ (11, 3)
+							id [a] @ (11, 1)
+							id [b] @ (11, 5)
+						id [d] @ (11, 9)
+					id [d] @ (11, 13)
+				id [e] @ (11, 17)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: a calculated move |
+-------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms2/gen.t18
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms2/gen.t18:6:6
+ | error: expected ;, got (
+
+
+RETURN CODE: 1
+
+Run ended on Sun Feb 26 19:41:38 2023
+
