@@ -41,7 +41,7 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
     // Explanation line
     message.insert(message.begin(), column, ' ');
     message.insert(message.begin() + column - 1, 1, '^');
-    message.insert(message.begin() + column, width - 1, '~');
+    message.insert(message.begin() + column, std::max(width - 1, 0), '~');
     print_line(ostream, message, indent);
 }
 
