@@ -2,7 +2,7 @@
 //        x = 2 + 3 * 5
 //        y = (2 + 3) * 5
 //}
-var a int
-var b int
-
-func test(a int, b int, c int)
+func test(a int, b int, c int) int {
+    var a
+    var b int
+}

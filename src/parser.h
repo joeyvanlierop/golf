@@ -42,9 +42,10 @@ private:
     AST* break_stmt();
     AST* return_stmt();
     AST* expr();
-    AST* unary_expr();
-    AST* primary_expr();
+    AST* assignment();
+    AST* or_expr();
+    AST* and_expr();
+    AST* and_expr();
     AST* operand();
     AST* arguments();
-    AST* assignment();
 };

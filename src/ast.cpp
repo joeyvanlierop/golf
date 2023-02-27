@@ -9,6 +9,8 @@ AST::AST(std::string type) : AST(type, "", -1, -1) {}
 
 AST::AST(std::string type, std::string attr) : AST(type, attr, -1, -1) {}
 
+AST::AST(std::string type, int line, int column) : AST(type, "", line, column) {}
+
 void AST::add_child(AST *child) {
     this->children.push_back(child);
 }

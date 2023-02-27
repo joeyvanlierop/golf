@@ -9,7 +9,7 @@ bool Parser::is_at_end() {
 }
 
 Token Parser::advance() {
-    if(!is_at_end())
+    if (!is_at_end())
         current++;
     return peek();
 }
@@ -20,7 +20,7 @@ Token Parser::peek() {
 
 Token Parser::consume(TokenType type) {
     auto curr = peek();
-    if(check(type)){
+    if (check(type)) {
         advance();
         return curr;
     }
@@ -32,7 +32,7 @@ Token Parser::consume(TokenType type) {
 }
 
 bool Parser::check(TokenType type) {
-    if(is_at_end())
+    if (is_at_end())
         return false;
     return peek().type == type;
 }
@@ -49,7 +49,7 @@ bool Parser::match(TokenType expected) {
  */
 AST *Parser::parse() {
     auto ast = new AST("program");
-    while(!is_at_end()) {
+    while (!is_at_end()) {
         auto child = decl();
         ast->add_child(child);
     }
@@ -61,10 +61,8 @@ AST *Parser::parse() {
  */
 AST *Parser::decl() {
     switch (peek().type) {
-        case Var:
-            return var_decl();
-        case Func:
-            return func_decl();
+        case Var:return var_decl();
+        case Func:return func_decl();
         default:
             Logger::error(filereader, peek().line, peek().column + 1, 1, "unexpected token [" + peek().lexeme + "]");
     }
@@ -83,7 +81,7 @@ AST *Parser::var_decl() {
 
     // Optional variable type
     auto has_type = check(Identifier);
-    if (has_type){
+    if (has_type) {
         auto type = consume(Identifier);
         ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
     }
@@ -108,8 +106,8 @@ AST *Parser::func_decl() {
     ast->add_child(signature);
 
     // Function body
-//    auto body = block();
-//    ast->add_child(body);
+    auto body = block();
+    ast->add_child(body);
 
     consume(Semicolon);
     return ast;
@@ -136,14 +134,14 @@ AST *Parser::func_sig() {
         formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
 
         formals->add_child(formal);
-    } while(match(Comma));
+    } while (match(Comma));
 
     // Closing paren
     consume(RightParen);
 
     // Optional return type
     auto has_type = check(Identifier);
-    if (has_type){
+    if (has_type) {
         auto type = consume(Identifier);
         ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
     } else {
@@ -158,6 +156,15 @@ AST *Parser::func_sig() {
  */
 AST *Parser::block() {
     auto ast = new AST("block");
+    consume(LeftBracket);
+
+    // Block body
+    while (!check(RightBracket)) {
+        auto child = stmt();
+        ast->add_child(child);
+    }
+
+    consume(RightBracket);
     return ast;
 }
 
@@ -173,19 +180,13 @@ AST *Parser::block() {
  *  | Assignment
  */
 AST *Parser::stmt() {
-    switch(peek().type) {
-        case Var:
-            return var_decl();
-        case If:
-            return if_stmt();
-        case For:
-            return for_stmt();
-        case Break:
-            return break_stmt();
-        case Return:
-            return return_stmt();
-        case LeftBracket:
-            return block();
+    switch (peek().type) {
+        case Var:return var_decl();
+        case If:return if_stmt();
+        case For:return for_stmt();
+        case Break:return break_stmt();
+        case Return:return return_stmt();
+        case LeftBracket:return block();
     }
 }
 
@@ -194,6 +195,25 @@ AST *Parser::stmt() {
  */
 AST *Parser::if_stmt() {
     auto ast = new AST("if");
+    consume(If);
+
+    // Condition
+    auto condition = expr();
+    ast->add_child(condition);
+
+    // If body
+    auto body = block();
+    ast->add_child(body);
+
+    // Optional else/else-if
+    if (match(Else))
+        // Else-if
+        if (check(If))
+            ast->add_child(if_stmt());
+        // Else
+        else
+            ast->add_child(block());
+
     return ast;
 }
 
@@ -202,22 +222,43 @@ AST *Parser::if_stmt() {
  */
 AST *Parser::for_stmt() {
     auto ast = new AST("for");
+    consume(For);
+
+    // Condition
+    auto condition = expr();
+    ast->add_child(condition);
+
+    // For body
+    auto body = block();
+    ast->add_child(body);
+
     return ast;
 }
 
 /**
- * BreakStmt ::= "break"
+ * BreakStmt ::= "break" ";"
  */
 AST *Parser::break_stmt() {
     auto ast = new AST("break");
+    consume(Break);
+    consume(Semicolon);
     return ast;
 }
 
 /**
- * ReturnStmt ::= "return" [ Expression ]
+ * ReturnStmt ::= "return" [ Expression ] ";"
  */
 AST *Parser::return_stmt() {
     auto ast = new AST("return");
+    consume(Return);
+
+    // Optional return expression
+    if(!check(Semicolon)) {
+        auto child = expr();
+        ast->add_child(child);
+    }
+
+    consume(Semicolon);
     return ast;
 }
 
@@ -225,7 +266,30 @@ AST *Parser::return_stmt() {
  * Expression ::= UnaryExpr | Expression binary_op Expression
  */
 AST *Parser::expr() {
-    auto ast = new AST("expr");
+    auto ast = or_expr();
+    consume(Semicolon);
+    return ast;
+}
+
+/**
+ * Assignment ::= Expression "=" Expression
+ */
+AST *Parser::assignment() {
+    auto ast = new AST("assignment");
+
+    ast->add_child(expr());
+    consume(Equal);
+    ast->add_child(expr());
+
+    return ast;
+}
+
+/**
+ * OrExpr ::= UnaryExpr | Expression binary_op Expression
+ */
+AST *Parser::or_expr() {
+    auto ast = or_expr();
+    consume(Semicolon);
     return ast;
 }
 
@@ -233,8 +297,21 @@ AST *Parser::expr() {
  * UnaryExpr ::= PrimaryExpr | unary_op UnaryExpr
  */
 AST *Parser::unary_expr() {
-    auto ast = new AST("expr");
-    return ast;
+    auto curr = peek();
+    switch(curr.type) {
+        case Subtract: {
+            auto ast = new AST("u-", curr.line, curr.column);
+            ast->add_child(unary_expr());
+            return ast;
+        }
+        case Not: {
+            auto ast = new AST("!", curr.line, curr.column);
+            ast->add_child(unary_expr());
+            return ast;
+        }
+        default:
+            return primary_expr();
+    }
 }
 
 /**
@@ -249,22 +326,35 @@ AST *Parser::primary_expr() {
  * Operand ::= int_lit | string_lit | identifier | "(" Expression ")"
  */
 AST *Parser::operand() {
-    auto ast = new AST("operand");
-    return ast;
+    auto curr = peek();
+    switch(curr.type) {
+        case Integer:
+            return new AST("string", curr.lexeme, curr.line, curr.column);
+        case String:
+            return new AST("int", curr.lexeme, curr.line, curr.column);
+        case Identifier:
+            return new AST("id", curr.lexeme, curr.line, curr.column);
+        default: {
+            consume(LeftParen);
+            auto child = expr();
+            consume(RightParen);
+            return child;
+        }
+    }
 }
 
 /**
  * Arguments ::= "(" Expression { "," Expression } [ "," ] ")"
  */
 AST *Parser::arguments() {
-    auto ast = new AST("operand");
-    return ast;
-}
+    auto ast = new AST("arguments");
+    consume(LeftParen);
 
-/**
- * Assignment ::= Expression "=" Expression
- */
-AST *Parser::assignment() {
-    auto ast = new AST("operand");
+    // TODO: Review trailing comma
+    do {
+        ast->add_child(expr());
+    } while(match(Comma));
+
+    consume(RightParen);
     return ast;
 }
