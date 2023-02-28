@@ -449,10 +449,16 @@ AST *Parser::mul_expr() {
  * UnaryExpr ::= ("!" | "-") UnaryExpr | FuncCall
  */
 AST *Parser::unary_expr() {
-    if (match(Not) || match(Subtract)) {
+    // TODO: Refactor this to be more concise if you are out of fun things to do in life :(
+    if (match(Not)) {
         auto op = previous();
         auto r = unary_expr();
         return (new AST(op.lexeme, op.line, op.column))->add_child(r);
+    }
+    if (match(Subtract)) {
+        auto op = previous();
+        auto r = unary_expr();
+        return (new AST("u"+op.lexeme, op.line, op.column))->add_child(r);
     }
 
     return func_call();
