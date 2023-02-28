@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 15:50:03 2023
+Run started on Tue Feb 28 15:54:35 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -19,8 +19,8 @@ src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn
    62 | }
       | ^
 src/parser.cpp: In member function ‘AST* Parser::operand()’:
-src/parser.cpp:514:1: warning: control reaches end of non-void function [-Wreturn-type]
-  514 | }
+src/parser.cpp:513:1: warning: control reaches end of non-void function [-Wreturn-type]
+  513 | }
       | ^
 
 
@@ -627,33 +627,16 @@ Test: assignment |
 % ./golf /home/profs/aycock/411/TEST/ms2/parse.t20
 
 STDOUT:
-program
-	func @ (3, 0)
-		newid [main] @ (3, 5)
-		sig
-			formals
-			typeid [$void]
-		block
-			var @ (4, 1)
-				newid [a] @ (4, 5)
-				typeid [int] @ (4, 7)
-			var @ (5, 1)
-				newid [b] @ (5, 5)
-				typeid [int] @ (5, 7)
-			var @ (6, 1)
-				newid [c] @ (6, 5)
-				typeid [int] @ (6, 7)
-			= @ (7, 3)
-				id [a] @ (7, 1)
-				= @ (7, 7)
-					id [b] @ (7, 5)
-					id [c] @ (7, 9)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms2/parse.t20:7:8
+  | 
+7 | 	a = b = c
+  |        ^ error: expected ;, got =
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: associativity test |
@@ -1391,5 +1374,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Feb 28 15:50:04 2023
+Run ended on Tue Feb 28 15:54:36 2023
 
