@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
     // Lex input
     Lexer lexer(&reader);
-    auto tokens = lexer.match_tokens(true);
+    auto tokens = lexer.match_tokens(false);
 
     // Parse tokens
     Parser parser(&reader, tokens);
