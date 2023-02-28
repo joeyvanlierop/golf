@@ -145,8 +145,8 @@ AST *Parser::var_decl() {
  * FuncDecl ::= "func" identifier Signature Block
  */
 AST *Parser::func_decl() {
-    auto ast = new AST("func");
-    consume(Func);
+    auto token = consume(Func);
+    auto ast = new AST("func", token.line, token.column);
 
     // Function name
     auto id = consume(Identifier);
