@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 15:40:16 2023
+Run started on Tue Feb 28 15:44:58 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -9,11 +9,19 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/golf.cpp
+g++ -c src/parser.cpp
 g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 
 STDERR:
+src/parser.cpp: In member function ‘Token Parser::consume(TokenType)’:
+src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn-type]
+   62 | }
+      | ^
+src/parser.cpp: In member function ‘AST* Parser::operand()’:
+src/parser.cpp:514:1: warning: control reaches end of non-void function [-Wreturn-type]
+  514 | }
+      | ^
 
 
 RETURN CODE: 0
@@ -290,36 +298,36 @@ program
 				id [x] @ (4, 8)
 				- @ (4, 13)
 					id [a] @ (4, 12)
-					- @ (4, 14)
+					u- @ (4, 14)
 						int [123] @ (4, 15)
 			= @ (5, 10)
 				id [x] @ (5, 8)
 				- @ (5, 13)
 					id [a] @ (5, 12)
-					- @ (5, 14)
+					u- @ (5, 14)
 						int [123] @ (5, 16)
 			= @ (6, 10)
 				id [x] @ (6, 8)
 				- @ (6, 13)
 					id [a] @ (6, 12)
-					- @ (6, 14)
-						- @ (6, 15)
+					u- @ (6, 14)
+						u- @ (6, 15)
 							int [123] @ (6, 16)
 			= @ (7, 10)
 				id [x] @ (7, 8)
 				- @ (7, 13)
 					id [a] @ (7, 12)
-					- @ (7, 14)
+					u- @ (7, 14)
 						id [b] @ (7, 15)
 			= @ (8, 10)
 				id [x] @ (8, 8)
-				- @ (8, 12)
-					- @ (8, 13)
-						- @ (8, 14)
-							- @ (8, 15)
-								- @ (8, 16)
-									- @ (8, 17)
-										- @ (8, 18)
+				u- @ (8, 12)
+					u- @ (8, 13)
+						u- @ (8, 14)
+							u- @ (8, 15)
+								u- @ (8, 16)
+									u- @ (8, 17)
+										u- @ (8, 18)
 											id [x] @ (8, 19)
 
 
@@ -1210,7 +1218,7 @@ program
 								id [TK_SUB] @ (173, 8)
 						= @ (174, 9)
 							id [result] @ (174, 2)
-							- @ (174, 11)
+							u- @ (174, 11)
 								funccall
 									id [F] @ (174, 12)
 									actuals
@@ -1311,7 +1319,7 @@ program
 		block
 			= @ (217, 5)
 				id [EOF] @ (217, 1)
-				- @ (217, 7)
+				u- @ (217, 7)
 					int [1] @ (217, 8)
 			= @ (219, 9)
 				id [ASCII_0] @ (219, 1)
@@ -1383,5 +1391,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Feb 28 15:40:17 2023
+Run ended on Tue Feb 28 15:44:59 2023
 
