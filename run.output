@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 15:37:38 2023
+Run started on Tue Feb 28 15:39:42 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -9,7 +9,6 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/golf.cpp
 g++ -c src/parser.cpp
 g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
@@ -131,7 +130,7 @@ program
 			formals
 			typeid [$void]
 		block
-			for
+			for @ (5, 1)
 				id [$true]
 				block
 					emptystmt
@@ -237,7 +236,7 @@ program
 			formals
 			typeid [$void]
 		block
-			if
+			if @ (5, 1)
 				== @ (6, 4)
 					+ @ (5, 6)
 						int [2] @ (5, 4)
@@ -1020,33 +1019,33 @@ program
 			break
 			block
 				id [ego] @ (13, 2)
-			if
+			if @ (15, 1)
 				id [true] @ (15, 4)
 				block
 					int [42] @ (16, 2)
-			if
+			if @ (18, 1)
 				id [false] @ (18, 4)
 				block
 					int [111] @ (19, 2)
-				if
+				if @ (20, 8)
 					id [fallse] @ (20, 11)
 					block
 						int [222] @ (21, 2)
 					else
 						block
 							int [333] @ (23, 2)
-			if
+			if @ (25, 1)
 				id [false] @ (25, 5)
 				block
 					int [444] @ (26, 2)
 				else
 					block
 						int [555] @ (28, 2)
-			for
+			for @ (30, 1)
 				id [$true]
 				block
 					int [666] @ (31, 2)
-			for
+			for @ (33, 1)
 				id [some_expr] @ (33, 5)
 				block
 					int [777] @ (34, 2)
@@ -2122,7 +2121,7 @@ program
 			formals
 			typeid [int] @ (17, 12)
 		block
-			if
+			if @ (18, 1)
 				id [_havechar] @ (18, 4)
 				block
 					= @ (19, 12)
@@ -2143,7 +2142,7 @@ program
 					typeid [int] @ (25, 15)
 			typeid [$void]
 		block
-			if
+			if @ (26, 1)
 				id [_havechar] @ (26, 4)
 				block
 					funccall
@@ -2174,7 +2173,7 @@ program
 			formals
 			typeid [int] @ (42, 12)
 		block
-			if
+			if @ (43, 1)
 				id [_havetoken] @ (43, 4)
 				block
 					return
@@ -2198,7 +2197,7 @@ program
 					typeid [int] @ (51, 18)
 			typeid [$void]
 		block
-			if
+			if @ (52, 1)
 				!= @ (52, 11)
 					funccall
 						id [peek] @ (52, 4)
@@ -2232,7 +2231,7 @@ program
 			var
 				newid [ch] @ (62, 5)
 				typeid [int] @ (62, 8)
-			for
+			for @ (64, 1)
 				id [$true]
 				block
 					= @ (65, 5)
@@ -2240,7 +2239,7 @@ program
 						funccall
 							id [getc] @ (65, 7)
 							actuals
-					if
+					if @ (66, 2)
 						! @ (66, 5)
 							funccall
 								id [isspace] @ (66, 6)
@@ -2248,63 +2247,63 @@ program
 									id [ch] @ (66, 14)
 						block
 							break
-			if
+			if @ (71, 1)
 				== @ (71, 7)
 					id [ch] @ (71, 4)
 					id [EOF] @ (71, 10)
 				block
 					return
 						id [TK_EOF] @ (71, 25)
-			if
+			if @ (72, 1)
 				== @ (72, 7)
 					id [ch] @ (72, 4)
 					id [ASCII_NL] @ (72, 10)
 				block
 					return
 						id [TK_EOLN] @ (72, 29)
-			if
+			if @ (73, 1)
 				== @ (73, 7)
 					id [ch] @ (73, 4)
 					id [ASCII_PLUS] @ (73, 10)
 				block
 					return
 						id [TK_ADD] @ (73, 31)
-			if
+			if @ (74, 1)
 				== @ (74, 7)
 					id [ch] @ (74, 4)
 					id [ASCII_MINUS] @ (74, 10)
 				block
 					return
 						id [TK_SUB] @ (74, 32)
-			if
+			if @ (75, 1)
 				== @ (75, 7)
 					id [ch] @ (75, 4)
 					id [ASCII_STAR] @ (75, 10)
 				block
 					return
 						id [TK_MUL] @ (75, 31)
-			if
+			if @ (76, 1)
 				== @ (76, 7)
 					id [ch] @ (76, 4)
 					id [ASCII_SLASH] @ (76, 10)
 				block
 					return
 						id [TK_DIV] @ (76, 32)
-			if
+			if @ (77, 1)
 				== @ (77, 7)
 					id [ch] @ (77, 4)
 					id [ASCII_LPAREN] @ (77, 10)
 				block
 					return
 						id [TK_LPAREN] @ (77, 33)
-			if
+			if @ (78, 1)
 				== @ (78, 7)
 					id [ch] @ (78, 4)
 					id [ASCII_RPAREN] @ (78, 10)
 				block
 					return
 						id [TK_RPAREN] @ (78, 33)
-			if
+			if @ (80, 1)
 				funccall
 					id [isdigit] @ (80, 4)
 					actuals
@@ -2313,7 +2312,7 @@ program
 					= @ (81, 7)
 						id [attr] @ (81, 2)
 						int [0] @ (81, 9)
-					for
+					for @ (82, 2)
 						funccall
 							id [isdigit] @ (82, 6)
 							actuals
@@ -2393,7 +2392,7 @@ program
 			var
 				newid [result] @ (109, 5)
 				typeid [int] @ (109, 12)
-			for
+			for @ (111, 1)
 				!= @ (111, 12)
 					funccall
 						id [peek] @ (111, 5)
@@ -2441,7 +2440,7 @@ program
 				funccall
 					id [T] @ (126, 5)
 					actuals
-			for
+			for @ (127, 1)
 				|| @ (127, 22)
 					== @ (127, 12)
 						funccall
@@ -2468,7 +2467,7 @@ program
 						funccall
 							id [T] @ (130, 6)
 							actuals
-					if
+					if @ (132, 2)
 						== @ (132, 11)
 							id [token] @ (132, 5)
 							id [TK_ADD] @ (132, 14)
@@ -2507,7 +2506,7 @@ program
 				funccall
 					id [F] @ (146, 5)
 					actuals
-			for
+			for @ (147, 1)
 				|| @ (147, 22)
 					== @ (147, 12)
 						funccall
@@ -2534,7 +2533,7 @@ program
 						funccall
 							id [F] @ (150, 6)
 							actuals
-					if
+					if @ (152, 2)
 						== @ (152, 11)
 							id [token] @ (152, 5)
 							id [TK_MUL] @ (152, 14)
@@ -2570,7 +2569,7 @@ program
 				funccall
 					id [peek] @ (165, 9)
 					actuals
-			if
+			if @ (167, 1)
 				== @ (167, 10)
 					id [token] @ (167, 4)
 					id [TK_LPAREN] @ (167, 13)
@@ -2588,7 +2587,7 @@ program
 						id [match] @ (170, 2)
 						actuals
 							id [TK_RPAREN] @ (170, 8)
-				if
+				if @ (172, 8)
 					== @ (172, 17)
 						id [token] @ (172, 11)
 						id [TK_SUB] @ (172, 20)
@@ -2603,7 +2602,7 @@ program
 								funccall
 									id [F] @ (174, 12)
 									actuals
-					if
+					if @ (176, 8)
 						== @ (176, 17)
 							id [token] @ (176, 11)
 							id [TK_NUMBER] @ (176, 20)
@@ -2772,5 +2771,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Feb 28 15:37:40 2023
+Run ended on Tue Feb 28 15:39:43 2023
 
