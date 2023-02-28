@@ -168,7 +168,7 @@ AST *Parser::func_sig() {
     // Formals
     auto formals = new AST("formals");
     ast->add_child(formals);
-    while(check(Identifier)) {
+    while (check(Identifier)) {
         auto formal = new AST("formal");
         auto id = consume(Identifier);
         formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
@@ -176,7 +176,7 @@ AST *Parser::func_sig() {
         formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
         formals->add_child(formal);
 
-        if(!match(Comma))
+        if (!match(Comma))
             break;
     };
 
@@ -300,7 +300,7 @@ AST *Parser::return_stmt() {
     consume(Return);
 
     // Optional return expression
-    if(!check(Semicolon)) {
+    if (!check(Semicolon)) {
         auto child = expr();
         ast->add_child(child);
     }
@@ -333,7 +333,7 @@ AST *Parser::expr() {
 AST *Parser::assignment() {
     auto l = or_expr();
 
-    if(match(Equal)) {
+    if (match(Equal)) {
         auto op = previous();
         auto r = expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -348,7 +348,7 @@ AST *Parser::assignment() {
 AST *Parser::or_expr() {
     auto l = and_expr();
 
-    while(match(Or)) {
+    while (match(Or)) {
         auto op = previous();
         auto r = and_expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -363,7 +363,7 @@ AST *Parser::or_expr() {
 AST *Parser::and_expr() {
     auto l = rel_expr();
 
-    while(match(And)) {
+    while (match(And)) {
         auto op = previous();
         auto r = rel_expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -378,7 +378,8 @@ AST *Parser::and_expr() {
 AST *Parser::rel_expr() {
     auto l = add_expr();
 
-    while(match(EqualEqual) || match(NotEqual) || match(Less) || match(LessEqual) || match(Greater) || match(GreaterEqual)) {
+    while (match(EqualEqual) || match(NotEqual) || match(Less) ||
+           match(LessEqual) || match(Greater) || match(GreaterEqual)) {
         auto op = previous();
         auto r = add_expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -393,7 +394,7 @@ AST *Parser::rel_expr() {
 AST *Parser::add_expr() {
     auto l = mul_expr();
 
-    while(match(Add) || match(Subtract)) {
+    while (match(Add) || match(Subtract)) {
         auto op = previous();
         auto r = mul_expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -406,9 +407,9 @@ AST *Parser::add_expr() {
  * MulExpr ::= UnaryExpr { ("*" | "/" | "%") UnaryExpr }
  */
 AST *Parser::mul_expr() {
-    auto l = unary_expr();
+    auto l = func_call();
 
-    while(match(Multiply) || match(Divide) || match(Modulo)) {
+    while (match(Multiply) || match(Divide) || match(Modulo)) {
         auto op = previous();
         auto r = unary_expr();
         l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
@@ -418,19 +419,55 @@ AST *Parser::mul_expr() {
 }
 
 /**
- * UnaryExpr ::= int_lit | string_lit | identifier | "(" Expression ")"
+ * UnaryExpr ::= ("!" | "-") UnaryExpr | FuncCall
  */
 AST *Parser::unary_expr() {
-    if(match(Integer))
+    if (match(Not) || match(Subtract)) {
+        auto op = previous();
+        auto r = unary_expr();
+        return (new AST(op.lexeme, op.line, op.column))->add_child(r);
+    }
+
+    return func_call();
+}
+
+/**
+ * FuncCall ::= Operand | Operand "(" [ Expression { "," Expression } ] ")"
+ */
+AST *Parser::func_call() {
+    auto ast = operand();
+
+    // Arguments
+    if (match(LeftParen)) {
+        ast = (new AST("funccall"))->add_child(ast);
+        auto actuals = new AST("actuals");
+        ast->add_child(actuals);
+        while (!match(RightParen)) {
+            actuals->add_child(expr());
+            if (!match(Comma)) {
+                consume(RightParen);
+                break;
+            }
+        }
+    }
+
+    return ast;
+}
+
+/**
+ * Operand ::= int_lit | string_lit | identifier | "(" Expression ")"
+ */
+AST *Parser::operand() {
+    if (match(Integer))
         return new AST("int", previous().lexeme, previous().line, previous().column);
 
-    if(match(String))
+    if (match(String))
         return new AST("string", previous().lexeme, previous().line, previous().column);
 
-    if(match(Identifier))
+    if (match(Identifier))
         return new AST("id", previous().lexeme, previous().line, previous().column);
 
-    if(match(LeftParen)) {
+    if (match(LeftParen)) {
         auto ast = expr();
         consume(RightParen);
         return ast;

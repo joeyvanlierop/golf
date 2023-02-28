@@ -43,4 +43,6 @@ private:
     AST *add_expr();
     AST *mul_expr();
     AST *unary_expr();
+    AST *func_call();
+    AST *operand();
 };

@@ -1,0 +1,5 @@
+func baz() int {
+    blarg(
+        123 + 456,
+        greep(false, "eek"))
+}
