@@ -112,12 +112,13 @@ std::string Logger::get_line(std::ifstream &filestream, int line) {
 
 /**
  * Determines if a given string is printable.
+ * Allow tabs, TODO: fix indentation in message
  * @param str the string to check
  * @return true if the string is printable, false otherwise
 */
 bool Logger::is_printable(const std::string &str) {
     for (char c: str)
-        if (!std::isprint(c))
+        if (!std::isprint(c) && c != '\t')
             return false;
     return true;
 }
