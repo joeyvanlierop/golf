@@ -4,5 +4,6 @@ func main() {
 	var a int
 	var b int
 	var c int
+	a = b
 	a = b = c
 }

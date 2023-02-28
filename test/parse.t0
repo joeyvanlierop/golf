@@ -1,5 +1,5 @@
 func test() {
-    if a {
+    if a; {
 
     } else if b {
 
