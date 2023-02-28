@@ -124,8 +124,8 @@ AST *Parser::decl() {
  * VarDecl ::= "var" identifier [ identifier ] ";"
  */
 AST *Parser::var_decl() {
-    auto ast = new AST("var");
-    consume(Var);
+    auto token = consume(Var);
+    auto ast = new AST("var", token.line, token.column);
 
     // Variable name
     auto id = consume(Identifier);
