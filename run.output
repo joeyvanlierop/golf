@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 13:28:35 2023
+Run started on Tue Feb 28 14:11:11 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -9,11 +9,23 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/logger.cpp
+g++ -c src/parser.cpp
 g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 
 STDERR:
+src/parser.cpp: In member function ‘Token Parser::consume(TokenType)’:
+src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn-type]
+   62 | }
+      | ^
+src/parser.cpp: In member function ‘AST* Parser::decl()’:
+src/parser.cpp:112:1: warning: control reaches end of non-void function [-Wreturn-type]
+  112 | }
+      | ^
+src/parser.cpp: In member function ‘AST* Parser::operand()’:
+src/parser.cpp:477:1: warning: control reaches end of non-void function [-Wreturn-type]
+  477 | }
+      | ^
 
 
 RETURN CODE: 0
@@ -211,16 +223,56 @@ Test: formal and actual params |
 % ./golf /home/profs/aycock/411/TEST/ms2/parse.t7
 
 STDOUT:
+program
+	func
+		newid [foo] @ (3, 5)
+		sig
+			formals
+			typeid [$void]
+		block
+	func
+		newid [bar] @ (6, 5)
+		sig
+			formals
+				formal
+					newid [a1] @ (6, 9)
+					typeid [int] @ (6, 12)
+				formal
+					newid [a2] @ (6, 17)
+					typeid [bool] @ (6, 20)
+				formal
+					newid [a3] @ (6, 26)
+					typeid [sometype] @ (6, 29)
+			typeid [returntype] @ (6, 39)
+		block
+	func
+		newid [baz] @ (9, 5)
+		sig
+			formals
+			typeid [int] @ (9, 11)
+		block
+			funccall
+				id [blarg] @ (10, 1)
+				actuals
+					+ @ (11, 6)
+						int [123] @ (11, 2)
+						int [456] @ (11, 8)
+					funccall
+						id [garble] @ (12, 2)
+						actuals
+							int [789] @ (12, 9)
+					id [true] @ (13, 2)
+					funccall
+						id [greep] @ (14, 2)
+						actuals
+							id [false] @ (14, 8)
+							string [eek] @ (14, 16)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t7:10:7
-   | 
-10 | 	blarg(
-   |       ^ error: expected ;, got (
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: unary and binary minus |
@@ -403,16 +455,25 @@ Test: func call line breaks with trailing commas |
 % ./golf /home/profs/aycock/411/TEST/ms2/parse.t17
 
 STDOUT:
+program
+	func
+		newid [foo] @ (3, 5)
+		sig
+			formals
+			typeid [$void]
+		block
+			funccall
+				id [garbled] @ (4, 1)
+				actuals
+					id [a] @ (4, 9)
+					id [b] @ (5, 2)
+					id [c] @ (6, 2)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t17:4:9
-  | 
-4 | 	garbled(a,
-  |         ^ error: expected ;, got (
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: func call line breaks sans trailing comma |
@@ -424,10 +485,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t18:5:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t18:7:4
   | 
-5 | 	garbled(a,
-  |         ^ error: expected ;, got (
+7 | 		c
+  |    ^ error: expected ), got ;
 
 
 RETURN CODE: 1
@@ -549,13 +610,13 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/gen.t18:6:6
-  | 
-6 | 	init()
-  |      ^ error: expected ;, got (
+--> /home/profs/aycock/411/TEST/ms2/gen.t18:64:5
+   | 
+64 | 	for {
+   |     ^ error: expected expression
 
 
 RETURN CODE: 1
 
-Run ended on Tue Feb 28 13:28:36 2023
+Run ended on Tue Feb 28 14:11:12 2023
 
