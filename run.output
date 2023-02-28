@@ -1,6 +1,6 @@
-Run started on Sun Feb 26 19:53:29 2023
+Run started on Tue Feb 28 13:20:34 2023
 
-Hostname: csx3.cs.ucalgary.ca
+Hostname: csx2.cs.ucalgary.ca
 
 -------------------------------------------------------------------------------
 Running make |
@@ -9,12 +9,6 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/golf.cpp
-g++ -c src/lexer.cpp
-g++ -c src/token.cpp
-g++ -c src/logger.cpp
-g++ -c src/filereader.cpp
-g++ -c src/ast.cpp
 g++ -c src/parser.cpp
 g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
@@ -29,8 +23,8 @@ src/parser.cpp:112:1: warning: control reaches end of non-void function [-Wretur
   112 | }
       | ^
 src/parser.cpp: In member function ‘AST* Parser::unary_expr()’:
-src/parser.cpp:438:1: warning: control reaches end of non-void function [-Wreturn-type]
-  438 | }
+src/parser.cpp:440:1: warning: control reaches end of non-void function [-Wreturn-type]
+  440 | }
       | ^
 
 
@@ -188,14 +182,33 @@ Test: precedence check |
 % ./golf /home/profs/aycock/411/TEST/ms2/parse.t6
 
 STDOUT:
+program
+	func
+		newid [foo] @ (4, 5)
+		sig
+			formals
+			typeid [asdf] @ (4, 11)
+		block
+			= @ (5, 3)
+				id [x] @ (5, 1)
+				+ @ (5, 7)
+					int [2] @ (5, 5)
+					* @ (5, 11)
+						int [3] @ (5, 9)
+						int [5] @ (5, 13)
+			= @ (6, 3)
+				id [y] @ (6, 1)
+				* @ (6, 13)
+					+ @ (6, 8)
+						int [2] @ (6, 6)
+						int [3] @ (6, 10)
+					int [5] @ (6, 15)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t6:5:4
- | error: expected ;, got =
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: formal and actual params |
@@ -223,10 +236,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t8:4:11
+--> /home/profs/aycock/411/TEST/ms2/parse.t8:4:14
   | 
 4 |         x = a--123
-  |           ^ error: expected ;, got =
+  |              ^ error: expected expression
 
 
 RETURN CODE: 1
@@ -432,14 +445,33 @@ Test: assignment |
 % ./golf /home/profs/aycock/411/TEST/ms2/parse.t20
 
 STDOUT:
+program
+	func
+		newid [main] @ (3, 5)
+		sig
+			formals
+			typeid [$void]
+		block
+			var
+				newid [a] @ (4, 5)
+				typeid [int] @ (4, 7)
+			var
+				newid [b] @ (5, 5)
+				typeid [int] @ (5, 7)
+			var
+				newid [c] @ (6, 5)
+				typeid [int] @ (6, 7)
+			= @ (7, 3)
+				id [a] @ (7, 1)
+				= @ (7, 7)
+					id [b] @ (7, 5)
+					id [c] @ (7, 9)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t20:7:4
- | error: expected ;, got =
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: associativity test |
@@ -511,5 +543,5 @@ STDERR:
 
 RETURN CODE: 1
 
-Run ended on Sun Feb 26 19:53:30 2023
+Run ended on Tue Feb 28 13:20:35 2023
 
