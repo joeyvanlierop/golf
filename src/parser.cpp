@@ -495,7 +495,7 @@ AST *Parser::operand() {
         return new AST("id", previous().lexeme, previous().line, previous().column);
 
     if (check(Semicolon))
-        return new AST("emptystmt", previous().line, previous().column);
+        return new AST("emptystmt");
 
     if (match(LeftParen)) {
         auto ast = expr();
