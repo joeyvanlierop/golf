@@ -316,8 +316,8 @@ AST *Parser::for_stmt() {
  * BreakStmt ::= "break" ";"
  */
 AST *Parser::break_stmt() {
-    auto ast = new AST("break");
-    consume(Break);
+    auto token = consume(Break);
+    auto ast = new AST("break", token.line, token.column);
     return ast;
 }
 
@@ -325,8 +325,8 @@ AST *Parser::break_stmt() {
  * ReturnStmt ::= "return" [ Expression ] ";"
  */
 AST *Parser::return_stmt() {
-    auto ast = new AST("return");
-    consume(Return);
+    auto token = consume(Return);
+    auto ast = new AST("return", token.line, token.column);
 
     // Optional return expression
     if (!check(Semicolon)) {
