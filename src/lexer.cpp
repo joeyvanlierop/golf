@@ -196,6 +196,14 @@ std::vector<Token> Lexer::match_tokens(bool verbose) {
  */
 std::optional<Token> Lexer::match_token() {
     char c = advance();
+
+    // Ugly approach to allow complex statements to occupy a single line
+    // TODO: Refactor this lmao
+    if(c == '}' && tokens.back().type != Semicolon) {
+        current--;
+        return create_token(Semicolon);
+    }
+
     switch (c) {
         // Whitespace
         case ' ':

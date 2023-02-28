@@ -1,5 +1,9 @@
-func baz() int {
-    blarg(
-        123 + 456,
-        greep(false, "eek"))
+func test() {
+    if a {
+
+    } else if b {
+
+    } else {
+
+    }
 }

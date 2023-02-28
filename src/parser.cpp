@@ -103,12 +103,21 @@ AST *Parser::parse() {
  * Declaration ::= VarDecl | FuncDecl
  */
 AST *Parser::decl() {
+    AST* ast;
+
     switch (peek().type) {
-        case Var:return var_decl();
-        case Func:return func_decl();
+        case Var:
+            ast = var_decl();
+            break;
+        case Func:
+            ast = func_decl();
+            break;
         default:
             Logger::error(filereader, peek().line, peek().column + 1, 1, "unexpected token [" + peek().lexeme + "]");
     }
+
+    consume(Semicolon);
+    return ast;
 }
 
 /**
@@ -129,7 +138,6 @@ AST *Parser::var_decl() {
         ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
     }
 
-    consume(Semicolon);
     return ast;
 }
 
@@ -152,7 +160,6 @@ AST *Parser::func_decl() {
     auto body = block();
     ast->add_child(body);
 
-    consume(Semicolon);
     return ast;
 }
 
@@ -224,15 +231,34 @@ AST *Parser::block() {
  *  | Assignment
  */
 AST *Parser::stmt() {
+    AST* ast;
+
     switch (peek().type) {
-        case Var:return var_decl();
-        case If:return if_stmt();
-        case For:return for_stmt();
-        case Break:return break_stmt();
-        case Return:return return_stmt();
-        case LeftBracket:return block();
-        default:return expr_stmt();
+        case Var:
+            ast = var_decl();
+            break;
+        case If:
+            ast = if_stmt();
+            break;
+        case For:
+            ast = for_stmt();
+            break;
+        case Break:
+            ast = break_stmt();
+            break;
+        case Return:
+            ast = return_stmt();
+            break;
+        case LeftBracket:
+            ast = block();
+            break;
+        default:
+            ast = expr_stmt();
+            break;
     }
+
+    consume(Semicolon);
+    return ast;
 }
 
 /**
@@ -257,10 +283,9 @@ AST *Parser::if_stmt() {
             ast->add_child(if_stmt());
             // Else
         else
-            ast->add_child(block());
+            ast->add_child((new AST("else"))->add_child(block()));
     }
 
-    consume(Semicolon);
     return ast;
 }
 
@@ -271,8 +296,13 @@ AST *Parser::for_stmt() {
     auto ast = new AST("for");
     consume(For);
 
-    // Condition
-    auto condition = expr();
+    // Optional condition
+    AST* condition;
+    if (check(LeftBracket)) {
+        condition = new AST("id", "$true");
+    } else {
+        condition = expr();
+    }
     ast->add_child(condition);
 
     // For body
@@ -288,7 +318,6 @@ AST *Parser::for_stmt() {
 AST *Parser::break_stmt() {
     auto ast = new AST("break");
     consume(Break);
-    consume(Semicolon);
     return ast;
 }
 
@@ -305,7 +334,6 @@ AST *Parser::return_stmt() {
         ast->add_child(child);
     }
 
-    consume(Semicolon);
     return ast;
 }
 
@@ -314,7 +342,6 @@ AST *Parser::return_stmt() {
  */
 AST *Parser::expr_stmt() {
     auto ast = expr();
-    consume(Semicolon);
     return ast;
 }
 
@@ -407,7 +434,7 @@ AST *Parser::add_expr() {
  * MulExpr ::= UnaryExpr { ("*" | "/" | "%") UnaryExpr }
  */
 AST *Parser::mul_expr() {
-    auto l = func_call();
+    auto l = unary_expr();
 
     while (match(Multiply) || match(Divide) || match(Modulo)) {
         auto op = previous();
@@ -467,11 +494,15 @@ AST *Parser::operand() {
     if (match(Identifier))
         return new AST("id", previous().lexeme, previous().line, previous().column);
 
+    if (check(Semicolon))
+        return new AST("emptystmt", previous().line, previous().column);
+
     if (match(LeftParen)) {
         auto ast = expr();
         consume(RightParen);
         return ast;
     }
 
-    Logger::error(filereader, peek().line, peek().column, 1, "expected expression");
+
+    Logger::error(filereader, peek().line, peek().column + 1, 1, "expected expression");
 }

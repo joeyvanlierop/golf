@@ -61,7 +61,7 @@ func match(expect int) {
 func scanner() int {
 	var ch int
 
-	for {
+    for {
 		ch = getc()
 		if !isspace(ch) {
 			break
