@@ -265,8 +265,8 @@ AST *Parser::stmt() {
  * IfStmt ::= "if" Expression block [ "else" IfStmt | block ]
  */
 AST *Parser::if_stmt() {
-    auto ast = new AST("if");
-    consume(If);
+    auto token = consume(If);
+    auto ast = new AST("if", token.line, token.column);
 
     // Condition
     auto condition = expr();
@@ -293,8 +293,8 @@ AST *Parser::if_stmt() {
  * ForStmt ::= "for" Expression block
  */
 AST *Parser::for_stmt() {
-    auto ast = new AST("for");
-    consume(For);
+    auto token = consume(For);
+    auto ast = new AST("for", token.line, token.column);
 
     // Optional condition
     AST* condition;
