@@ -100,7 +100,7 @@ AST *Parser::parse() {
 }
 
 /**
- * Declaration ::= VarDecl | FuncDecl
+ * Declaration ::= VarDecl | FuncDecl ";"
  */
 AST *Parser::decl() {
     AST* ast;
@@ -121,7 +121,7 @@ AST *Parser::decl() {
 }
 
 /**
- * VarDecl ::= "var" identifier [ identifier ] ";"
+ * VarDecl ::= "var" identifier [ identifier ]
  */
 AST *Parser::var_decl() {
     auto token = consume(Var);
@@ -227,8 +227,8 @@ AST *Parser::block() {
  *  | BreakStmt
  *  | ReturnStmt
  *  | Block
- *  | Expression
- *  | Assignment
+ *  | ExpressionStmt
+ *  ";"
  */
 AST *Parser::stmt() {
     AST* ast;
@@ -313,7 +313,7 @@ AST *Parser::for_stmt() {
 }
 
 /**
- * BreakStmt ::= "break" ";"
+ * BreakStmt ::= "break"
  */
 AST *Parser::break_stmt() {
     auto token = consume(Break);
@@ -322,7 +322,7 @@ AST *Parser::break_stmt() {
 }
 
 /**
- * ReturnStmt ::= "return" [ Expression ] ";"
+ * ReturnStmt ::= "return" [ Expression ]
  */
 AST *Parser::return_stmt() {
     auto token = consume(Return);
@@ -338,27 +338,18 @@ AST *Parser::return_stmt() {
 }
 
 /**
- * Expression ::= Expression ";"
+ * ExpressionStmt ::= Assignment
  */
 AST *Parser::expr_stmt() {
-    auto ast = expr();
-    return ast;
-}
-
-
-/**
- * Expression ::= Assignment
- */
-AST *Parser::expr() {
     auto ast = assignment();
     return ast;
 }
 
 /**
- * Assignment ::= OrExpr "=" Expr | OrExpr
+ * Assignment ::= Expr "=" Expr | Expr
  */
 AST *Parser::assignment() {
-    auto l = or_expr();
+    auto l = expr();
 
     if (match(Equal)) {
         auto op = previous();
@@ -367,6 +358,14 @@ AST *Parser::assignment() {
     }
 
     return l;
+}
+
+/**
+ * Expression ::= OrExpr
+ */
+AST *Parser::expr() {
+    auto ast = or_expr();
+    return ast;
 }
 
 /**
