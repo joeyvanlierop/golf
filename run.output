@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 15:44:58 2023
+Run started on Tue Feb 28 15:46:30 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -103,7 +103,7 @@ Test: "for" open brace exception |
 
 STDOUT:
 program
-	func
+	func @ (4, 0)
 		newid [main] @ (4, 5)
 		sig
 			formals
@@ -164,7 +164,7 @@ Test: weird but correct formatting |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [main] @ (3, 5)
 		sig
 			formals
@@ -193,7 +193,7 @@ Test: precedence check |
 
 STDOUT:
 program
-	func
+	func @ (4, 0)
 		newid [foo] @ (4, 5)
 		sig
 			formals
@@ -228,14 +228,14 @@ Test: formal and actual params |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [foo] @ (3, 5)
 		sig
 			formals
 			typeid [$void]
 		block
 			emptystmt
-	func
+	func @ (6, 0)
 		newid [bar] @ (6, 5)
 		sig
 			formals
@@ -251,7 +251,7 @@ program
 			typeid [returntype] @ (6, 39)
 		block
 			emptystmt
-	func
+	func @ (9, 0)
 		newid [baz] @ (9, 5)
 		sig
 			formals
@@ -288,7 +288,7 @@ Test: unary and binary minus |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [main] @ (3, 5)
 		sig
 			formals
@@ -452,7 +452,7 @@ Test: func line breaks using trailing commas |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [foo] @ (3, 5)
 		sig
 			formals
@@ -501,7 +501,7 @@ Test: func call line breaks with trailing commas |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [foo] @ (3, 5)
 		sig
 			formals
@@ -546,7 +546,7 @@ Test: legit syntax salad |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [asdf] @ (3, 5)
 		sig
 			formals
@@ -628,7 +628,7 @@ Test: assignment |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [main] @ (3, 5)
 		sig
 			formals
@@ -663,7 +663,7 @@ Test: associativity test |
 
 STDOUT:
 program
-	func
+	func @ (3, 0)
 		newid [a_sock] @ (3, 5)
 		sig
 			formals
@@ -717,7 +717,7 @@ Test: a calculated move |
 
 STDOUT:
 program
-	func
+	func @ (5, 0)
 		newid [main] @ (5, 5)
 		sig
 			formals
@@ -735,7 +735,7 @@ program
 	var
 		newid [_char] @ (15, 4)
 		typeid [int] @ (15, 10)
-	func
+	func @ (17, 0)
 		newid [getc] @ (17, 5)
 		sig
 			formals
@@ -753,7 +753,7 @@ program
 				funccall
 					id [getchar] @ (22, 8)
 					actuals
-	func
+	func @ (25, 0)
 		newid [ungetc] @ (25, 5)
 		sig
 			formals
@@ -787,7 +787,7 @@ program
 	var
 		newid [attr] @ (40, 4)
 		typeid [int] @ (40, 9)
-	func
+	func @ (42, 0)
 		newid [peek] @ (42, 5)
 		sig
 			formals
@@ -808,7 +808,7 @@ program
 					actuals
 			return
 				id [_token] @ (48, 8)
-	func
+	func @ (51, 0)
 		newid [match] @ (51, 5)
 		sig
 			formals
@@ -842,7 +842,7 @@ program
 			= @ (58, 12)
 				id [_havetoken] @ (58, 1)
 				id [false] @ (58, 14)
-	func
+	func @ (61, 0)
 		newid [scanner] @ (61, 5)
 		sig
 			formals
@@ -965,7 +965,7 @@ program
 			funccall
 				id [halt] @ (91, 1)
 				actuals
-	func
+	func @ (94, 0)
 		newid [isdigit] @ (94, 5)
 		sig
 			formals
@@ -982,7 +982,7 @@ program
 					<= @ (95, 28)
 						id [ch] @ (95, 25)
 						id [ASCII_9] @ (95, 31)
-	func
+	func @ (98, 0)
 		newid [isspace] @ (98, 5)
 		sig
 			formals
@@ -1003,7 +1003,7 @@ program
 					== @ (101, 11)
 						id [ch] @ (101, 8)
 						id [ASCII_CR] @ (101, 14)
-	func
+	func @ (108, 0)
 		newid [parser] @ (108, 5)
 		sig
 			formals
@@ -1040,7 +1040,7 @@ program
 						id [prints] @ (117, 2)
 						actuals
 							string [\n] @ (117, 10)
-	func
+	func @ (121, 0)
 		newid [E] @ (121, 5)
 		sig
 			formals
@@ -1106,7 +1106,7 @@ program
 										id [r] @ (135, 11)
 			return
 				id [l] @ (138, 8)
-	func
+	func @ (141, 0)
 		newid [T] @ (141, 5)
 		sig
 			formals
@@ -1172,7 +1172,7 @@ program
 										id [r] @ (155, 11)
 			return
 				id [l] @ (158, 8)
-	func
+	func @ (161, 0)
 		newid [F] @ (161, 5)
 		sig
 			formals
@@ -1311,7 +1311,7 @@ program
 	var
 		newid [ASCII_NL] @ (214, 4)
 		typeid [int] @ (214, 13)
-	func
+	func @ (216, 0)
 		newid [init] @ (216, 5)
 		sig
 			formals
@@ -1391,5 +1391,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Feb 28 15:44:59 2023
+Run ended on Tue Feb 28 15:46:31 2023
 
