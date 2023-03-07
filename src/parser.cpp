@@ -121,7 +121,7 @@ AST *Parser::decl() {
 }
 
 /**
- * VarDecl ::= "var" identifier [ identifier ]
+ * VarDecl ::= "var" identifier identifier
  */
 AST *Parser::var_decl() {
     auto token = consume(Var);
@@ -131,12 +131,9 @@ AST *Parser::var_decl() {
     auto id = consume(Identifier);
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
-    // Optional variable type
-    auto has_type = check(Identifier);
-    if (has_type) {
-        auto type = consume(Identifier);
-        ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
-    }
+    // Variable type
+    auto type = consume(Identifier);
+    ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
 
     return ast;
 }

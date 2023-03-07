@@ -21,13 +21,20 @@ void AST::print() {
 }
 
 void AST::print(int indent) {
+    // Indentation
     std::stringstream ss;
     ss << std::string(indent, '\t');
     ss << type;
+
+    // AST has an attribute
     if (attr.length() > 0)
         ss << " [" << attr << "]";
+
+    // AST has location data
     if (line >= 0)
         ss << " @ (" << line << ", " << column << ")";
+
+    // Print string and print children
     std::cout << ss.str() << std::endl;
     for (auto child: children)
         child->print(indent + 1);
