@@ -135,7 +135,7 @@ bool Logger::is_printable(const std::string &str) {
 std::tuple<std::string, int> Logger::normalize_line(const std::string &str, int end_column) {
     std::string normalized = "";
     auto indent = 0;
-    for (int i = 0; i < end_column; i++) {
+    for (int i = 0; i < end_column && i < str.length(); i++) {
         auto c = str[i];
         if (c == '\t') {
             // TODO: Review this (how much should we indent, also what bugs does this introduce)
