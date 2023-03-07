@@ -101,7 +101,7 @@ std::optional<Token> Lexer::infer_semicolon() {
 std::optional<Token> Lexer::newline() {
     auto token = infer_semicolon();
     line++;
-    column = 0;
+    column = 1;
     return token;
 }
 

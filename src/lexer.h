@@ -15,7 +15,7 @@ private:
     int start = 0;
     int current = 0;
     int line = 1;
-    int column = 0;
+    int column = 1;
     FileReader *filereader;
     std::string input;
     std::vector<Token> tokens;
