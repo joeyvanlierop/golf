@@ -200,7 +200,7 @@ AST *Parser::func_sig() {
     };
 
     // Closing paren
-    consume(RightParen, "function signature should close with \")\"");
+    consume(RightParen, "function signature must be closed with \")\"");
 
     // Optional return type
     auto has_type = check(Identifier);
@@ -489,7 +489,7 @@ AST *Parser::func_call() {
         while (!match(RightParen)) {
             actuals->add_child(expr());
             if (!match(Comma)) {
-                consume(RightParen);
+                consume(RightParen, "function call must closed with \")\"");
                 break;
             }
         }
