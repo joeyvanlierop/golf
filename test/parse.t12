@@ -2,6 +2,6 @@
 // ensure error message is appropriate when semicolon not automatically inserted
 
 func main() {
-	for true; {
+    for true; {
 	}
 }

@@ -1,7 +1,7 @@
 // can't have opening brace on the next line
 
 func main() {
-	for true
+    for true
 	{
 	}
 }

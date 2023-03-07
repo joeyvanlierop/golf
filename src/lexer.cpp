@@ -88,12 +88,9 @@ std::optional<Token> Lexer::infer_semicolon() {
     const std::set<TokenType> valid = {
             Identifier, Integer, String, Break, Return, RightParen, RightBracket
     };
-    if (tokens.size() > 0) {
-        if (valid.count(tokens.back().type)) {
-            column++;
+    if (tokens.size() > 0)
+        if (valid.count(tokens.back().type))
             return create_token(Semicolon, "");
-        }
-    }
     return std::nullopt;
 }
 
