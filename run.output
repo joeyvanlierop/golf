@@ -1,4 +1,4 @@
-Run started on Tue Mar  7 14:03:11 2023
+Run started on Tue Mar  7 14:05:37 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -340,7 +340,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t9:4:11
   | 
-4 | func main()
+4 | func main();
   |           ^ error: expected {, got ;
 
 
@@ -358,7 +358,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t10:4:11
   | 
-4 | func main()
+4 | func main(); {
   |           ^ error: expected {, got ;
 
 
@@ -376,7 +376,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t11:5:9
   | 
-5 |     for true
+5 |     for true;
   |            ^ error: expected {, got ;
 
 
@@ -394,7 +394,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t12:5:9
   | 
-5 |     for true
+5 |     for true; {
   |            ^ error: expected {, got ;
 
 
@@ -412,7 +412,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t13:5:8
   | 
-5 |     if true
+5 |     if true;
   |           ^ error: expected {, got ;
 
 
@@ -430,7 +430,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t14:5:8
   | 
-5 |     if true
+5 |     if true; {
   |           ^ error: expected {, got ;
 
 
@@ -624,7 +624,7 @@ STDOUT:
 STDERR:
 --> /home/profs/aycock/411/TEST/ms2/parse.t20:7:7
   | 
-7 |     a = b 
+7 |     a = b = c
   |          ^ error: expected ;, got =
 
 
@@ -1366,5 +1366,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Mar  7 14:03:12 2023
+Run ended on Tue Mar  7 14:05:38 2023
 
