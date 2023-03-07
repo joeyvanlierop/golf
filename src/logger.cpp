@@ -119,7 +119,7 @@ std::string Logger::get_line(std::ifstream &filestream, int line) {
  * @return true if the string is printable, false otherwise
 */
 bool Logger::is_printable(const std::string &str) {
-    for (char c : str)
+    for (char c: str)
         if (!std::isprint(c) && c != '\t')
             return false;
     return true;
@@ -129,18 +129,19 @@ bool Logger::is_printable(const std::string &str) {
  * Normalizes the given line to to accomodate tab escapes ('\t')
  * Converts '\t' to 4 spaces
  * @param str the string to check
- * @param end_column the column where we stop checking
+ * @param end_column the column where we stop adding indentation
  * @return a tuple with the normalized string and additional indentation
 */
 std::tuple<std::string, int> Logger::normalize_line(const std::string &str, int end_column) {
     std::string normalized = "";
     auto indent = 0;
-    for (int i = 0; i < end_column && i < str.length(); i++) {
+    for (int i = 0; i < str.length(); i++) {
         auto c = str[i];
         if (c == '\t') {
             // TODO: Review this (how much should we indent, also what bugs does this introduce)
             normalized += "    ";
-            indent += 3;
+            if (i < end_column)
+                indent += 3;
         } else {
             normalized += c;
         }
