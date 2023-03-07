@@ -28,6 +28,7 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
     }
 
     // Calculate how much to indent the vertical lines
+    // log10 is used to determine the number of digits in the line number
     auto indent = log10(line) + 2;
 
     // Padding
@@ -39,9 +40,10 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
     print_line(ostream, error_line, line, indent);
 
     // Explanation line
-    message.insert(message.begin(), column, ' ');
-    message.insert(message.begin() + column - 1, 1, '^');
-    message.insert(message.begin() + column, std::max(width - 1, 0), '~');
+    auto extra_indent = calculate_tab_indent(error_line);
+    message.insert(message.begin(), column + extra_indent, ' ');
+    message.insert(message.begin() + column + extra_indent - 1, 1, '^');
+    message.insert(message.begin() + column + extra_indent, std::max(width - 1, 0), '~');
     print_line(ostream, message, indent);
 }
 
@@ -111,8 +113,8 @@ std::string Logger::get_line(std::ifstream &filestream, int line) {
 
 
 /**
- * Determines if a given string is printable.
- * Allow tabs, TODO: fix indentation in message
+ * Determines if a given string is printable
+ * Manually allow tabs ('\t') since isprint() does not include it
  * @param str the string to check
  * @return true if the string is printable, false otherwise
 */
@@ -121,6 +123,21 @@ bool Logger::is_printable(const std::string &str) {
         if (!std::isprint(c) && c != '\t')
             return false;
     return true;
+}
+
+
+/**
+ * Determines the amount of padding needed to accomodate tab escapes ('\t')
+ * Assumes that a tab is 4 spaces (TODO: Maybe check is this is universal)
+ * @param str the string to check
+ * @return true if the string is printable, false otherwise
+*/
+int Logger::calculate_tab_indent(const std::string &str) {
+    auto indent = 0;
+    for (char c: str)
+        if (c == '\t')
+            indent += 4;
+    return indent;
 }
 
 

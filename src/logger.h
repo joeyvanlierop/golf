@@ -16,5 +16,6 @@ private:
     static void print_line(std::ostream& ostream, std::string content, int line, int indent);
     static std::string get_line(std::ifstream& filestream, int line);
     static bool is_printable(const std::string &str);
+    static int calculate_tab_indent(const std::string &str);
 };
 
