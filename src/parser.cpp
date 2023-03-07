@@ -59,6 +59,9 @@ Token Parser::consume(TokenType type) {
     std::stringstream ss;
     ss << "expected " << type << ", got " << peek().type;
     Logger::error(filereader, curr.line, curr.column + 1, curr.lexeme.length(), ss.str());
+    // Should not be reached
+    // TODO: Maybe improve this
+    throw 0;
 }
 
 /**
@@ -505,6 +508,8 @@ AST *Parser::operand() {
         return ast;
     }
 
-
     Logger::error(filereader, peek().line, peek().column + 1, 1, "expected expression");
+    // Should not be reached
+    // TODO: Maybe improve this
+    throw 0;
 }
