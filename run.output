@@ -1,4 +1,4 @@
-Run started on Tue Mar  7 14:05:37 2023
+Run started on Tue Mar  7 14:15:56 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -9,7 +9,8 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/logger.cpp
+g++ -c src/lexer.cpp
+g++ -c src/parser.cpp
 g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 
@@ -338,10 +339,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t9:4:11
+--> /home/profs/aycock/411/TEST/ms2/parse.t9:4:12
   | 
 4 | func main();
-  |           ^ error: expected {, got ;
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -356,10 +357,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t10:4:11
+--> /home/profs/aycock/411/TEST/ms2/parse.t10:4:12
   | 
 4 | func main(); {
-  |           ^ error: expected {, got ;
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -374,10 +375,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t11:5:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t11:5:10
   | 
 5 |     for true;
-  |            ^ error: expected {, got ;
+  |             ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -392,10 +393,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t12:5:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t12:5:10
   | 
 5 |     for true; {
-  |            ^ error: expected {, got ;
+  |             ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -410,10 +411,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t13:5:8
+--> /home/profs/aycock/411/TEST/ms2/parse.t13:5:9
   | 
 5 |     if true;
-  |           ^ error: expected {, got ;
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -428,10 +429,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t14:5:8
+--> /home/profs/aycock/411/TEST/ms2/parse.t14:5:9
   | 
 5 |     if true; {
-  |           ^ error: expected {, got ;
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -622,10 +623,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t20:7:7
+--> /home/profs/aycock/411/TEST/ms2/parse.t20:7:8
   | 
 7 |     a = b = c
-  |          ^ error: expected ;, got =
+  |           ^ error: expected ;, got =
 
 
 RETURN CODE: 1
@@ -1366,5 +1367,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Mar  7 14:05:38 2023
+Run ended on Tue Mar  7 14:15:57 2023
 
