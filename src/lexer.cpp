@@ -88,9 +88,12 @@ std::optional<Token> Lexer::infer_semicolon() {
     const std::set<TokenType> valid = {
             Identifier, Integer, String, Break, Return, RightParen, RightBracket
     };
-    if (tokens.size() > 0)
-        if (valid.count(tokens.back().type))
+    if (tokens.size() > 0) {
+        if (valid.count(tokens.back().type)) {
+            column++;
             return create_token(Semicolon, "");
+        }
+    }
     return std::nullopt;
 }
 
@@ -183,8 +186,9 @@ std::vector<Token> Lexer::match_tokens(bool verbose) {
                 std::cout << token.value() << std::endl;
         }
     }
-    if(infer_semicolon().has_value())
-        tokens.push_back(infer_semicolon().value());
+    auto closing_semicolon = infer_semicolon();
+    if(closing_semicolon.has_value())
+        tokens.push_back(closing_semicolon.value());
     tokens.push_back(create_token(Eof, current, current));
 
     return tokens;

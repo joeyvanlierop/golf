@@ -29,7 +29,7 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
 
     // Calculate how much to indent the vertical lines
     // log10 is used to determine the number of digits in the line number
-    auto indent = log10(line) + 2;
+    int indent = log10(line) + 2;
 
     // Padding
     print_line(ostream, "", indent);
@@ -127,7 +127,7 @@ bool Logger::is_printable(const std::string &str) {
 
 /**
  * Normalizes the given line to to accomodate tab escapes ('\t')
- * Assumes that a tab is 4 spaces (TODO: Maybe check is this is universal)
+ * Converts '\t' to 4 spaces
  * @param str the string to check
  * @param end_column the column where we stop checking
  * @return a tuple with the normalized string and additional indentation
@@ -138,8 +138,9 @@ std::tuple<std::string, int> Logger::normalize_line(const std::string &str, int 
     for (int i = 0; i < end_column; i++) {
         auto c = str[i];
         if (c == '\t') {
+            // TODO: Review this (how much should we indent, also what bugs does this introduce)
             normalized += "    ";
-            indent += 4;
+            indent += 3;
         } else {
             normalized += c;
         }
