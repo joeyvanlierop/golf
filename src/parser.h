@@ -22,6 +22,7 @@ private:
     Token peek();
     Token previous();
     Token consume(TokenType type);
+    Token consume(TokenType type, const std::string &error_message);
     bool check(TokenType type);
     bool match(TokenType expected);
     AST* decl();

@@ -51,14 +51,26 @@ Token Parser::previous() {
  */
 Token Parser::consume(TokenType type) {
     auto curr = peek();
+    std::stringstream ss;
+    ss << "expected " << type << ", got " << peek().type;
+    return consume(type, ss.str());
+}
+
+/**
+ * Consumes the current token and advances
+ * Throws an error if the current token does not match the expected type
+ * @param type expected token type
+ * @param error_message custom error message
+ * @return the consumed token
+ */
+Token Parser::consume(TokenType type, const std::string &error_message) {
+    auto curr = peek();
     if (check(type)) {
         advance();
         return curr;
     }
 
-    std::stringstream ss;
-    ss << "expected " << type << ", got " << peek().type;
-    Logger::error(filereader, curr.line, curr.column, curr.lexeme.length(), ss.str());
+    Logger::error(filereader, curr.line, curr.column, curr.lexeme.length(), error_message);
     // Should not be reached
     // TODO: Maybe improve this
     throw 0;
@@ -119,7 +131,7 @@ AST *Parser::decl() {
             Logger::error(filereader, peek().line, peek().column + 1, 1, "unexpected token [" + peek().lexeme + "]");
     }
 
-    consume(Semicolon);
+    consume(Semicolon, "declarations must be terminated by a semicolon");
     return ast;
 }
 
@@ -131,11 +143,11 @@ AST *Parser::var_decl() {
     auto ast = new AST("var", token.line, token.column);
 
     // Variable name
-    auto id = consume(Identifier);
+    auto id = consume(Identifier, "variable identifier should follow the \"var\" keyword");
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
     // Variable type
-    auto type = consume(Identifier);
+    auto type = consume(Identifier, "variable type should follow the identifier");
     ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
 
     return ast;
@@ -149,7 +161,7 @@ AST *Parser::func_decl() {
     auto ast = new AST("func", token.line, token.column);
 
     // Function name
-    auto id = consume(Identifier);
+    auto id = consume(Identifier, "function identifier should follow the \"func\" keyword");
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
     // Function signature
@@ -170,16 +182,16 @@ AST *Parser::func_sig() {
     auto ast = new AST("sig");
 
     // Opening paren
-    consume(LeftParen);
+    consume(LeftParen, "function signature should open with \"(\"");
 
     // Formals
     auto formals = new AST("formals");
     ast->add_child(formals);
     while (check(Identifier)) {
         auto formal = new AST("formal");
-        auto id = consume(Identifier);
+        auto id = consume(Identifier, "signature formal should begin with an identifier");
         formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
-        auto type = consume(Identifier);
+        auto type = consume(Identifier, "expected a type to follow the formal identifier");
         formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
         formals->add_child(formal);
 
@@ -188,7 +200,7 @@ AST *Parser::func_sig() {
     };
 
     // Closing paren
-    consume(RightParen);
+    consume(RightParen, "function signature should close with \")\"");
 
     // Optional return type
     auto has_type = check(Identifier);
@@ -207,7 +219,7 @@ AST *Parser::func_sig() {
  */
 AST *Parser::block() {
     auto ast = new AST("block");
-    consume(LeftBracket);
+    consume(LeftBracket, "block must begin with \"{\"");
 
     // Block body
     while (!check(RightBracket)) {
@@ -215,7 +227,7 @@ AST *Parser::block() {
         ast->add_child(child);
     }
 
-    consume(RightBracket);
+    consume(RightBracket, "block must close with \"}\"");
     return ast;
 }
 
@@ -257,7 +269,7 @@ AST *Parser::stmt() {
             break;
     }
 
-    consume(Semicolon);
+    consume(Semicolon, "statement must be terminated by \";\"");
     return ast;
 }
 
@@ -504,7 +516,7 @@ AST *Parser::operand() {
 
     if (match(LeftParen)) {
         auto ast = expr();
-        consume(RightParen);
+        consume(RightParen, "parenthesised operands must be closed with \")\"");
         return ast;
     }
 
