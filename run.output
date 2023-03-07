@@ -1,4 +1,4 @@
-Run started on Tue Feb 28 15:54:35 2023
+Run started on Tue Mar  7 13:36:14 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -14,14 +14,6 @@ g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
 
 
 STDERR:
-src/parser.cpp: In member function ‘Token Parser::consume(TokenType)’:
-src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn-type]
-   62 | }
-      | ^
-src/parser.cpp: In member function ‘AST* Parser::operand()’:
-src/parser.cpp:513:1: warning: control reaches end of non-void function [-Wreturn-type]
-  513 | }
-      | ^
 
 
 RETURN CODE: 0
@@ -87,10 +79,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t1:3:12
+--> /home/profs/aycock/411/TEST/ms2/parse.t1:3:11
   | 
 3 | func main()
-  |            ^ error: expected {, got ;
+  |           ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -130,10 +122,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t3:4:10
+--> /home/profs/aycock/411/TEST/ms2/parse.t3:4:9
   | 
-4 | 	for true
-  |          ^ error: expected {, got ;
+4 |     for true
+  |             ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -148,10 +140,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t4:4:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t4:4:8
   | 
-4 | 	if true
-  |         ^ error: expected {, got ;
+4 |     if true
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -346,10 +338,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t9:4:12
+--> /home/profs/aycock/411/TEST/ms2/parse.t9:4:11
   | 
-4 | func main();
-  |            ^ error: expected {, got ;
+4 | func main()
+  |           ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -364,10 +356,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t10:4:12
+--> /home/profs/aycock/411/TEST/ms2/parse.t10:4:11
   | 
-4 | func main(); {
-  |            ^ error: expected {, got ;
+4 | func main()
+  |           ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -382,10 +374,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t11:5:10
+--> /home/profs/aycock/411/TEST/ms2/parse.t11:5:9
   | 
-5 | 	for true;
-  |          ^ error: expected {, got ;
+5 |     for true
+  |             ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -400,10 +392,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t12:5:10
+--> /home/profs/aycock/411/TEST/ms2/parse.t12:5:9
   | 
-5 | 	for true; {
-  |          ^ error: expected {, got ;
+5 |     for true
+  |             ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -418,10 +410,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t13:5:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t13:5:8
   | 
-5 | 	if true;
-  |         ^ error: expected {, got ;
+5 |     if true
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -436,10 +428,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t14:5:9
+--> /home/profs/aycock/411/TEST/ms2/parse.t14:5:8
   | 
-5 | 	if true; {
-  |         ^ error: expected {, got ;
+5 |     if true
+  |            ^ error: expected {, got ;
 
 
 RETURN CODE: 1
@@ -485,10 +477,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t16:6:7
+--> /home/profs/aycock/411/TEST/ms2/parse.t16:6:6
   | 
-6 | 	c int
-  |       ^ error: expected ), got ;
+6 |     c int
+  |          ^ error: expected ), got ;
 
 
 RETURN CODE: 1
@@ -530,10 +522,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t18:7:4
+--> /home/profs/aycock/411/TEST/ms2/parse.t18:7:3
   | 
-7 | 		c
-  |    ^ error: expected ), got ;
+7 |         c
+  |           ^ error: expected ), got ;
 
 
 RETURN CODE: 1
@@ -630,10 +622,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t20:7:8
+--> /home/profs/aycock/411/TEST/ms2/parse.t20:7:7
   | 
-7 | 	a = b = c
-  |        ^ error: expected ;, got =
+7 |     a = b 
+  |           ^ error: expected ;, got =
 
 
 RETURN CODE: 1
@@ -1374,5 +1366,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Feb 28 15:54:36 2023
+Run ended on Tue Mar  7 13:36:15 2023
 

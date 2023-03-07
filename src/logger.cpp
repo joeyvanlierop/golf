@@ -37,10 +37,10 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
     // Error line
     if (!is_printable(error_line))
         error_line = "<encoding error>";
-    print_line(ostream, error_line, line, indent);
+    auto [normalized_error_line, extra_indent] = normalize_line(error_line, column);
+    print_line(ostream, normalized_error_line, line, indent);
 
     // Explanation line
-    auto extra_indent = calculate_tab_indent(error_line);
     message.insert(message.begin(), column + extra_indent, ' ');
     message.insert(message.begin() + column + extra_indent - 1, 1, '^');
     message.insert(message.begin() + column + extra_indent, std::max(width - 1, 0), '~');
@@ -119,25 +119,32 @@ std::string Logger::get_line(std::ifstream &filestream, int line) {
  * @return true if the string is printable, false otherwise
 */
 bool Logger::is_printable(const std::string &str) {
-    for (char c: str)
+    for (char c : str)
         if (!std::isprint(c) && c != '\t')
             return false;
     return true;
 }
 
-
 /**
- * Determines the amount of padding needed to accomodate tab escapes ('\t')
+ * Normalizes the given line to to accomodate tab escapes ('\t')
  * Assumes that a tab is 4 spaces (TODO: Maybe check is this is universal)
  * @param str the string to check
- * @return true if the string is printable, false otherwise
+ * @param end_column the column where we stop checking
+ * @return a tuple with the normalized string and additional indentation
 */
-int Logger::calculate_tab_indent(const std::string &str) {
+std::tuple<std::string, int> Logger::normalize_line(const std::string &str, int end_column) {
+    std::string normalized = "";
     auto indent = 0;
-    for (char c: str)
-        if (c == '\t')
+    for (int i = 0; i < end_column; i++) {
+        auto c = str[i];
+        if (c == '\t') {
+            normalized += "    ";
             indent += 4;
-    return indent;
+        } else {
+            normalized += c;
+        }
+    }
+    return {normalized, indent};
 }
 
 
