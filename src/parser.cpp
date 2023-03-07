@@ -470,7 +470,7 @@ AST *Parser::func_call() {
     auto ast = operand();
 
     // Arguments
-    if (match(LeftParen)) {
+    while (match(LeftParen)) {
         ast = (new AST("funccall"))->add_child(ast);
         auto actuals = new AST("actuals");
         ast->add_child(actuals);
@@ -487,7 +487,7 @@ AST *Parser::func_call() {
 }
 
 /**
- * Operand ::= int_lit | string_lit | identifier | "(" Expression ")"
+ * Operand ::= int_lit | string_lit | identifier | ";" | "(" Expression ")"
  */
 AST *Parser::operand() {
     if (match(Integer))
