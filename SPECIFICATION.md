@@ -131,7 +131,7 @@ Implementation restriction: for compatibility with other tools, a compiler may d
 
 The following terms are used to denote specific ASCII character classes:
 
-```
+```ebnf
 newline        = /* the character U+000A */ .
 ascii_char     = /* an arbitrary ASCII character except newline */ .
 ascii_letter   = "A" … "Z" | "a" … "z" .
@@ -142,7 +142,7 @@ ascii_digit    = "0" … "9" .
 
 The underscore character `_` (U+005F) is considered a letter.
 
-```
+```ebnf
 letter        = ascii_letter | "_" .
 decimal_digit = "0" … "9" .
 ```
@@ -182,7 +182,7 @@ _Fun fact: the full Go compiler sets the semicolon token's lexeme to ";" if the 
 
 Identifiers name program entities such as variables. An identifier is a sequence of one or more letters and digits. The first character in an identifier must be a letter.
 
-```
+```ebnf
 identifier = letter { letter | ascii_digit } .
 ```
 
@@ -226,7 +226,7 @@ The following character sequences represent operators (including assignment oper
 
 An integer literal is a sequence of digits representing an integer constant.
 
-```
+```ebnf
 int_lit        = decimal_lit .
 decimal_lit    = decimal_digits .
 decimal_digits = decimal_digit { decimal_digit } .
@@ -260,7 +260,7 @@ Interpreted string literals are character sequences between double quotes, as in
 
 All other sequences starting with a backslash are illegal.
 
-```
+```ebnf
 string_lit             = interpreted_string_lit .
 interpreted_string_lit = `"` { ascii_value } `"` .
 
@@ -288,7 +288,7 @@ A type determines a set of values together with operations and methods specific 
 
 The language predeclares certain type names.
 
-```
+```ebnf
 Type      = TypeName .
 TypeName  = identifier .
 ```
@@ -317,7 +317,7 @@ A string type represents the set of string values. A string value is a (possibly
 
 A _block_ is a possibly empty sequence of declarations and statements within matching brace brackets.
 
-```
+```ebnf
 Block = "{" StatementList "}" .
 StatementList = { Statement ";" } .
 ```
@@ -369,7 +369,7 @@ Functions:
 
 A variable declaration creates a variable, binds an identifier to it, and gives it a type and an initial (zero) value.
 
-```
+```ebnf
 VarDecl     = "var" VarSpec .
 VarSpec     = identifier Type .
 ```
@@ -380,7 +380,7 @@ Each variable is initialized to its zero value.
 
 A function declaration binds an identifier, the _function name_, to a function.
 
-```
+```ebnf
 FunctionDecl = "func" FunctionName Signature FunctionBody .
 FunctionName = identifier .
 FunctionBody = Block .
@@ -404,7 +404,7 @@ An expression specifies the computation of a value by applying operators and fun
 
 Operands denote the elementary values in an expression. An operand may be a literal, an identifier denoting a constant, variable, or function, or a parenthesized expression.
 
-```
+```ebnf
 Operand     = Literal | OperandName | "(" Expression ")" .
 Literal     = BasicLit .
 BasicLit    = int_lit | string_lit .
@@ -415,7 +415,7 @@ OperandName = identifier .
 
 Primary expressions are the operands for unary and binary expressions.
 
-```
+```ebnf
 PrimaryExpr = Operand | PrimaryExpr Arguments .
 
 Arguments      = "(" [ ExpressionList [ "," ] ] ")" .
@@ -435,7 +435,7 @@ foo()
 
 Given an expression f with function type,
 
-```
+```go
 f(a1, a2, … an)
 ```
 
@@ -447,7 +447,7 @@ In a function call, the function value and arguments are evaluated in the usual 
 
 Operators combine operands into expressions.
 
-```
+```ebnf
 Expression = UnaryExpr | Expression binary_op Expression .
 UnaryExpr  = PrimaryExpr | unary_op UnaryExpr .
 
@@ -541,7 +541,7 @@ Logical operators apply to boolean values and yield a result of the same type as
 
 Statements control execution.
 
-```
+```ebnf
 Statement =
     Declaration | SimpleStmt |
     ReturnStmt | BreakStmt |
@@ -568,7 +568,7 @@ ExpressionStmt = Expression .
 
 ### Assignments
 
-```
+```ebnf
 Assignment = Expression assign_op Expression .
 
 assign_op = "=" .
@@ -590,7 +590,7 @@ The type of an `if` expression must be boolean.
 
 A "for" statement specifies repeated execution of a block. There are two forms: with and without a condition.
 
-```
+```ebnf
 ForStmt = "for" [ Condition ] Block .
 Condition = Expression .
 ```
@@ -599,7 +599,7 @@ Condition = Expression .
 
 In its simplest form, a "for" statement specifies the repeated execution of a block as long as a boolean condition evaluates to true. The condition is evaluated before each iteration.
 
-```
+```go
 for a < b {
         a = a * 2
 }
@@ -615,13 +615,13 @@ If the condition is absent, it is equivalent to the boolean value `true`.
 
 A "return" statement in a function F terminates the execution of F, and optionally provides a result value.
 
-```
+```ebnf
 ReturnStmt = "return" [ Expression ] .
 ```
 
 In a function without a result type, a "return" statement must not specify a result value.
 
-```
+```go
 func noResult() {
     return
 }
@@ -633,7 +633,7 @@ For a function with a result type, the type of the return expression must be the
 
 A "break" statement terminates execution of the innermost "for" statement within the same function.
 
-```
+```ebnf
 BreakStmt = "break" .
 ```
 
@@ -663,13 +663,13 @@ None of the printing functions automatically output a newline.
 
 A GoLF program consists of a single file declaring variables and functions belonging to the program.
 
-```
+```ebnf
 SourceFile       = { TopLevelDecl ";" } .
 ```
 
 A complete program declares a function `main` that takes no arguments and returns no value. It is an error for `main` to be absent from an input source file.
 
-```
+```go
 func main() { … }
 ```
 
@@ -679,7 +679,7 @@ Program execution begins by invoking the function `main`. When that function inv
 
 Lexical tokens:
 
-```
+```ebnf
 newline        = /* the character U+000A */ .
 ascii_char     = /* an arbitrary ASCII character except newline */ .
 ascii_letter   = "A" … "Z" | "a" … "z" .
@@ -711,7 +711,7 @@ unary_op   = "-" | "!" .
 
 Syntax rules (SourceFile is the start symbol):
 
-```
+```ebnf
 Type      = TypeName .
 TypeName  = identifier .
 
