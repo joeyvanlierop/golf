@@ -6,9 +6,7 @@ This is a stack-based, multi-pass compiler written in C++ for a programming lang
 
 You can read through the whole specification [here](./SPECIFICATION.md). Otherwise, here are some short snippets of what you can do in GoLF:
 
-- GoLF has extra built-in data structures like `Arrays`, `Tuples`, `Iterators`, `Ranges`, and `Dictionaries`.
-
-- GoLF has extra built-in functions like:
+- GoLF has built-in functions:
 
   - `printb(b bool)`: To print a boolean to the console,
   - `printc(c int)`: To print a character to the console,
@@ -18,13 +16,13 @@ You can read through the whole specification [here](./SPECIFICATION.md). Otherwi
   - `len(s string)`: To get the length of a string,
   - `halt()`: To halts the execution of the program,
 
-- GoLF has support for arithmetic operators like `+`, `-`, `/`, `*`, `%`
+- GoLF has support for arithmetic operators: `+`, `-`, `/`, `*`, `%`
 
-- GoLF has support for comparison operators like `==`, `<`, `<=`, `>=`, `>`
+- GoLF has support for comparison operators: `==`, `<`, `<=`, `>=`, `>`
 
-- GoLF has support for binary operators like `&&`, `||`
+- GoLF has support for binary operators: `&&`, `||`
 
-- GoLF has support for unary operators like `!`, `-`
+- GoLF has support for unary operators: `!`, `-`
 
 - GoLF supports the `break` statement in loops
 
