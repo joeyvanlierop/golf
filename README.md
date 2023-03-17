@@ -1,20 +1,105 @@
-#  GoLF
-> Interpreter for the [GoLF](https://pages.cpsc.ucalgary.ca/~aycock/411/golf.html) language written in C++.
+# The GoLF Language
 
-Still **work in progress**.
+This is a stack-based, multi-pass compiler written in C++ for a programming language called GoLF. This was created as part of a term project for a course at the University of Calgary (CPSC 411) taught by John Aycock. If you are reading this and he is still teaching the course, enroll in it. Right now. Seriously.
 
-## How to Build
+## Features
+
+You can read through the whole specification [here](./SPECIFICATION.md). Otherwise, here are some short snippets of what you can do in GoLF:
+
+- GoLF has extra built-in data structures like `Arrays`, `Tuples`, `Iterators`, `Ranges`, and `Dictionaries`.
+
+- GoLF has extra built-in functions like:
+
+  - `printb(b bool)`: To print a boolean to the console,
+  - `printc(c int)`: To print a character to the console,
+  - `printb(i int)`: To print a number to the console,
+  - `printb(s string)`: To print a string to the console,
+  - `getchar()`: To receive user input,
+  - `len(s string)`: To get the length of a string,
+  - `halt()`: To halts the execution of the program,
+
+- GoLF has support for arithmetic operators like `+`, `-`, `/`, `*`, `%`
+
+- GoLF has support for comparison operators like `==`, `<`, `<=`, `>=`, `>`
+
+- GoLF has support for binary operators like `&&`, `||`
+
+- GoLF has support for unary operators like `!`, `-`
+
+- GoLF supports the `break` statement in loops
+
+## Building
 
 In order to build and compile, you need to install `Make` plus the toolchain of your choice, e.g. `g++` or `clang`. After you setup `Make` with your toolchain of choice, clone the repository and build the project as follows:
 
 ```shell
-git clone https://gitlab.cpsc.ucalgary.ca/joseph.vanlierop/cpsc-411.git
-cd cpsc-411/
+git clone https://github.com/joeyvanlierop/golf.git
+cd golf/
 make
 ```
 
-## How to Run
+## Hello World
+
+To run a "hello world" program, create a file named `hello-world.golf` on your computer, and place the following inside it:
+
+```go
+func main() {
+    prints("Hello, world!\n")
+}
+```
+
+Then, in a terminal window, navigate to the unzipped folder and run:
 
 ```shell
-$ golf [filename]
+$ golf hello-world.golf
 ```
+
+## The Classic Fibonacci Number Calculator:
+
+```go
+func main() {
+    var i int
+    i = 0
+
+    // Anything larger than 47 overflows a 32-bit int...
+    for i <= 47 {
+        prints("fib(")
+        printi(i)
+        prints(") = ")
+        printi(fib(i))
+        prints("\n")
+        i = i + 1
+    }
+}
+
+func fib(n int) int {
+    if n == 0 { return 0 }
+    if n == 1 { return 1 }
+    return fib(n-1) + fib(n-2)
+}
+```
+
+<!-- ### A Little Greeting Loop
+
+```go
+while true {
+    var name = input("Who are we greeting? ");
+    print("Hello there, " + name + "!\n");
+
+    if input("Greet again? (y/n): ") != "y" {
+        break;
+    }
+}
+``` -->
+
+## Lifecycle of a GoLF Program
+
+GoLF programs get executed in four separate steps: lexing, parsing, semantic analysis, and code generation.
+
+- **Lexing**: The lexer matches strings in the source code and groups them into tokens.
+
+- **Parsing**: The parser finds tokens in the source code and groups those tokens into `AST` nodes to create an Abstract Syntax Tree of the source code.
+
+- **Semantic Analysis**: (TODO)
+
+- **Code Generation**: (TODO)
