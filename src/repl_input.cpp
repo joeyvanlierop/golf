@@ -2,7 +2,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #elif __linux__
-#include <xcb/xcb.h>
+#include <sys/ioctl.h>
 #endif
 
 #include <iostream>
@@ -35,17 +35,7 @@ bool ReplInput::is_shift_pressed() {
 #ifdef _WIN32
     return GetKeyState(VK_SHIFT) < 0;
 #elif __linux__
-    static xcb_connection_t* conn = xcb_connect(nullptr, nullptr);
-    if (!conn) return false;
-    xcb_query_keymap_reply_t* reply = xcb_query_keymap_reply(conn, xcb_query_keymap(conn), nullptr);
-    if (!reply) return false;
-    const uint8_t* keys = xcb_query_keymap_keys(reply);
-    const xcb_keysym_t shift_keysym = 0xffe1;
-    const uint8_t shift_keycode = 54;
-    bool is_shift_pressed = keys[shift_keycode / 8] & (1 << (shift_keycode % 8));
-    xcb_disconnect(conn);
-    free(reply);
-    return is_shift_pressed;
+    return ioctl(0, TIOCLINUX, &shift_state) == 0;
 #else
     return false;
 #endif
