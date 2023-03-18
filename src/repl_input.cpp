@@ -1,6 +1,9 @@
 #include <iostream>
+
 #ifdef _WIN32
+
 #include <Windows.h>
+
 #elif __linux__
 #include <sys/ioctl.h>
 #endif
@@ -19,16 +22,36 @@ ReplInput::ReplInput() : Input("repl") {
  * Reads from an interactive prompt
  * @return the user input
  */
+std::string read_line() {
+    std::string more;
+    std::getline(std::cin, more);
+    return more;
+}
+
+/**
+ * Reads from an interactive prompt
+ * @return the user input
+ */
 void ReplInput::read() {
     std::cout << ">>> " << std::flush;
-    std::getline(std::cin, Input::data);
-    while(is_shift_pressed()) {
+    Input::data = read_line();
+
+    auto open_braces = 0;
+    if (Input::data.ends_with('{'))
+        open_braces = 1;
+
+    while(open_braces > 0) {
         Input::data.append("\n");
         std::string more;
         std::cout << "... " << std::flush;
         std::getline(std::cin, more);
         Input::data.append(more);
-    };
+
+        if (Input::data.ends_with('{'))
+            open_braces = 1;
+        if (Input::data.ends_with('}'))
+            open_braces -= 1;
+    }
 }
 
 bool ReplInput::is_shift_pressed() {
