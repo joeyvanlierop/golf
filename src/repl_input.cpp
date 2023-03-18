@@ -35,7 +35,10 @@ bool ReplInput::is_shift_pressed() {
 #ifdef _WIN32
     return GetKeyState(VK_SHIFT) < 0;
 #elif __linux__
-    return ioctl(0, TIOCLINUX, &shift_state) == 0;
+    char shift_state;
+    shift_state = 6;
+    ioctl(0, TIOCLINUX, &shift_state);
+    return shift_state = 0;
 #else
     return false;
 #endif
