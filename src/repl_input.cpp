@@ -1,5 +1,6 @@
 #include <iostream>
 #include "repl_input.h"
+#include "lexer.h"
 
 /**
  * Constructs a ReplInput object with a default name
@@ -24,18 +25,11 @@ std::string read_line() {
  */
 void ReplInput::read() {
     std::cout << ">>> " << std::flush;
-    Input::data = read_line();
-
-    int open_braces;
-    while((open_braces = Input::data.ends_with('{') ? 1 : 0) > 0) {
+    std::string line;
+    while((line = read_line()).length() != 0) {
+        Input::data.append(line);
         Input::data.append("\n");
-        std::cout << "... " << std::string(open_braces, '\t') << std::flush;
-        Input::data.append(read_line());
-
-        if (Input::data.ends_with('{'))
-            open_braces += 1;
-        if (Input::data.ends_with('}'))
-            open_braces -= 1;
+        std::cout << "... " << std::flush;
     }
 }
 
