@@ -26,17 +26,14 @@ void ReplInput::read() {
     std::cout << ">>> " << std::flush;
     Input::data = read_line();
 
-    auto open_braces = 0;
-    if (Input::data.ends_with('{'))
-        open_braces = 1;
-
-    while(open_braces > 0) {
+    int open_braces;
+    while((open_braces = Input::data.ends_with('{') ? 1 : 0) > 0) {
         Input::data.append("\n");
-        std::cout << "... " << std::flush;
+        std::cout << "... " << std::string(open_braces, '\t') << std::flush;
         Input::data.append(read_line());
 
         if (Input::data.ends_with('{'))
-            open_braces = 1;
+            open_braces += 1;
         if (Input::data.ends_with('}'))
             open_braces -= 1;
     }
