@@ -38,6 +38,7 @@ bool ReplInput::is_shift_pressed() {
     char shift_state;
     shift_state = 6;
     ioctl(0, TIOCLINUX, &shift_state);
+    std::cout << shift_state << std::endl;
     return shift_state = 0;
 #else
     return false;
