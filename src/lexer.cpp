@@ -6,16 +6,14 @@
  * Lexer class constructor
  * @param filereader pointer to a FileReader object
  */
-Lexer::Lexer(FileReader *filereader) : filereader(filereader) {
-    input = filereader->read_all();
-}
+Lexer::Lexer(Input *input) : input(input) { }
 
 /**
  * Check if lexer is at the end of the input
  * @return true if lexer is at the end of the input, false otherwise
  */
 bool Lexer::is_at_end() {
-    return current >= input.length();
+    return current >= input->data.length();
 }
 
 /**
@@ -24,7 +22,7 @@ bool Lexer::is_at_end() {
  */
 char Lexer::advance() {
     column++;
-    return input[current++];
+    return input->data[current++];
 }
 
 /**
@@ -35,7 +33,7 @@ char Lexer::advance() {
  * @return the created token
  */
 Token Lexer::create_token(TokenType token_type, int start, int end) {
-    return Token(token_type, input.substr(start, (end - start)), line, column - current + start);
+    return Token(token_type, input->data.substr(start, (end - start)), line, column - current + start);
 }
 
 /**
@@ -77,7 +75,7 @@ TokenType Lexer::either(char expected, TokenType matched, TokenType unmatched) {
  * @return the next character in the input
  */
 char Lexer::peek() {
-    return input.at(current);
+    return input->data.at(current);
 }
 
 /**
@@ -123,7 +121,7 @@ Token Lexer::identifier() {
     while (!is_at_end() && is_alphanumeric(peek()))
         advance();
 
-    auto lexeme = input.substr(start, (current - start));
+    auto lexeme = input->data.substr(start, (current - start));
     if (Keywords.count(lexeme))
         return create_token(Keywords[lexeme]);
     return create_token(Identifier);
@@ -238,12 +236,12 @@ std::optional<Token> Lexer::match_token() {
             if (match('&'))
                 return create_token(And);
             else
-                Logger::error(filereader, line, column, 1, "bitwise AND not supported");
+                Logger::error(input, line, column, 1, "bitwise AND not supported");
         case '|':
             if (match('|'))
                 return create_token(Or);
             else
-                Logger::error(filereader, line, column, 1, "bitwise OR not supported");
+                Logger::error(input, line, column, 1, "bitwise OR not supported");
 
         // Comment
         case '/':
@@ -262,16 +260,16 @@ std::optional<Token> Lexer::match_token() {
                         match('t') || match('\\') || match('\"'))
                         continue;
                     else
-                        Logger::error(filereader, line, column, 2,
+                        Logger::error(input, line, column, 2,
                               "bad string escape '\\" + std::string(1, peek()) + "'");
                 if (peek() == '\n')
-                    Logger::error(filereader, line, column - current + start + 1, current - start + 1,
+                    Logger::error(input, line, column - current + start + 1, current - start + 1,
                           "string contains newline");
                 advance();
             }
 
             if (is_at_end())
-                Logger::error(filereader, line, column - current + start + 1, current - start + 1, "unterminated string");
+                Logger::error(input, line, column - current + start + 1, current - start + 1, "unterminated string");
 
             advance();
             return create_token(String, start + 1, current - 1);
@@ -288,11 +286,11 @@ std::optional<Token> Lexer::match_token() {
 
             // Non-ascii character
             else if (!isascii(c))
-                Logger::warning(filereader, line, column, 1, "skipping non-ascii character");
+                Logger::warning(input, line, column, 1, "skipping non-ascii character");
 
             // Unknown
             else
-                Logger::warning(filereader, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
+                Logger::warning(input, line, column, 1, "skipping unknown character '" + std::string(1, c) + "'");
     }
 
     // Couldn't match any character, ignore

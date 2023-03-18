@@ -7,7 +7,7 @@
  * @param filereader pointer to a FileReader object
  * @param tokens list of tokens to parse
  */
-Parser::Parser(FileReader *filereader, std::vector<Token> tokens) : filereader(filereader), tokens(tokens) {}
+Parser::Parser(Input *input, std::vector<Token> tokens) : input(input), tokens(tokens) {}
 
 /**
  * Check if parser has reached the final token
@@ -70,7 +70,7 @@ Token Parser::consume(TokenType type, const std::string &error_message) {
         return curr;
     }
 
-    Logger::error(filereader, curr.line, curr.column, curr.lexeme.length(), error_message);
+    Logger::error(input, curr.line, curr.column, curr.lexeme.length(), error_message);
     // Should not be reached
     // TODO: Maybe improve this
     throw 0;
@@ -118,17 +118,16 @@ AST *Parser::parse() {
  * Declaration ::= VarDecl | FuncDecl ";"
  */
 AST *Parser::decl() {
-    AST* ast;
+    AST *ast;
 
     switch (peek().type) {
-        case Var:
-            ast = var_decl();
+        case Var:ast = var_decl();
             break;
-        case Func:
-            ast = func_decl();
+        case Func:ast = func_decl();
             break;
         default:
-            Logger::error(filereader, peek().line, peek().column + 1, 1, "unexpected token [" + peek().lexeme + "]");
+            Logger::error(input, peek().line, peek().column, peek().lexeme.length(),
+                          "declarations must be begin with a \"var\" or \"func\" keyword");
     }
 
     consume(Semicolon, "declarations must be terminated by a semicolon");
@@ -143,11 +142,11 @@ AST *Parser::var_decl() {
     auto ast = new AST("var", token.line, token.column);
 
     // Variable name
-    auto id = consume(Identifier, "variable identifier should follow the \"var\" keyword");
+    auto id = consume(Identifier, "variable identifier must follow the \"var\" keyword");
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
     // Variable type
-    auto type = consume(Identifier, "variable type should follow the identifier");
+    auto type = consume(Identifier, "variable type must follow the identifier");
     ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
 
     return ast;
@@ -161,7 +160,7 @@ AST *Parser::func_decl() {
     auto ast = new AST("func", token.line, token.column);
 
     // Function name
-    auto id = consume(Identifier, "function identifier should follow the \"func\" keyword");
+    auto id = consume(Identifier, "function identifier must follow the \"func\" keyword");
     ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
 
     // Function signature
@@ -182,14 +181,14 @@ AST *Parser::func_sig() {
     auto ast = new AST("sig");
 
     // Opening paren
-    consume(LeftParen, "function signature should open with \"(\"");
+    consume(LeftParen, "function signature must open with \"(\"");
 
     // Formals
     auto formals = new AST("formals");
     ast->add_child(formals);
     while (check(Identifier)) {
         auto formal = new AST("formal");
-        auto id = consume(Identifier, "signature formal should begin with an identifier");
+        auto id = consume(Identifier, "signature formal must begin with an identifier");
         formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
         auto type = consume(Identifier, "expected a type to follow the formal identifier");
         formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
@@ -243,29 +242,22 @@ AST *Parser::block() {
  *  ";"
  */
 AST *Parser::stmt() {
-    AST* ast;
+    AST *ast;
 
     switch (peek().type) {
-        case Var:
-            ast = var_decl();
+        case Var:ast = var_decl();
             break;
-        case If:
-            ast = if_stmt();
+        case If:ast = if_stmt();
             break;
-        case For:
-            ast = for_stmt();
+        case For:ast = for_stmt();
             break;
-        case Break:
-            ast = break_stmt();
+        case Break:ast = break_stmt();
             break;
-        case Return:
-            ast = return_stmt();
+        case Return:ast = return_stmt();
             break;
-        case LeftBracket:
-            ast = block();
+        case LeftBracket:ast = block();
             break;
-        default:
-            ast = expr_stmt();
+        default:ast = expr_stmt();
             break;
     }
 
@@ -309,7 +301,7 @@ AST *Parser::for_stmt() {
     auto ast = new AST("for", token.line, token.column);
 
     // Optional condition
-    AST* condition;
+    AST *condition;
     if (check(LeftBracket)) {
         condition = new AST("id", "$true");
     } else {
@@ -469,7 +461,7 @@ AST *Parser::unary_expr() {
     if (match(Subtract)) {
         auto op = previous();
         auto r = unary_expr();
-        return (new AST("u"+op.lexeme, op.line, op.column))->add_child(r);
+        return (new AST("u" + op.lexeme, op.line, op.column))->add_child(r);
     }
 
     return func_call();
@@ -520,7 +512,7 @@ AST *Parser::operand() {
         return ast;
     }
 
-    Logger::error(filereader, peek().line, peek().column + 1, 1, "expected expression");
+    Logger::error(input, peek().line, peek().column + 1, 1, "expected expression");
     // Should not be reached
     // TODO: Maybe improve this
     throw 0;

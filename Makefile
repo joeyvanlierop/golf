@@ -15,7 +15,7 @@ token.o: src/token.cpp src/token.h
 logger.o: src/logger.cpp src/logger.h
 	g++ -c src/logger.cpp
 
-filereader.o: src/filereader.cpp src/filereader.h
+filereader.o: src/file_input.cpp src/file_input.h
 	g++ -c src/filereader.cpp
 
 ast.o: src/ast.cpp src/ast.h

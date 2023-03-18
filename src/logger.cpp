@@ -15,12 +15,12 @@ int Logger::warnings = 0;
  * @param width width of the error mark
  * @param message the message to log
  */
-void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int column, int width, std::string message) {
+void Logger::log(std::ostream &ostream, Input *input, int line, int column, int width, std::string message) {
     // File name and location
-    ostream << "--> " << filereader->filename << ":" << line << ":" << column << std::endl;
+    ostream << "--> " << input->name << ":" << line << ":" << column << std::endl;
 
     // Extract error line
-    auto error_line = get_line(filereader->filestream, line);
+    auto error_line = input->get_line(line);
 
     if (!is_printable(error_line)) {
         print_line(ostream, message, 0);
@@ -56,12 +56,12 @@ void Logger::log(std::ostream &ostream, FileReader *filereader, int line, int co
  * @param width width of the error mark
  * @param message the warning message to log
  */
-void Logger::warning(FileReader *filereader, int line, int column, int width, std::string message) {
-    log(std::cerr, filereader, line, column, width, "warning: " + message);
+void Logger::warning(Input *input, int line, int column, int width, std::string message) {
+    log(std::cerr, input, line, column, width, "warning: " + message);
 
     // Error out if we have too many warnings
     if (++warnings > max_warnings)
-        error(filereader, line, column, width, "too many warnings");
+        error(input, line, column, width, "too many warnings");
 }
 
 /**
@@ -72,8 +72,8 @@ void Logger::warning(FileReader *filereader, int line, int column, int width, st
  * @param width width of the error mark
  * @param message the error message to log
  */
-void Logger::error(FileReader *filereader, int line, int column, int width, std::string message) {
-    log(std::cerr, filereader, line, column, width, "error: " + message);
+void Logger::error(Input *input, int line, int column, int width, std::string message) {
+    log(std::cerr, input, line, column, width, "error: " + message);
     exit(EXIT_FAILURE);
 }
 
@@ -102,14 +102,14 @@ void Logger::print_line(std::ostream &ostream, std::string content, int line, in
  * @param line the line number to get the content from
  * @return a string representing the specified line of the input file
 */
-std::string Logger::get_line(std::ifstream &filestream, int line) {
-    std::string out;
-    filestream.seekg(std::ios::beg);
-    for (int i = 0; i < line; i++) {
-        std::getline(filestream, out);
-    }
-    return out;
-}
+//std::string Logger::get_line(std::ifstream &filestream, int line) {
+//    std::string out;
+//    filestream.seekg(std::ios::beg);
+//    for (int i = 0; i < line; i++) {
+//        std::getline(filestream, out);
+//    }
+//    return out;
+//}
 
 
 /**

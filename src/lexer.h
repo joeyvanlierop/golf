@@ -4,11 +4,12 @@
 #include <vector>
 #include <optional>
 #include "token.h"
-#include "filereader.h"
+#include "file_input.h"
+#include "input.h"
 
 class Lexer {
 public:
-    Lexer(FileReader* filereader);
+    Lexer(Input* input);
     std::vector<Token> match_tokens(bool verbose);
 
 private:
@@ -16,8 +17,7 @@ private:
     int current = 0;
     int line = 1;
     int column = 1;
-    FileReader *filereader;
-    std::string input;
+    Input *input;
     std::vector<Token> tokens;
 
     bool is_at_end();

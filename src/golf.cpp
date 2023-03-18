@@ -1,8 +1,9 @@
-#include <iostream>
 #include "golf.h"
 #include "lexer.h"
-#include "filereader.h"
+#include "file_input.h"
 #include "parser.h"
+#include "input.h"
+#include "repl_input.h"
 
 /**
  * The main function of the program
@@ -13,24 +14,33 @@
  * @return EXIT_SUCCESS if the program executes successfully, EXIT_FAILURE otherwise
  */
 int main(int argc, char* argv[]) {
-    // Validate input
-    if (argc != 2)
-    {
-        printf("Usage: %s [filename]\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
+//    // Validate input
+//    if (argc < 2)
+//    {
+//        printf("Usage: %s [filename]\n", argv[0]);
+//        exit(EXIT_FAILURE);
+//    }
+    // TODO: Make this not garbage
+    bool interactive = argc == 1;
 
-    // Read input
-    FileReader reader(argv[1]);
+    do {
+        // Read input
+        Input *input;
+        if(interactive)
+            input = new ReplInput();
+        else
+            input = new FileInput(argv[1]);
+        input->read();
 
-    // Lex input
-    Lexer lexer(&reader);
-    auto tokens = lexer.match_tokens(false);
+        // Lex input
+        Lexer lexer(input);
+        auto tokens = lexer.match_tokens(false);
 
-    // Parse tokens
-    Parser parser(&reader, tokens);
-    auto ast = parser.parse();
-    ast->print();
+        // Parse tokens
+        Parser parser(input, tokens);
+        auto ast = parser.parse();
+        ast->print();
+    } while(interactive);
 
     return EXIT_SUCCESS;
 }

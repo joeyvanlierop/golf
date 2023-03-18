@@ -2,17 +2,18 @@
 
 #include <string>
 #include <tuple>
-#include "filereader.h"
+#include "file_input.h"
+#include "input.h"
 
 class Logger {
 public:
-    static void warning(FileReader* fileReader, int line, int column, int width, std::string message);
-    static void error(FileReader* fileReader, int line, int column, int width, std::string message);
+    static void warning(Input *input, int line, int column, int width, std::string message);
+    static void error(Input *input, int line, int column, int width, std::string message);
 
 private:
     static int warnings;
     static const int max_warnings = 10;
-    static void log(std::ostream& ostream, FileReader* fileReader, int line, int column, int width, std::string message);
+    static void log(std::ostream& ostream, Input *input, int line, int column, int width, std::string message);
     static void print_line(std::ostream& ostream, std::string content, int indent);
     static void print_line(std::ostream& ostream, std::string content, int line, int indent);
     static std::string get_line(std::ifstream& filestream, int line);

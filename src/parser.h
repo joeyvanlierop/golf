@@ -2,19 +2,20 @@
 
 #include "ast.h"
 #include "token.h"
-#include "filereader.h"
+#include "file_input.h"
+#include "input.h"
 #include <vector>
 #include <set>
 #include <optional>
 
 class Parser {
 public:
-    Parser(FileReader *filereader, std::vector<Token> tokens);
+    Parser(Input *input, std::vector<Token> tokens);
     AST* parse();
 
 private:
     int current = 0;
-    FileReader *filereader;
+    Input *input;
     std::vector<Token> tokens;
 
     bool is_at_end();
