@@ -1,10 +1,11 @@
 #include <iostream>
 #ifdef _WIN32
 #include <Windows.h>
-#else
-#include <unistd.h>
-#include <termios.h>
+#elif __linux__
+#include <xcb/xcb.h>
 #endif
+
+#include <iostream>
 #include "repl_input.h"
 
 /**
@@ -32,33 +33,25 @@ void ReplInput::read() {
 
 bool ReplInput::is_shift_pressed() {
 #ifdef _WIN32
-    return GetAsyncKeyState(VK_SHIFT) & 0x8000;
+    return GetKeyState(VK_SHIFT) < 0;
+#elif __linux__
+    static xcb_connection_t* conn = xcb_connect(nullptr, nullptr);
+    if (!conn) return false;
+    xcb_query_keymap_reply_t* reply = xcb_query_keymap_reply(conn, xcb_query_keymap(conn), nullptr);
+    if (!reply) return false;
+    const uint8_t* keys = xcb_query_keymap_keys(reply);
+    const xcb_keysym_t shift_keysym = 0xffe1;
+    const uint8_t shift_keycode = 54;
+    bool is_shift_pressed = keys[shift_keycode / 8] & (1 << (shift_keycode % 8));
+    xcb_disconnect(conn);
+    free(reply);
+    return is_shift_pressed;
 #else
-    struct termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    bool shift = false;
-    int nread;
-    char c;
-    do {
-        nread = read(STDIN_FILENO, &c, 1);
-        if (nread == 1 && c == '\e') {
-            nread = read(STDIN_FILENO, &c, 1);
-            if (nread == 1 && c == '[') {
-                nread = read(STDIN_FILENO, &c, 1);
-                if (nread == 1 && (c == '2' || c == '3')) {
-                    nread = read(STDIN_FILENO, &c, 1);
-                    if (nread == 1 && c == '~') {
-                        shift = (c == '2');
-                        break;
-                    }
-                }
-            }
-        }
-    } while (nread == 1);
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return shift;
+    return false;
 #endif
 }
+
+
+
+
+
