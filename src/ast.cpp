@@ -42,10 +42,6 @@ void AST::print(int indent) {
     if (sym.length() > 0)
         ss << " sym=" << sym;
 
-    // AST has an attribute
-    if (attr.length() > 0)
-        ss << " [" << attr << "]";
-
     // AST has location data
     if (line >= 0)
         ss << " @ (" << line << ", " << column << ")";
