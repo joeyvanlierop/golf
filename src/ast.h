@@ -8,6 +8,8 @@ class AST {
 public:
     std::string attr;
     std::string type;
+    std::string sig;
+    std::string sym;
     int line;
     int column;
     std::vector<AST*> children;

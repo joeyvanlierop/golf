@@ -103,6 +103,7 @@ bool Parser::match(TokenType expected) {
  * Program ::= { Declaration } EOF
  *
  * Parses the list of tokens given to the parser
+ * @param verbose should the abstract syntax tree be printed
  * @return abstract syntax tree (AST) representing the given list of tokens
  */
 AST *Parser::parse(bool verbose) {

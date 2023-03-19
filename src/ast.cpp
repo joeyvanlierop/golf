@@ -34,6 +34,18 @@ void AST::print(int indent) {
     if (attr.length() > 0)
         ss << " [" << attr << "]";
 
+    // AST has a sig(nature type)
+    if (sig.length() > 0)
+        ss << " sig=" << sig;
+
+    // AST has a sym(bol table reference)
+    if (sym.length() > 0)
+        ss << " sym=" << sym;
+
+    // AST has an attribute
+    if (attr.length() > 0)
+        ss << " [" << attr << "]";
+
     // AST has location data
     if (line >= 0)
         ss << " @ (" << line << ", " << column << ")";

@@ -6,19 +6,23 @@
 
 #include "input.h"
 
-class Symbol {
+struct Record {
+    std::string sig;
+    std::string rt_sig;
+    bool is_const;
+    bool is_type;
 };
 
 class SymbolTable {
 public:
     SymbolTable(Input* input);
     void define(std::string name, std::string type, int line, int column);
-    std::string lookup(std::string name, int line, int column);
-    void push_scope();
-    void pop_scope();
+    Record* lookup(std::string name, int line, int column);
+    void open_scope();
+    void close_scope();
 
 private:
     Input* input;
-    std::vector<std::map<std::string, std::string>> scopes;
+    std::vector<std::map<std::string, Record*>> scopes;
 };
 
