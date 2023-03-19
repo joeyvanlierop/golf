@@ -21,6 +21,7 @@ std::string read_line() {
 
 /**
  * Reads from an interactive prompt
+ * Terminated by entring an empty line
  * @return the user input
  */
 void ReplInput::read() {

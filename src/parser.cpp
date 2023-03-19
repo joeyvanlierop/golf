@@ -105,12 +105,14 @@ bool Parser::match(TokenType expected) {
  * Parses the list of tokens given to the parser
  * @return abstract syntax tree (AST) representing the given list of tokens
  */
-AST *Parser::parse() {
+AST *Parser::parse(bool verbose) {
     auto ast = new AST("program");
     while (!is_at_end()) {
         auto child = decl();
         ast->add_child(child);
     }
+    if (verbose)
+        ast->print();
     return ast;
 }
 
@@ -452,13 +454,16 @@ AST *Parser::mul_expr() {
  * UnaryExpr ::= ("!" | "-") UnaryExpr | FuncCall
  */
 AST *Parser::unary_expr() {
-    // TODO: Refactor this to be more concise if you are out of fun things to do in life :(
+    // TODO: Refactor this to be more concise if you are out of fun things to do in life :)
     if (match(Not)) {
         auto op = previous();
         auto r = unary_expr();
         return (new AST(op.lexeme, op.line, op.column))->add_child(r);
     }
     if (match(Subtract)) {
+        // TODO: Hacky solution for negative integers
+        if(match(Integer))
+            return new AST("int", "-" + previous().lexeme, previous().line, previous().column - 1);
         auto op = previous();
         auto r = unary_expr();
         return (new AST("u" + op.lexeme, op.line, op.column))->add_child(r);

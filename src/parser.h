@@ -11,7 +11,7 @@
 class Parser {
 public:
     Parser(Input *input, std::vector<Token> tokens);
-    AST* parse();
+    AST* parse(bool verbose);
 
 private:
     int current = 0;

@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "input.h"
 #include "repl_input.h"
+#include "semantic.h"
 
 /**
  * The main function of the program
@@ -38,8 +39,11 @@ int main(int argc, char* argv[]) {
 
         // Parse tokens
         Parser parser(input, tokens);
-        auto ast = parser.parse();
-        ast->print();
+        auto ast = parser.parse(false);
+
+        // Analyze syntax
+        Semantic semantic(input, *ast);
+        auto annotated_ast = semantic.analyze(true);
     } while(interactive);
 
     return EXIT_SUCCESS;
