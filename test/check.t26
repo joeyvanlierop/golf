@@ -1,0 +1,5 @@
+// returning value from function with no return type
+
+func main() {
+	return 123
+}

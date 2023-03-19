@@ -1,0 +1,6 @@
+// type name nonexistent = error
+
+var x notthere
+
+func main() {
+}

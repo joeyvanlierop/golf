@@ -1,0 +1,9 @@
+// this should fail because the later top-level declaration's scope
+// is the file block
+
+var foo int
+
+func main() {
+}
+
+var int bool

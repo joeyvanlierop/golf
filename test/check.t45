@@ -1,0 +1,6 @@
+// type id used where type id can't be used
+
+func main() {
+	var x int
+	x = int
+}

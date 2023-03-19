@@ -1,0 +1,6 @@
+// strong typing: ints and bools are distinct
+
+func main() {
+	var i int
+	i = true
+}

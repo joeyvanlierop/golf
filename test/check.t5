@@ -1,0 +1,19 @@
+// block scope check
+
+func main() {
+	var x int
+	{
+		var x bool
+		{
+			var x string
+			x = "asdf"
+			{
+				var x int
+				x = x + 1
+			}
+			prints(x)
+		}
+		printb(x)
+	}
+	printi(x)
+}

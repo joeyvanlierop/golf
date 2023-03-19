@@ -1,0 +1,9 @@
+// function arg number check
+
+func foo(a int, b int, c int) {
+}
+
+func main() {
+        foo(123, 456)
+}
+

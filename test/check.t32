@@ -1,0 +1,7 @@
+// legit although fairly useless
+
+func main() {
+	var i int
+	i
+	42
+}

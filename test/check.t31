@@ -1,0 +1,12 @@
+// check that for expr type is boolean
+
+func main() {
+	for {			// ok
+	}
+	var four bool		// ok
+	for four {
+	}
+	var ever string		// hold up
+	for ever {
+	}
+}

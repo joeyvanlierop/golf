@@ -1,0 +1,6 @@
+// integer literal definitely out of range
+
+func main() {
+	var i int
+	i = 999999999999999999999999999999999999999999999999
+}

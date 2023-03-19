@@ -1,0 +1,5 @@
+// main can't have a return value
+
+func main() int {
+	return 42
+}

@@ -1,0 +1,12 @@
+// scope checking and undef variables
+var a int
+
+func main() {
+	a = 123
+	var b int
+	{
+		a = 456
+		b = 42
+		c = 789
+	}
+}

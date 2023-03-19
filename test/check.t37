@@ -1,0 +1,12 @@
+// func return + argument checks
+
+func bar(i int) int {
+        return bar(bar(i))
+}
+
+func foo(b bool) int {
+        return foo(foo(b))
+}
+
+func main() {
+}

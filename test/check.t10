@@ -1,0 +1,8 @@
+// type name not a type = error
+
+var t int
+var x t
+
+func main() {
+}
+

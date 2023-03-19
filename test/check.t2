@@ -1,0 +1,7 @@
+// this creates a nonsensical loop, because the top-level variable's scope 
+// is the file block
+
+var int int
+
+func main() {
+}

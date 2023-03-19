@@ -1,0 +1,8 @@
+// formal parameters don't take effect until the function block;
+// ensure that checking is still done for duplicate names there
+
+func main() {
+}
+
+func foo(i int, b bool, i int) {
+}

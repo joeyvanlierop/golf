@@ -1,4 +1,0 @@
-// can't have opening brace on the next line
-func test() {
-    a = b = c = 10 + 2
-}

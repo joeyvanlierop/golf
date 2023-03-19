@@ -1,0 +1,15 @@
+// redef variable
+
+var a int
+
+func main() {
+	var a bool
+	if true {
+		var a string
+		var b int
+		{
+			var b bool
+		}
+		var b string
+	}
+}

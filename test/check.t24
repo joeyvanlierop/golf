@@ -1,0 +1,7 @@
+// break not inside for loop
+
+func main() {
+	if true {
+		break
+	}
+}

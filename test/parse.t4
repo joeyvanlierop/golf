@@ -1,7 +1,0 @@
-// can't have opening brace on the next line
-
-func main() {
-	if true
-	{
-	}
-}

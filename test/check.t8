@@ -1,0 +1,5 @@
+// can't change constants
+
+func main() {
+	true = false
+}

@@ -1,0 +1,9 @@
+// comparable and ordered
+
+func main() {
+	"abc" == "def"
+	123 != 456
+	true == false
+	false != true
+	true > false
+}

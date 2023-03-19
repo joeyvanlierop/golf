@@ -1,0 +1,8 @@
+// true and false are predeclared and can be redefined
+
+var true int
+
+func main() {
+	var false int
+	printi(true * false)
+}

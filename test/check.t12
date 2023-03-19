@@ -1,0 +1,8 @@
+// can't have more than one main(), and in general, the same name can't
+// be defined twice in the same scope
+
+func main() {
+}
+
+func main() {
+}

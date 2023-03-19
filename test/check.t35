@@ -1,0 +1,11 @@
+// operand type mismatch
+
+func main() {
+        var a int
+        var b bool
+
+        a = 123
+        b = true
+
+        a = a + b
+}

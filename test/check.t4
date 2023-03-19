@@ -1,0 +1,20 @@
+// top-level names' scope is the entire file block
+
+var b4int int
+
+func b4func() {
+	printi(b4int)
+	printi(aft3rint)
+	aft3rfunc()
+}
+
+func main() {
+	b4func()
+}
+
+func aft3rfunc() {
+	printi(b4int)
+	printi(aft3rint)
+}
+
+var aft3rint int

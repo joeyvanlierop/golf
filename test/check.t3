@@ -1,0 +1,7 @@
+// this works because for local scope, the var name isn't in effect
+// until after the VarDecl
+
+func main() {
+	var int int
+	printi(int)
+}

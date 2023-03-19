@@ -1,0 +1,9 @@
+// deeper type propagation in AST
+
+func main() {
+	var x int
+	2 + 3 * 5 - 123 >= -(-(-x))
+
+	var b bool
+	!!!(true && false || b == true) != (5 <= 6)
+}

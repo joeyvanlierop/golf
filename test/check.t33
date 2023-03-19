@@ -1,0 +1,12 @@
+// check built-in routines
+
+func main() {
+        prints("Hello, world!\n");
+        printb(true);
+        printi(123);
+        printc(123);
+        var ch int
+	ch = getchar()
+	halt()
+}
+

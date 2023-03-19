@@ -1,0 +1,215 @@
+#!/usr/bin/python3
+
+# Run this script from the directory corresponding to the root of your
+# code repo.  In other words, when your TA pulls the code from your repo,
+# goes to its root directory, and runs this script, it should work.
+#
+# Output is logged in the file "run.output", WHICH WILL BE OVERWRITTEN
+# EACH TIME THIS SCRIPT IS RUN.
+#
+# Output from the standard output and standard error streams is collected
+# separately, and as a result won't be intermingled as might be seen when
+# running a command directly from the terminal.
+#
+# To best show off your program's construction, be sure to remove all
+# object/executable/class/jar files before running this script (or, ideally,
+# you'll have a "clean" target in your Makefile and you can just "make clean"
+# first.
+#
+# Needs Python 3.8 or higher.
+
+import os
+import sys
+import time
+import signal
+import socket
+import subprocess
+
+TESTPATH = '/home/profs/aycock/411/TEST/ms3'
+LOGFILE = 'run.output'
+JARCLASS = 'golf'
+JAR = 'golf.jar'
+EXE = './golf'
+
+JAVA = '/usr/bin/java'
+MAKE = '/usr/bin/make'
+
+WIDTH = 79
+
+#
+# Test files
+#
+
+TESTS = (
+	( 'check.t1',	'later global "int" redeclaration' ),
+	( 'check.t2',	'global var declaration loop' ),
+	( 'check.t3',	'local var version of check.t2' ),
+	( 'check.t4',	'global name test' ),
+	( 'check.t5',	'block scope check' ),
+	( 'check.t6',	'global var declaration, complex loop' ),
+	( 'check.t7',	'parameter scope test' ),
+	( 'check.t8',	"constants can't be changed" ),
+	( 'check.t9',	'nonexistent type name' ),
+	( 'check.t10',	'type name not a type' ),
+	( 'check.t11',	'formal parameters need types' ),
+	( 'check.t12',	'multiple (main) functions, same name' ),
+	( 'check.t13',	'no main function' ),
+	( 'check.t14',	"main can't have arguments" ),
+	( 'check.t15',	"main can't have a return value" ),
+	( 'check.t16',	'dup check for formal parameters' ),
+	( 'check.t17',	'function call as lvalue' ),
+	( 'check.t18',	'function name as lvalue' ),
+	( 'check.t19',	'humongous integer literal' ),
+	( 'check.t20',	'positive integer literal out of range' ),
+	( 'check.t21',	'negative integer literal out of range' ),
+	( 'check.t22',	'"break" not inside "for" loop' ),
+	( 'check.t23',	'"break" in block, but not in "for"' ),
+	( 'check.t24',	'"break" in "if" block' ),
+	( 'check.t25',	'missing return statement' ),
+	( 'check.t26',	'returning value from void function' ),
+	( 'check.t27',	'return type mismatch' ),
+	( 'check.t28',	'missing return type' ),
+	( 'check.t29',	'"if" expr not a boolean type' ),
+	( 'check.t30',	'"if"-"else" not a boolean type' ),
+	( 'check.t31',	'"for" expr not a boolean type' ),
+	( 'check.t32',	'legit expression statements' ),
+	( 'check.t33',	'built-in routine check' ),
+	( 'check.t34',	'actual parameter type check' ),
+	( 'check.t35',	'operand type mismatch' ),
+	( 'check.t36',	'another actual parameter type check' ),
+	( 'check.t37',	'return+argument checks' ),
+	( 'check.t38',	'scope check and undefined variable' ),
+	( 'check.t39',	'redefined variable' ),
+	( 'check.t40',	'comparable and ordered comparisons' ),
+	( 'check.t41',	'int/bool distinction' ),
+	( 'check.t42',	'deep type propagation' ),
+	( 'check.t43',	'redefining "true" and "false"' ),
+	( 'check.t44',	'call of non-function' ),
+	( 'check.t45',	'type id used in wrong context' ),
+)
+
+#
+# Utility routines
+#
+
+f = None
+
+def log(s):
+	global f
+	if f is None:
+		try:
+			# ensure Python doesn't try to alter output
+			f = open(LOGFILE, 'w', encoding='iso-8859-1')
+		except IOError as e:
+			print(f'{LOGFILE}: {e.strerror}', file=sys.stderr)
+			sys.exit(1)
+	print(s, file=f)
+	print(file=f)
+
+def die(s):
+	log(f'*** ABNORMAL TERMINATION: {s}')
+	print(f'{sys.argv[0]}: {s}', file=sys.stderr)
+	sys.exit(1)
+
+def timestamp(reason):
+	log(f'Run {reason} on {time.ctime()}')
+	
+def banner(title):
+	# his friends call him Bruce
+	s = '-' * WIDTH + '\n'
+	s += title + ' |\n'
+	s += '-' * (len(title) + 2)
+	log(s)
+
+	# make progress visible to user
+	print(title, file=sys.stderr)
+
+def run(cmd):
+	# XXX no timeouts set currently
+	log('% ' + ' '.join(cmd))
+
+	try:
+		cp = subprocess.run(cmd, capture_output=True)
+	except subprocess.SubprocessError:
+		die('unexpected exception running command')
+	except IOError as e:
+		die(f'unexpected I/O error running command: {e.strerror}')
+
+	# encoding should effectively act as a passthrough with no
+	# possibility of encoding errors
+	log('STDOUT:\n' + str(cp.stdout, encoding='iso-8859-1'))
+	log('STDERR:\n' + str(cp.stderr, encoding='iso-8859-1'))
+	
+	if cp.returncode < 0:
+		# rarely a good sign, let's be honest
+		which = signal.strsignal(-cp.returncode)
+		log(f'*** TERMINATION VIA SIGNAL: {which}')
+	else:
+		log(f'RETURN CODE: {cp.returncode}')
+
+#
+# Figure out what form the executable code's in
+#
+
+cmd = []
+
+def findcompiler():
+	global cmd
+	is_exe = is_jar = False
+
+	if os.access(EXE, os.X_OK):
+		is_exe = True
+		cmd = [ EXE ]
+	if os.access(JAR, os.R_OK):
+		is_jar = True
+		cmd = [ JAVA, '-cp', JAR, JARCLASS ]
+
+	if not is_exe and not is_jar:
+		die('no compiler found with name per spec')
+	if is_exe and is_jar:
+		die('multiple compiler candidates found')
+
+	log('Compiler will be run as ' + ' '.join(cmd))
+
+#
+# Testing, one, two, three, testing
+#
+
+def main():
+	timestamp('started')
+
+	# must be run on CPSC Linux machine
+	log(f'Hostname: {socket.gethostname()}')
+
+	# build it; this'll also permit variants on "Makefile" like "makefile"
+	banner('Running make')
+	run([ MAKE ])
+
+	# figure out how to run the compiler
+	banner('Locating GoLF compiler')
+	findcompiler()
+
+	# no-argument case
+	banner('Test: too few arguments')
+	run(cmd)
+
+	# extra-argument case
+	banner('Test: too many arguments')
+	run(cmd + [ '/dev/null', '/dev/zero' ])
+
+	# nonexistent case
+	banner('Test: nonexistent file')
+	run(cmd + [ '/i/do/not/exist' ])
+
+	# now the fun begins
+	for file, description in TESTS:
+		banner(f'Test: {description}')
+		run(cmd + [ f'{TESTPATH}/{file}' ])
+
+	timestamp('ended')
+
+if __name__ == '__main__':
+	try:
+		main()
+	except KeyboardInterrupt:
+		die('terminated via keyboard interrupt')

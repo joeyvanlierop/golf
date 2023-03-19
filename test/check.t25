@@ -1,0 +1,7 @@
+// no return in function with return type is a compile-time error
+
+func main() {
+}
+
+func foo() string {
+}

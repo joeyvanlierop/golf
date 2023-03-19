@@ -1,8 +1,0 @@
-// an optional trailing comma allows this formatting in Go (and GoLF)
-
-func foo() {
-	garbled(a,
-		b,
-		c,
-	)
-}

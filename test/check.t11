@@ -1,0 +1,7 @@
+// must have types for formal parameters
+
+func main() {
+}
+
+func foo(a1 int, a2 main, a3 bool) {
+}

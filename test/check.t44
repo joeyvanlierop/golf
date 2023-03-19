@@ -1,0 +1,5 @@
+// this passes through grammar but needs to be caught in the semantic checker
+
+func main() {
+	"asdf"(1,2,3)
+}

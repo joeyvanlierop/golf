@@ -1,0 +1,16 @@
+// this works because the scope of parameters is their function block
+
+func foo(int int) int {
+	printi(int)
+	return int
+}
+
+func bar(bar int) {
+}
+
+func string(string int) bool {
+	return true
+}
+
+func main() {
+}

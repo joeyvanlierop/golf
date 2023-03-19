@@ -1,0 +1,4 @@
+// main can't have arguments
+
+func main(argc int) {
+}
