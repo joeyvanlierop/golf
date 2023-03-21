@@ -1,4 +1,4 @@
-Run started on Tue Mar 21 13:20:25 2023
+Run started on Tue Mar 21 13:24:21 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -150,16 +150,15 @@ Test: block scope check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t5
 
 STDOUT:
+f(str), f(str)
+f(bool), f(bool)
+f(int), f(int)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t5:9:9
-  | 
-9 |             x = "asdf"
-  |                  ^~~~ error: invalid operand
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: global var declaration, complex loop |
@@ -187,56 +186,12 @@ Test: parameter scope test |
 
 STDOUT:
 f(int), f(int)
-program
-	func sym=0x79bb50 @ (3, 1)
-		newid [foo] @ (3, 6)
-		sig
-			formals
-				formal
-					newid [int] @ (3, 10)
-					typeid [int] sym=0x79b490 @ (3, 14)
-			typeid [int] sym=0x79b490 @ (3, 19)
-		block
-			funccall sig=void @ (4, 8)
-				id [printi] sig=f(int) sym=0x79b880 @ (4, 2)
-				actuals
-					id [int] sig=int sym=0x79b490 @ (4, 9)
-			return @ (5, 2)
-				id [int] sig=int sym=0x79b490 @ (5, 9)
-	func sym=0x79bbe0 @ (8, 1)
-		newid [bar] @ (8, 6)
-		sig
-			formals
-				formal
-					newid [bar] @ (8, 10)
-					typeid [int] sym=0x79b490 @ (8, 14)
-			typeid [$void] sym=0x79b370
-		block
-			emptystmt
-	func sym=0x79bc70 @ (11, 1)
-		newid [string] @ (11, 6)
-		sig
-			formals
-				formal
-					newid [string] @ (11, 13)
-					typeid [int] sym=0x79b490 @ (11, 20)
-			typeid [bool] sym=0x79b400 @ (11, 25)
-		block
-			return @ (12, 2)
-				id [true] sig=bool sym=0x79b640 @ (12, 9)
-	func sym=0x79bd00 @ (15, 1)
-		newid [main] @ (15, 6)
-		sig
-			formals
-			typeid [$void] sym=0x79b370
-		block
-			emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: constants can't be changed |
@@ -248,13 +203,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t8:4:2
-  | 
-4 |     true = false
-  |     ^~~~ error: cannot assign to a constant
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: nonexistent type name |
@@ -356,13 +307,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t14:3:1
-  | 
-3 | func main(argc int) {
-  | ^ error: main function cannot have arguments
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: main can't have a return value |
@@ -374,13 +321,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t15:3:1
-  | 
-3 | func main() int {
-  | ^ error: main function cannot have a return type
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: dup check for formal parameters |
@@ -389,36 +332,12 @@ Test: dup check for formal parameters |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t16
 
 STDOUT:
-program
-	func sym=0xd73f80 @ (4, 1)
-		newid [main] @ (4, 6)
-		sig
-			formals
-			typeid [$void] sym=0xd737a0
-		block
-			emptystmt
-	func sym=0xd74010 @ (7, 1)
-		newid [foo] @ (7, 6)
-		sig
-			formals
-				formal
-					newid [i] @ (7, 10)
-					typeid [int] sym=0xd738c0 @ (7, 12)
-				formal
-					newid [b] @ (7, 17)
-					typeid [bool] sym=0xd73830 @ (7, 19)
-				formal
-					newid [i] @ (7, 25)
-					typeid [int] sym=0xd738c0 @ (7, 27)
-			typeid [$void] sym=0xd737a0
-		block
-			emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: function call as lvalue |
@@ -431,13 +350,9 @@ f(), f()
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t17:6:5
-  | 
-6 |     foo() = 123
-  |        ^ error: unknown identifier ""
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: function name as lvalue |
@@ -449,13 +364,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t18:6:8
-  | 
-6 |     foo = 123
-  |           ^~~ error: invalid operand
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: humongous integer literal |
@@ -467,13 +378,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t19:5:2
-  | 
-5 |     i = 999999999999999999999999999999999999999999999999
-  |     ^ error: unknown identifier "i"
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: positive integer literal out of range |
@@ -485,13 +392,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t20:5:2
-  | 
-5 |     i = 2147483647    // ok
-  |     ^ error: unknown identifier "i"
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: negative integer literal out of range |
@@ -503,13 +406,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t21:5:2
-  | 
-5 |     i = -2147483648    // ok
-  |     ^ error: unknown identifier "i"
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "break" not inside "for" loop |
@@ -521,13 +420,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t22:7:2
-  | 
-7 |     break
-  |     ^~~~~ error: break must be inside a for loop
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "break" in block, but not in "for" |
@@ -539,13 +434,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t23:5:3
-  | 
-5 |         break
-  |         ^~~~~ error: break must be inside a for loop
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "break" in "if" block |
@@ -557,13 +448,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t24:5:3
-  | 
-5 |         break
-  |         ^~~~~ error: break must be inside a for loop
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: missing return statement |
@@ -572,27 +459,12 @@ Test: missing return statement |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t25
 
 STDOUT:
-program
-	func sym=0xf6ca10 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xf6c230
-		block
-			emptystmt
-	func sym=0xf6caa0 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [string] sym=0xf6c3e0 @ (6, 12)
-		block
-			emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: returning value from void function |
@@ -601,21 +473,12 @@ Test: returning value from void function |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t26
 
 STDOUT:
-program
-	func sym=0x21adb80 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x21ad3a0
-		block
-			return @ (4, 2)
-				int [123] sig=int @ (4, 9)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: return type mismatch |
@@ -624,28 +487,12 @@ Test: return type mismatch |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t27
 
 STDOUT:
-program
-	func sym=0x111cbe0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x111c400
-		block
-			emptystmt
-	func sym=0x111cc70 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [bool] sym=0x111c490 @ (6, 12)
-		block
-			return @ (7, 2)
-				int [123] sig=int @ (7, 9)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: missing return type |
@@ -654,27 +501,12 @@ Test: missing return type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t28
 
 STDOUT:
-program
-	func sym=0x46faa0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x46f2c0
-		block
-			emptystmt
-	func sym=0x46fb30 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [bool] sym=0x46f350 @ (6, 12)
-		block
-			return @ (7, 2)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "if" expr not a boolean type |
@@ -683,23 +515,12 @@ Test: "if" expr not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t29
 
 STDOUT:
-program
-	func sym=0x5a6ff0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x5a6690
-		block
-			if @ (4, 2)
-				int [1] sig=int @ (4, 5)
-				block
-					emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "if"-"else" not a boolean type |
@@ -708,26 +529,12 @@ Test: "if"-"else" not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t30
 
 STDOUT:
-program
-	func sym=0xfe39a0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xfe31c0
-		block
-			if @ (4, 2)
-				int [1] sig=int @ (4, 5)
-				block
-					emptystmt
-				else
-					block
-						emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: "for" expr not a boolean type |
@@ -736,37 +543,12 @@ Test: "for" expr not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t31
 
 STDOUT:
-program
-	func sym=0x11c7940 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x11c7160
-		block
-			for @ (4, 2)
-				id [$true] sig=bool sym=0x11c73a0
-				block
-					emptystmt
-			var sym=0x11c79d0 @ (6, 2)
-				newid [four] @ (6, 6)
-				typeid [bool] sym=0x11c71f0 @ (6, 11)
-			for @ (7, 2)
-				id [four] sig=bool sym=0x11c79d0 @ (7, 6)
-				block
-					emptystmt
-			var sym=0x11c7a60 @ (9, 2)
-				newid [ever] @ (9, 6)
-				typeid [string] sym=0x11c7310 @ (9, 11)
-			for @ (10, 2)
-				id [ever] sig=str sym=0x11c7a60 @ (10, 6)
-				block
-					emptystmt
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: legit expression statements |
@@ -775,24 +557,12 @@ Test: legit expression statements |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t32
 
 STDOUT:
-program
-	func sym=0x1a3d110 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x1a3c800
-		block
-			var sym=0x1a3d1a0 @ (4, 2)
-				newid [i] @ (4, 6)
-				typeid [int] sym=0x1a3c920 @ (4, 8)
-			id [i] sig=int sym=0x1a3d1a0 @ (5, 2)
-			int [42] sig=int @ (6, 2)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: built-in routine check |
@@ -806,16 +576,13 @@ f(bool), f(bool)
 f(int), f(int)
 f(int), f(int)
 f(), f()
+f(), f()
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t33:9:14
-  | 
-9 |     ch = getchar()
-  |                 ^ error: invalid operand
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: actual parameter type check |
@@ -846,13 +613,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t35:10:15
-   | 
-10 |         a = a + b
-   |               ^ error: invalid operand
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: another actual parameter type check |
@@ -916,41 +679,12 @@ Test: redefined variable |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t39
 
 STDOUT:
-program
-	globalvar sym=0xcf9e60 @ (3, 1)
-		newid [a] @ (3, 5)
-		typeid [int] sym=0xcf97a0 @ (3, 7)
-	func sym=0xcf9ef0 @ (5, 1)
-		newid [main] @ (5, 6)
-		sig
-			formals
-			typeid [$void] sym=0xcf8e80
-		block
-			var sym=0xcf9f80 @ (6, 2)
-				newid [a] @ (6, 6)
-				typeid [bool] sym=0xcf8f10 @ (6, 8)
-			if @ (7, 2)
-				id [true] sig=bool sym=0xcf9950 @ (7, 5)
-				block
-					var sym=0xcfa010 @ (8, 3)
-						newid [a] @ (8, 7)
-						typeid [string] sym=0xcf9830 @ (8, 9)
-					var sym=0xcfa0a0 @ (9, 3)
-						newid [b] @ (9, 7)
-						typeid [int] sym=0xcf97a0 @ (9, 9)
-					block
-						var sym=0xcfa130 @ (11, 4)
-							newid [b] @ (11, 8)
-							typeid [bool] sym=0xcf8f10 @ (11, 10)
-					var sym=0xcfa0a0 @ (13, 3)
-						newid [b] @ (13, 7)
-						typeid [string] sym=0xcf9830 @ (13, 9)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: comparable and ordered comparisons |
@@ -980,13 +714,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t41:5:6
-  | 
-5 |     i = true
-  |         ^~~~ error: invalid operand
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: deep type propagation |
@@ -1035,14 +765,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t44:0:0
- | 
-0| 
- | ~~~ error: unknown identifier "asdf"
-double free or corruption (out)
 
 
-*** TERMINATION VIA SIGNAL: Aborted
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: type id used in wrong context |
@@ -1054,13 +779,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t45:5:2
-  | 
-5 |     x = int
-  |     ^ error: unknown identifier "x"
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
-Run ended on Tue Mar 21 13:20:26 2023
+Run ended on Tue Mar 21 13:24:28 2023
 
