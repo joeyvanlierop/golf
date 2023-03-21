@@ -20,16 +20,16 @@ void Semantic::pass_0() {
 	symbol_table.define("bool", {"bool", "", false, true});
 	symbol_table.define("int", {"int", "", false, true});
 	symbol_table.define("string", {"str", "", false, true});
-	symbol_table.define("$true", {"bool", "Ltrue", true, false});
-	symbol_table.define("true", {"bool", "Ltrue", true, false});
-	symbol_table.define("false", {"bool", "Lfalse", true, false});
-	symbol_table.define("printb", {"f(bool) void", "Lprintb", false, false});
-	symbol_table.define("printc", {"f(int) void", "Lprintc", false, false});
-	symbol_table.define("printi", {"f(int) void", "Lprinti", false, false});
-	symbol_table.define("prints", {"f(str) void", "Lprints", false, false});
-	symbol_table.define("getchar", {"f() void", "Lgetchar", false, false});
-	symbol_table.define("halt", {"f() void", "Lhalt", false, false});
-	symbol_table.define("len", {"f(str) int", "Llen", false, false});
+	symbol_table.define("$true", {"bool", "", true, false});
+	symbol_table.define("true", {"bool", "", true, false});
+	symbol_table.define("false", {"bool", "", true, false});
+	symbol_table.define("printb", {"f(bool)", "void", false, false});
+	symbol_table.define("printc", {"f(int)", "void", false, false});
+	symbol_table.define("printi", {"f(int)", "void", false, false});
+	symbol_table.define("prints", {"f(str)", "void", false, false});
+	symbol_table.define("getchar", {"f()", "void", false, false});
+	symbol_table.define("halt", {"f()", "void", false, false});
+	symbol_table.define("len", {"f(str)", "int", false, false});
 }
 
 /**
