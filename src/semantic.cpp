@@ -150,6 +150,7 @@ void Semantic::pass_3() {
 		} else if (ast->type == "funccall") {
 			auto func_call = encode_func_call(ast);
 			auto func_decl = symbol_table.lookup(ast->get_child(0)->attr);
+			std::cout << func_call << ", " << func_decl->sig << std::endl;
 			if (func_call != func_decl->sig)
 				Logger::error(input, ast->line, ast->column, ast->attr.length(),
 							  "function call does not match function signature");
@@ -229,6 +230,15 @@ void Semantic::pass_4() {
 								 Logger::error(input, ast->line, ast->column, ast->attr.length(), "main function cannot have a return type");
 							 main_count++;
 						 }
+					 } else if (ast->type == "=") {
+						 auto left = ast->get_child(0);
+						 auto right = ast->get_child(1);
+						 auto type = symbol_table.lookup(left);
+						 if(type->is_const)
+							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a constant");
+						 if(left->sig != right->sig)
+							 Logger::error(input, right->line, right->column, right->attr.length(), "invalid assignment type");
+						 ast->sig = "void";
 					 }
 				 },
 				 [&for_depth](auto ast) {

@@ -66,7 +66,6 @@ inline BinaryOpTable legal_binary = {
 		{"&&", {{"bool", "bool", "bool"}}},
 		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
 		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
-		{"=",  {{"bool", "bool", "void"}, {"int", "int", "void"},  {"string", "string", "void"}}},
 		{"-",  {{"int", "int", "int"}}}
 };
 
