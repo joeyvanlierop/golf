@@ -222,20 +222,23 @@ void Semantic::pass_4() {
 						 }
 					 } else if (ast->type == "func") {
 						 if (ast->get_child(0)->attr == "main") {
-							 auto main_record = ast->get_child(0)->sym;
-							 if(main_record->sig != "f()")
-								 Logger::error(input, ast->line, ast->column, ast->attr.length(), "main function cannot have arguments");
-							 else if(main_record->rt_sig != "void")
-								 Logger::error(input, ast->line, ast->column, ast->attr.length(), "main function cannot have a return type");
+							 auto main_record = ast->sym;
+							 if (main_record->sig != "f()")
+								 Logger::error(input, ast->line, ast->column, ast->attr.length(),
+											   "main function cannot have arguments");
+							 else if (main_record->rt_sig != "void")
+								 Logger::error(input, ast->line, ast->column, ast->attr.length(),
+											   "main function cannot have a return type");
 							 main_count++;
 						 }
 					 } else if (ast->type == "=") {
 						 auto left = ast->get_child(0);
 						 auto right = ast->get_child(1);
-						 if(left->sym->is_const)
+						 if (left->sym->is_const)
 							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a constant");
-						 if(left->sig != right->sig)
-							 Logger::error(input, right->line, right->column, right->attr.length(), "invalid assignment type");
+						 if (left->sig != right->sig)
+							 Logger::error(input, left->line, left->column, left->attr.length(),
+										   "cannot assign \"" + right->sig + "\" to \"" + left->attr + "\"");
 						 ast->sig = "void";
 					 }
 				 },
@@ -245,7 +248,7 @@ void Semantic::pass_4() {
 					 }
 				 });
 
-	if(main_count == 0) {
+	if (main_count == 0) {
 		Logger::error(input, 1, 1, 1, "missing main function");
 	}
 }

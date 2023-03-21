@@ -40,39 +40,55 @@
 
 class Semantic {
 public:
-    Semantic(Input *input, AST ast);
-    AST analyze(bool verbose);
+	Semantic(Input *input, AST ast);
+
+	AST analyze(bool verbose);
 
 private:
-    Input *input;
-    AST ast;
-    SymbolTable symbol_table;
+	Input *input;
+	AST ast;
+	SymbolTable symbol_table;
 
-	std::string check_binary(AST* ast);
-	std::string check_unary(AST* ast);
-	std::string encode_func_decl(AST* ast);
-	std::string encode_func_call(AST* ast);
+	std::string check_binary(AST *ast);
 
-    void pass_0();
-    void pass_1();
-    void pass_2();
-    void pass_3();
-    void pass_4();
+	std::string check_unary(AST *ast);
+
+	std::string encode_func_decl(AST *ast);
+
+	std::string encode_func_call(AST *ast);
+
+	void pass_0();
+
+	void pass_1();
+
+	void pass_2();
+
+	void pass_3();
+
+	void pass_4();
 };
 
 using BinaryOpTable = std::map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>>;
 inline BinaryOpTable legal_binary = {
-		{"||", {{"bool", "bool", "bool"}}},
 		{"&&", {{"bool", "bool", "bool"}}},
-		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
-		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
-		{"-",  {{"int", "int", "int"}}}
+		{"||", {{"bool", "bool", "bool"}}},
+		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"string", "string", "bool"}}},
+		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"string", "string", "bool"}}},
+		{">=", {{"int",  "int",  "bool"}}},
+		{">",  {{"int",  "int",  "bool"}}},
+		{"<=", {{"int",  "int",  "bool"}}},
+		{"<",  {{"int",  "int",  "bool"}}},
+		{"*",  {{"int",  "int",  "int"}}},
+		{"/",  {{"int",  "int",  "int"}}},
+		{"%",  {{"int",  "int",  "int"}}},
+		{"+",  {{"int",  "int",  "int"}}},
+		{"-",  {{"int",  "int",  "int"}}},
 };
 
 using UnaryOpTable = std::map<std::string, std::vector<std::tuple<std::string, std::string>>>;
 inline UnaryOpTable legal_unary = {
-		{"!", {{"bool", "bool"}}},
-		{"u-", {{"int", "int"}}}
+		{"!",  {{"bool", "bool"}}},
+		{"u-", {{"int",  "int"}}}
 };
 
 
