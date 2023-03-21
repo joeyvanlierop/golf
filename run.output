@@ -1,4 +1,4 @@
-Run started on Tue Mar  7 14:40:22 2023
+Run started on Tue Mar 21 13:08:58 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -9,8 +9,7 @@ Running make |
 % /usr/bin/make
 
 STDOUT:
-g++ -c src/parser.cpp
-g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
+make: 'golf' is up to date.
 
 
 STDERR:
@@ -46,10 +45,13 @@ Test: too many arguments |
 % ./golf /dev/null /dev/zero
 
 STDOUT:
-Usage: ./golf [filename]
 
 
 STDERR:
+--> /dev/null:1:1
+  | 
+1 | 
+  | ^ error: missing main function
 
 
 RETURN CODE: 1
@@ -70,394 +72,310 @@ File /i/do/not/exist not found: "/home/ugb/joseph.vanlierop/Documents/cpsc-411"
 RETURN CODE: 1
 
 -------------------------------------------------------------------------------
-Test: func open brace in wrong place |
---------------------------------------
+Test: later global "int" redeclaration |
+----------------------------------------
 
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t1
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t1
 
 STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t1:3:12
+--> /home/profs/aycock/411/TEST/ms3/check.t1:4:9
   | 
-3 | func main()
-  |            ^ error: block must begin with "{"
+4 | var foo int
+  |         ^~~ error: expected type
 
 
 RETURN CODE: 1
 
 -------------------------------------------------------------------------------
-Test: "for" open brace exception |
+Test: global var declaration loop |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t2
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t2:4:9
+  | 
+4 | var int int
+  |         ^~~ error: expected type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: local var version of check.t2 |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t3
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t3:5:10
+  | 
+5 |     var int int
+  |             ^~~ error: expected type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: global name test |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t4
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t4:6:8
+  | 
+6 |     printi(b4int)
+  |           ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: block scope check |
+-------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t5
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t5:9:9
+  | 
+9 |             x = "asdf"
+  |                  ^~~~ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: global var declaration, complex loop |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t6
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t6:3:9
+  | 
+3 | var int bool
+  |         ^~~~ error: expected type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: parameter scope test |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t7
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t7:4:8
+  | 
+4 |     printi(int)
+  |           ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: constants can't be changed |
 ----------------------------------
 
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t2
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t8
 
 STDOUT:
 program
-	func @ (4, 1)
+	func sym=0x2221ca0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x22214c0
+		block
+			= sig=void @ (4, 7)
+				id [true] sig=bool sym=0x2221790 @ (4, 2)
+				id [false] sig=bool sym=0x2221820 @ (4, 9)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: nonexistent type name |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t9
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t9:3:7
+  | 
+3 | var x notthere
+  |       ^~~~~~~~ error: unknown identifier "notthere"
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: type name not a type |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t10
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t10:4:7
+  | 
+4 | var x t
+  |       ^ error: expected type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: formal parameters need types |
+------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t11
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t11:6:21
+  | 
+6 | func foo(a1 int, a2 main, a3 bool) {
+  |                     ^~~~ error: expected type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: multiple (main) functions, same name |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t12
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t12:7:6
+  | 
+7 | func main() {
+  |      ^~~~ error: "main" redefined
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: no main function |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t13
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t13:1:1
+  | 
+1 | // main() must be present
+  | ^ error: missing main function
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: main can't have arguments |
+---------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t14
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t14:3:1
+  | 
+3 | func main(argc int) {
+  | ^ error: main function cannot have arguments
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: main can't have a return value |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t15
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t15:3:1
+  | 
+3 | func main() int {
+  | ^ error: main function cannot have a return type
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: dup check for formal parameters |
+---------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t16
+
+STDOUT:
+program
+	func sym=0x98bf80 @ (4, 1)
 		newid [main] @ (4, 6)
 		sig
 			formals
-			typeid [$void]
-		block
-			for @ (5, 2)
-				id [$true]
-				block
-					emptystmt
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: "for" open brace in wrong place |
----------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t3
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t3:4:10
-  | 
-4 |     for true
-  |             ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: "if" open brace in wrong place |
---------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t4
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t4:4:9
-  | 
-4 |     if true
-  |            ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: weird but correct formatting |
-------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t5
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			if @ (5, 2)
-				== @ (6, 5)
-					+ @ (5, 7)
-						int [2] @ (5, 5)
-						int [3] @ (6, 3)
-					int [5] @ (7, 4)
-				block
-					emptystmt
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: precedence check |
-------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t6
-
-STDOUT:
-program
-	func @ (4, 1)
-		newid [foo] @ (4, 6)
-		sig
-			formals
-			typeid [asdf] @ (4, 12)
-		block
-			= @ (5, 4)
-				id [x] @ (5, 2)
-				+ @ (5, 8)
-					int [2] @ (5, 6)
-					* @ (5, 12)
-						int [3] @ (5, 10)
-						int [5] @ (5, 14)
-			= @ (6, 4)
-				id [y] @ (6, 2)
-				* @ (6, 14)
-					+ @ (6, 9)
-						int [2] @ (6, 7)
-						int [3] @ (6, 11)
-					int [5] @ (6, 16)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: formal and actual params |
---------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t7
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [foo] @ (3, 6)
-		sig
-			formals
-			typeid [$void]
+			typeid [$void] sym=0x98b7a0
 		block
 			emptystmt
-	func @ (6, 1)
-		newid [bar] @ (6, 6)
+	func sym=0x98c010 @ (7, 1)
+		newid [foo] @ (7, 6)
 		sig
 			formals
 				formal
-					newid [a1] @ (6, 10)
-					typeid [int] @ (6, 13)
+					newid [i] @ (7, 10)
+					typeid [int] sym=0x98b8c0 @ (7, 12)
 				formal
-					newid [a2] @ (6, 18)
-					typeid [bool] @ (6, 21)
+					newid [b] @ (7, 17)
+					typeid [bool] sym=0x98b830 @ (7, 19)
 				formal
-					newid [a3] @ (6, 27)
-					typeid [sometype] @ (6, 30)
-			typeid [returntype] @ (6, 40)
-		block
-			emptystmt
-	func @ (9, 1)
-		newid [baz] @ (9, 6)
-		sig
-			formals
-			typeid [int] @ (9, 12)
-		block
-			funccall
-				id [blarg] @ (10, 2)
-				actuals
-					+ @ (11, 7)
-						int [123] @ (11, 3)
-						int [456] @ (11, 9)
-					funccall
-						id [garble] @ (12, 3)
-						actuals
-							int [789] @ (12, 10)
-					id [true] @ (13, 3)
-					funccall
-						id [greep] @ (14, 3)
-						actuals
-							id [false] @ (14, 9)
-							string [eek] @ (14, 17)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: unary and binary minus |
-------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t8
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			= @ (4, 11)
-				id [x] @ (4, 9)
-				- @ (4, 14)
-					id [a] @ (4, 13)
-					u- @ (4, 15)
-						int [123] @ (4, 16)
-			= @ (5, 11)
-				id [x] @ (5, 9)
-				- @ (5, 14)
-					id [a] @ (5, 13)
-					u- @ (5, 15)
-						int [123] @ (5, 17)
-			= @ (6, 11)
-				id [x] @ (6, 9)
-				- @ (6, 14)
-					id [a] @ (6, 13)
-					u- @ (6, 15)
-						u- @ (6, 16)
-							int [123] @ (6, 17)
-			= @ (7, 11)
-				id [x] @ (7, 9)
-				- @ (7, 14)
-					id [a] @ (7, 13)
-					u- @ (7, 15)
-						id [b] @ (7, 16)
-			= @ (8, 11)
-				id [x] @ (8, 9)
-				u- @ (8, 13)
-					u- @ (8, 14)
-						u- @ (8, 15)
-							u- @ (8, 16)
-								u- @ (8, 17)
-									u- @ (8, 18)
-										u- @ (8, 19)
-											id [x] @ (8, 20)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: func open brace in wrong place, with semicolon |
-------------------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t9
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t9:4:12
-  | 
-4 | func main();
-  |            ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: func open brace with bonus semicolon |
---------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t10
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t10:4:12
-  | 
-4 | func main(); {
-  |            ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: "for" open brace in wrong place, with semicolon |
--------------------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t11
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t11:5:10
-  | 
-5 |     for true;
-  |             ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: "for" with bonus semicolon |
-----------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t12
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t12:5:10
-  | 
-5 |     for true; {
-  |             ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: "if" open brace in wrong place, with semicolon |
-------------------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t13
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t13:5:9
-  | 
-5 |     if true;
-  |            ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: "if" with bonus semicolon |
----------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t14
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t14:5:9
-  | 
-5 |     if true; {
-  |            ^ error: block must begin with "{"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: func line breaks using trailing commas |
-----------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t15
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [foo] @ (3, 6)
-		sig
-			formals
-				formal
-					newid [a] @ (3, 10)
-					typeid [int] @ (3, 12)
-				formal
-					newid [b] @ (4, 2)
-					typeid [int] @ (4, 4)
-				formal
-					newid [c] @ (5, 2)
-					typeid [int] @ (5, 4)
-			typeid [$void]
+					newid [i] @ (7, 25)
+					typeid [int] sym=0x98b8c0 @ (7, 27)
+			typeid [$void] sym=0x98b7a0
 		block
 			emptystmt
 
@@ -468,897 +386,32 @@ STDERR:
 RETURN CODE: 0
 
 -------------------------------------------------------------------------------
-Test: func line breaks sans trailing comma |
---------------------------------------------
+Test: function call as lvalue |
+-------------------------------
 
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t16
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t16:6:7
-  | 
-6 |     c int
-  |          ^ error: function signature must be closed with ")"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: func call line breaks with trailing commas |
---------------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t17
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t17
 
 STDOUT:
 program
-	func @ (3, 1)
-		newid [foo] @ (3, 6)
+	func sym=0x6c8c40 @ (1, 1)
+		newid [foo] @ (1, 6)
 		sig
 			formals
-			typeid [$void]
+			typeid [int] sym=0x6c8580 @ (1, 12)
 		block
-			funccall
-				id [garbled] @ (4, 2)
-				actuals
-					id [a] @ (4, 10)
-					id [b] @ (5, 3)
-					id [c] @ (6, 3)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: func call line breaks sans trailing comma |
--------------------------------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t18
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t18:7:4
-  | 
-7 |         c
-  |          ^ error: function call must closed with ")"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: legit syntax salad |
---------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t19
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [asdf] @ (3, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			var @ (4, 2)
-				newid [i] @ (4, 6)
-				typeid [int] @ (4, 8)
-			emptystmt
-			= @ (6, 4)
-				id [x] @ (6, 2)
-				int [123] @ (6, 6)
-			funccall
-				id [foo] @ (7, 2)
-				actuals
-					id [d] @ (7, 6)
-			funccall
-				id [bar] @ (8, 5)
-				actuals
-					id [d] @ (8, 12)
-			return @ (9, 2)
-			return @ (10, 2)
-				int [12345] @ (10, 9)
-			break @ (11, 2)
-			block
-				id [ego] @ (13, 3)
-			if @ (15, 2)
-				id [true] @ (15, 5)
-				block
-					int [42] @ (16, 3)
-			if @ (18, 2)
-				id [false] @ (18, 5)
-				block
-					int [111] @ (19, 3)
-				if @ (20, 9)
-					id [fallse] @ (20, 12)
-					block
-						int [222] @ (21, 3)
-					else
-						block
-							int [333] @ (23, 3)
-			if @ (25, 2)
-				id [false] @ (25, 6)
-				block
-					int [444] @ (26, 3)
-				else
-					block
-						int [555] @ (28, 3)
-			for @ (30, 2)
-				id [$true]
-				block
-					int [666] @ (31, 3)
-			for @ (33, 2)
-				id [some_expr] @ (33, 6)
-				block
-					int [777] @ (34, 3)
-			= @ (37, 8)
-				string [abc] @ (37, 3)
-				id [def] @ (37, 10)
-			= @ (38, 17)
-				== @ (38, 12)
-					+ @ (38, 7)
-						id [asdf] @ (38, 2)
-						int [12] @ (38, 9)
-					int [4] @ (38, 15)
-				id [bcd] @ (38, 19)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: assignment |
-------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t20
-
-STDOUT:
-
-
-STDERR:
---> /home/profs/aycock/411/TEST/ms2/parse.t20:7:8
-  | 
-7 |     a = b = c
-  |           ^ error: statement must be terminated by ";"
-
-
-RETURN CODE: 1
-
--------------------------------------------------------------------------------
-Test: associativity test |
---------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/parse.t21
-
-STDOUT:
-program
-	func @ (3, 1)
-		newid [a_sock] @ (3, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			var @ (4, 2)
-				newid [a] @ (4, 6)
-				typeid [int] @ (4, 8)
-			var @ (5, 2)
-				newid [b] @ (5, 6)
-				typeid [int] @ (5, 8)
-			var @ (6, 2)
-				newid [c] @ (6, 6)
-				typeid [int] @ (6, 8)
-			var @ (7, 2)
-				newid [d] @ (7, 6)
-				typeid [int] @ (7, 8)
-			var @ (8, 2)
-				newid [e] @ (8, 6)
-				typeid [int] @ (8, 8)
-			+ @ (10, 16)
-				+ @ (10, 12)
-					+ @ (10, 8)
-						+ @ (10, 4)
-							id [a] @ (10, 2)
-							id [b] @ (10, 6)
-						id [c] @ (10, 10)
-					id [d] @ (10, 14)
-				id [e] @ (10, 18)
-			/ @ (11, 16)
-				/ @ (11, 12)
-					/ @ (11, 8)
-						/ @ (11, 4)
-							id [a] @ (11, 2)
-							id [b] @ (11, 6)
-						id [d] @ (11, 10)
-					id [d] @ (11, 14)
-				id [e] @ (11, 18)
-
-
-STDERR:
-
-
-RETURN CODE: 0
-
--------------------------------------------------------------------------------
-Test: a calculated move |
--------------------------
-
-% ./golf /home/profs/aycock/411/TEST/ms2/gen.t18
-
-STDOUT:
-program
-	func @ (5, 1)
+			return @ (2, 2)
+				int [42] sig=int @ (2, 9)
+	func sym=0x6c8cd0 @ (5, 1)
 		newid [main] @ (5, 6)
 		sig
 			formals
-			typeid [$void]
+			typeid [$void] sym=0x6c8460
 		block
-			funccall
-				id [init] @ (6, 2)
-				actuals
-			funccall
-				id [parser] @ (7, 2)
-				actuals
-	var @ (14, 1)
-		newid [_havechar] @ (14, 5)
-		typeid [bool] @ (14, 15)
-	var @ (15, 1)
-		newid [_char] @ (15, 5)
-		typeid [int] @ (15, 11)
-	func @ (17, 1)
-		newid [getc] @ (17, 6)
-		sig
-			formals
-			typeid [int] @ (17, 13)
-		block
-			if @ (18, 2)
-				id [_havechar] @ (18, 5)
-				block
-					= @ (19, 13)
-						id [_havechar] @ (19, 3)
-						id [false] @ (19, 15)
-					return @ (20, 3)
-						id [_char] @ (20, 10)
-			return @ (22, 2)
-				funccall
-					id [getchar] @ (22, 9)
+			= sig=void @ (6, 8)
+				funccall sig=int @ (6, 5)
+					id [foo] sig=f() sym=0x6c8c40 @ (6, 2)
 					actuals
-	func @ (25, 1)
-		newid [ungetc] @ (25, 6)
-		sig
-			formals
-				formal
-					newid [ch] @ (25, 13)
-					typeid [int] @ (25, 16)
-			typeid [$void]
-		block
-			if @ (26, 2)
-				id [_havechar] @ (26, 5)
-				block
-					funccall
-						id [prints] @ (27, 3)
-						actuals
-							string [Internal error: too many ungets!\n] @ (27, 11)
-					funccall
-						id [halt] @ (28, 3)
-						actuals
-			= @ (30, 12)
-				id [_havechar] @ (30, 2)
-				id [true] @ (30, 14)
-			= @ (31, 8)
-				id [_char] @ (31, 2)
-				id [ch] @ (31, 10)
-	var @ (38, 1)
-		newid [_havetoken] @ (38, 5)
-		typeid [bool] @ (38, 16)
-	var @ (39, 1)
-		newid [_token] @ (39, 5)
-		typeid [int] @ (39, 12)
-	var @ (40, 1)
-		newid [attr] @ (40, 5)
-		typeid [int] @ (40, 10)
-	func @ (42, 1)
-		newid [peek] @ (42, 6)
-		sig
-			formals
-			typeid [int] @ (42, 13)
-		block
-			if @ (43, 2)
-				id [_havetoken] @ (43, 5)
-				block
-					return @ (44, 3)
-						id [_token] @ (44, 10)
-			= @ (46, 13)
-				id [_havetoken] @ (46, 2)
-				id [true] @ (46, 15)
-			= @ (47, 9)
-				id [_token] @ (47, 2)
-				funccall
-					id [scanner] @ (47, 11)
-					actuals
-			return @ (48, 2)
-				id [_token] @ (48, 9)
-	func @ (51, 1)
-		newid [match] @ (51, 6)
-		sig
-			formals
-				formal
-					newid [expect] @ (51, 12)
-					typeid [int] @ (51, 19)
-			typeid [$void]
-		block
-			if @ (52, 2)
-				!= @ (52, 12)
-					funccall
-						id [peek] @ (52, 5)
-						actuals
-					id [expect] @ (52, 15)
-				block
-					funccall
-						id [prints] @ (53, 3)
-						actuals
-							string [Error: expected ] @ (53, 11)
-					funccall
-						id [printc] @ (54, 3)
-						actuals
-							id [expect] @ (54, 10)
-					funccall
-						id [prints] @ (55, 3)
-						actuals
-							string [\n] @ (55, 11)
-					funccall
-						id [halt] @ (56, 3)
-						actuals
-			= @ (58, 13)
-				id [_havetoken] @ (58, 2)
-				id [false] @ (58, 15)
-	func @ (61, 1)
-		newid [scanner] @ (61, 6)
-		sig
-			formals
-			typeid [int] @ (61, 16)
-		block
-			var @ (62, 2)
-				newid [ch] @ (62, 6)
-				typeid [int] @ (62, 9)
-			for @ (64, 2)
-				id [$true]
-				block
-					= @ (65, 6)
-						id [ch] @ (65, 3)
-						funccall
-							id [getc] @ (65, 8)
-							actuals
-					if @ (66, 3)
-						! @ (66, 6)
-							funccall
-								id [isspace] @ (66, 7)
-								actuals
-									id [ch] @ (66, 15)
-						block
-							break @ (67, 4)
-			if @ (71, 2)
-				== @ (71, 8)
-					id [ch] @ (71, 5)
-					id [EOF] @ (71, 11)
-				block
-					return @ (71, 19)
-						id [TK_EOF] @ (71, 26)
-			if @ (72, 2)
-				== @ (72, 8)
-					id [ch] @ (72, 5)
-					id [ASCII_NL] @ (72, 11)
-				block
-					return @ (72, 23)
-						id [TK_EOLN] @ (72, 30)
-			if @ (73, 2)
-				== @ (73, 8)
-					id [ch] @ (73, 5)
-					id [ASCII_PLUS] @ (73, 11)
-				block
-					return @ (73, 25)
-						id [TK_ADD] @ (73, 32)
-			if @ (74, 2)
-				== @ (74, 8)
-					id [ch] @ (74, 5)
-					id [ASCII_MINUS] @ (74, 11)
-				block
-					return @ (74, 26)
-						id [TK_SUB] @ (74, 33)
-			if @ (75, 2)
-				== @ (75, 8)
-					id [ch] @ (75, 5)
-					id [ASCII_STAR] @ (75, 11)
-				block
-					return @ (75, 25)
-						id [TK_MUL] @ (75, 32)
-			if @ (76, 2)
-				== @ (76, 8)
-					id [ch] @ (76, 5)
-					id [ASCII_SLASH] @ (76, 11)
-				block
-					return @ (76, 26)
-						id [TK_DIV] @ (76, 33)
-			if @ (77, 2)
-				== @ (77, 8)
-					id [ch] @ (77, 5)
-					id [ASCII_LPAREN] @ (77, 11)
-				block
-					return @ (77, 27)
-						id [TK_LPAREN] @ (77, 34)
-			if @ (78, 2)
-				== @ (78, 8)
-					id [ch] @ (78, 5)
-					id [ASCII_RPAREN] @ (78, 11)
-				block
-					return @ (78, 27)
-						id [TK_RPAREN] @ (78, 34)
-			if @ (80, 2)
-				funccall
-					id [isdigit] @ (80, 5)
-					actuals
-						id [ch] @ (80, 13)
-				block
-					= @ (81, 8)
-						id [attr] @ (81, 3)
-						int [0] @ (81, 10)
-					for @ (82, 3)
-						funccall
-							id [isdigit] @ (82, 7)
-							actuals
-								id [ch] @ (82, 15)
-						block
-							= @ (83, 9)
-								id [attr] @ (83, 4)
-								+ @ (83, 21)
-									* @ (83, 16)
-										id [attr] @ (83, 11)
-										int [10] @ (83, 18)
-									- @ (83, 27)
-										id [ch] @ (83, 24)
-										id [ASCII_0] @ (83, 29)
-							= @ (84, 7)
-								id [ch] @ (84, 4)
-								funccall
-									id [getc] @ (84, 9)
-									actuals
-					funccall
-						id [ungetc] @ (86, 3)
-						actuals
-							id [ch] @ (86, 10)
-					return @ (87, 3)
-						id [TK_NUMBER] @ (87, 10)
-			funccall
-				id [prints] @ (90, 2)
-				actuals
-					string [Error: invalid character.\n] @ (90, 10)
-			funccall
-				id [halt] @ (91, 2)
-				actuals
-	func @ (94, 1)
-		newid [isdigit] @ (94, 6)
-		sig
-			formals
-				formal
-					newid [ch] @ (94, 14)
-					typeid [int] @ (94, 17)
-			typeid [bool] @ (94, 22)
-		block
-			return @ (95, 2)
-				&& @ (95, 23)
-					>= @ (95, 12)
-						id [ch] @ (95, 9)
-						id [ASCII_0] @ (95, 15)
-					<= @ (95, 29)
-						id [ch] @ (95, 26)
-						id [ASCII_9] @ (95, 32)
-	func @ (98, 1)
-		newid [isspace] @ (98, 6)
-		sig
-			formals
-				formal
-					newid [ch] @ (98, 14)
-					typeid [int] @ (98, 17)
-			typeid [bool] @ (98, 22)
-		block
-			return @ (99, 2)
-				|| @ (100, 25)
-					|| @ (99, 27)
-						== @ (99, 12)
-							id [ch] @ (99, 9)
-							id [ASCII_SPACE] @ (99, 15)
-						== @ (100, 12)
-							id [ch] @ (100, 9)
-							id [ASCII_TAB] @ (100, 15)
-					== @ (101, 12)
-						id [ch] @ (101, 9)
-						id [ASCII_CR] @ (101, 15)
-	func @ (108, 1)
-		newid [parser] @ (108, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			var @ (109, 2)
-				newid [result] @ (109, 6)
-				typeid [int] @ (109, 13)
-			for @ (111, 2)
-				!= @ (111, 13)
-					funccall
-						id [peek] @ (111, 6)
-						actuals
-					id [TK_EOF] @ (111, 16)
-				block
-					= @ (112, 10)
-						id [result] @ (112, 3)
-						funccall
-							id [E] @ (112, 12)
-							actuals
-					funccall
-						id [match] @ (113, 3)
-						actuals
-							id [TK_EOLN] @ (113, 9)
-					funccall
-						id [prints] @ (115, 3)
-						actuals
-							string [ = ] @ (115, 11)
-					funccall
-						id [printi] @ (116, 3)
-						actuals
-							id [result] @ (116, 10)
-					funccall
-						id [prints] @ (117, 3)
-						actuals
-							string [\n] @ (117, 11)
-	func @ (121, 1)
-		newid [E] @ (121, 6)
-		sig
-			formals
-			typeid [int] @ (121, 10)
-		block
-			var @ (122, 2)
-				newid [l] @ (122, 6)
-				typeid [int] @ (122, 8)
-			var @ (123, 2)
-				newid [r] @ (123, 6)
-				typeid [int] @ (123, 8)
-			var @ (124, 2)
-				newid [token] @ (124, 6)
-				typeid [int] @ (124, 12)
-			= @ (126, 4)
-				id [l] @ (126, 2)
-				funccall
-					id [T] @ (126, 6)
-					actuals
-			for @ (127, 2)
-				|| @ (127, 23)
-					== @ (127, 13)
-						funccall
-							id [peek] @ (127, 6)
-							actuals
-						id [TK_ADD] @ (127, 16)
-					== @ (127, 33)
-						funccall
-							id [peek] @ (127, 26)
-							actuals
-						id [TK_SUB] @ (127, 36)
-				block
-					= @ (128, 9)
-						id [token] @ (128, 3)
-						funccall
-							id [peek] @ (128, 11)
-							actuals
-					funccall
-						id [match] @ (129, 3)
-						actuals
-							id [token] @ (129, 9)
-					= @ (130, 5)
-						id [r] @ (130, 3)
-						funccall
-							id [T] @ (130, 7)
-							actuals
-					if @ (132, 3)
-						== @ (132, 12)
-							id [token] @ (132, 6)
-							id [TK_ADD] @ (132, 15)
-						block
-							= @ (133, 6)
-								id [l] @ (133, 4)
-								+ @ (133, 10)
-									id [l] @ (133, 8)
-									id [r] @ (133, 12)
-						else
-							block
-								= @ (135, 6)
-									id [l] @ (135, 4)
-									- @ (135, 10)
-										id [l] @ (135, 8)
-										id [r] @ (135, 12)
-			return @ (138, 2)
-				id [l] @ (138, 9)
-	func @ (141, 1)
-		newid [T] @ (141, 6)
-		sig
-			formals
-			typeid [int] @ (141, 10)
-		block
-			var @ (142, 2)
-				newid [l] @ (142, 6)
-				typeid [int] @ (142, 8)
-			var @ (143, 2)
-				newid [r] @ (143, 6)
-				typeid [int] @ (143, 8)
-			var @ (144, 2)
-				newid [token] @ (144, 6)
-				typeid [int] @ (144, 12)
-			= @ (146, 4)
-				id [l] @ (146, 2)
-				funccall
-					id [F] @ (146, 6)
-					actuals
-			for @ (147, 2)
-				|| @ (147, 23)
-					== @ (147, 13)
-						funccall
-							id [peek] @ (147, 6)
-							actuals
-						id [TK_MUL] @ (147, 16)
-					== @ (147, 33)
-						funccall
-							id [peek] @ (147, 26)
-							actuals
-						id [TK_DIV] @ (147, 36)
-				block
-					= @ (148, 9)
-						id [token] @ (148, 3)
-						funccall
-							id [peek] @ (148, 11)
-							actuals
-					funccall
-						id [match] @ (149, 3)
-						actuals
-							id [token] @ (149, 9)
-					= @ (150, 5)
-						id [r] @ (150, 3)
-						funccall
-							id [F] @ (150, 7)
-							actuals
-					if @ (152, 3)
-						== @ (152, 12)
-							id [token] @ (152, 6)
-							id [TK_MUL] @ (152, 15)
-						block
-							= @ (153, 6)
-								id [l] @ (153, 4)
-								* @ (153, 10)
-									id [l] @ (153, 8)
-									id [r] @ (153, 12)
-						else
-							block
-								= @ (155, 6)
-									id [l] @ (155, 4)
-									/ @ (155, 10)
-										id [l] @ (155, 8)
-										id [r] @ (155, 12)
-			return @ (158, 2)
-				id [l] @ (158, 9)
-	func @ (161, 1)
-		newid [F] @ (161, 6)
-		sig
-			formals
-			typeid [int] @ (161, 10)
-		block
-			var @ (162, 2)
-				newid [result] @ (162, 6)
-				typeid [int] @ (162, 13)
-			var @ (164, 2)
-				newid [token] @ (164, 6)
-				typeid [int] @ (164, 12)
-			= @ (165, 8)
-				id [token] @ (165, 2)
-				funccall
-					id [peek] @ (165, 10)
-					actuals
-			if @ (167, 2)
-				== @ (167, 11)
-					id [token] @ (167, 5)
-					id [TK_LPAREN] @ (167, 14)
-				block
-					funccall
-						id [match] @ (168, 3)
-						actuals
-							id [TK_LPAREN] @ (168, 9)
-					= @ (169, 10)
-						id [result] @ (169, 3)
-						funccall
-							id [E] @ (169, 12)
-							actuals
-					funccall
-						id [match] @ (170, 3)
-						actuals
-							id [TK_RPAREN] @ (170, 9)
-				if @ (172, 9)
-					== @ (172, 18)
-						id [token] @ (172, 12)
-						id [TK_SUB] @ (172, 21)
-					block
-						funccall
-							id [match] @ (173, 3)
-							actuals
-								id [TK_SUB] @ (173, 9)
-						= @ (174, 10)
-							id [result] @ (174, 3)
-							u- @ (174, 12)
-								funccall
-									id [F] @ (174, 13)
-									actuals
-					if @ (176, 9)
-						== @ (176, 18)
-							id [token] @ (176, 12)
-							id [TK_NUMBER] @ (176, 21)
-						block
-							funccall
-								id [match] @ (177, 3)
-								actuals
-									id [TK_NUMBER] @ (177, 9)
-							= @ (178, 10)
-								id [result] @ (178, 3)
-								id [attr] @ (178, 12)
-						else
-							block
-								funccall
-									id [prints] @ (181, 3)
-									actuals
-										string [Error: expected factor.\n] @ (181, 11)
-								funccall
-									id [halt] @ (182, 3)
-									actuals
-			return @ (184, 2)
-				id [result] @ (184, 9)
-	var @ (191, 1)
-		newid [EOF] @ (191, 5)
-		typeid [int] @ (191, 9)
-	var @ (193, 1)
-		newid [TK_EOF] @ (193, 5)
-		typeid [int] @ (193, 12)
-	var @ (194, 1)
-		newid [TK_EOLN] @ (194, 5)
-		typeid [int] @ (194, 13)
-	var @ (195, 1)
-		newid [TK_NUMBER] @ (195, 5)
-		typeid [int] @ (195, 15)
-	var @ (196, 1)
-		newid [TK_ADD] @ (196, 5)
-		typeid [int] @ (196, 12)
-	var @ (197, 1)
-		newid [TK_SUB] @ (197, 5)
-		typeid [int] @ (197, 12)
-	var @ (198, 1)
-		newid [TK_MUL] @ (198, 5)
-		typeid [int] @ (198, 12)
-	var @ (199, 1)
-		newid [TK_DIV] @ (199, 5)
-		typeid [int] @ (199, 12)
-	var @ (200, 1)
-		newid [TK_LPAREN] @ (200, 5)
-		typeid [int] @ (200, 15)
-	var @ (201, 1)
-		newid [TK_RPAREN] @ (201, 5)
-		typeid [int] @ (201, 15)
-	var @ (203, 1)
-		newid [ASCII_0] @ (203, 5)
-		typeid [int] @ (203, 13)
-	var @ (204, 1)
-		newid [ASCII_9] @ (204, 5)
-		typeid [int] @ (204, 13)
-	var @ (205, 1)
-		newid [ASCII_PLUS] @ (205, 5)
-		typeid [int] @ (205, 16)
-	var @ (206, 1)
-		newid [ASCII_MINUS] @ (206, 5)
-		typeid [int] @ (206, 17)
-	var @ (207, 1)
-		newid [ASCII_STAR] @ (207, 5)
-		typeid [int] @ (207, 16)
-	var @ (208, 1)
-		newid [ASCII_SLASH] @ (208, 5)
-		typeid [int] @ (208, 17)
-	var @ (209, 1)
-		newid [ASCII_LPAREN] @ (209, 5)
-		typeid [int] @ (209, 18)
-	var @ (210, 1)
-		newid [ASCII_RPAREN] @ (210, 5)
-		typeid [int] @ (210, 18)
-	var @ (211, 1)
-		newid [ASCII_SPACE] @ (211, 5)
-		typeid [int] @ (211, 17)
-	var @ (212, 1)
-		newid [ASCII_TAB] @ (212, 5)
-		typeid [int] @ (212, 15)
-	var @ (213, 1)
-		newid [ASCII_CR] @ (213, 5)
-		typeid [int] @ (213, 14)
-	var @ (214, 1)
-		newid [ASCII_NL] @ (214, 5)
-		typeid [int] @ (214, 14)
-	func @ (216, 1)
-		newid [init] @ (216, 6)
-		sig
-			formals
-			typeid [$void]
-		block
-			= @ (217, 6)
-				id [EOF] @ (217, 2)
-				u- @ (217, 8)
-					int [1] @ (217, 9)
-			= @ (219, 10)
-				id [ASCII_0] @ (219, 2)
-				int [48] @ (219, 12)
-			= @ (220, 10)
-				id [ASCII_9] @ (220, 2)
-				int [57] @ (220, 12)
-			= @ (221, 13)
-				id [ASCII_PLUS] @ (221, 2)
-				int [43] @ (221, 15)
-			= @ (222, 14)
-				id [ASCII_MINUS] @ (222, 2)
-				int [45] @ (222, 16)
-			= @ (223, 13)
-				id [ASCII_STAR] @ (223, 2)
-				int [42] @ (223, 15)
-			= @ (224, 14)
-				id [ASCII_SLASH] @ (224, 2)
-				int [47] @ (224, 16)
-			= @ (225, 15)
-				id [ASCII_LPAREN] @ (225, 2)
-				int [40] @ (225, 17)
-			= @ (226, 15)
-				id [ASCII_RPAREN] @ (226, 2)
-				int [41] @ (226, 17)
-			= @ (227, 14)
-				id [ASCII_SPACE] @ (227, 2)
-				int [32] @ (227, 16)
-			= @ (228, 12)
-				id [ASCII_TAB] @ (228, 2)
-				int [9] @ (228, 14)
-			= @ (229, 11)
-				id [ASCII_CR] @ (229, 2)
-				int [13] @ (229, 13)
-			= @ (230, 11)
-				id [ASCII_NL] @ (230, 2)
-				int [10] @ (230, 13)
-			= @ (232, 9)
-				id [TK_EOF] @ (232, 2)
-				int [256] @ (232, 11)
-			= @ (233, 12)
-				id [TK_NUMBER] @ (233, 2)
-				int [257] @ (233, 14)
-			= @ (234, 9)
-				id [TK_ADD] @ (234, 2)
-				id [ASCII_PLUS] @ (234, 11)
-			= @ (235, 9)
-				id [TK_SUB] @ (235, 2)
-				id [ASCII_MINUS] @ (235, 11)
-			= @ (236, 9)
-				id [TK_MUL] @ (236, 2)
-				id [ASCII_STAR] @ (236, 11)
-			= @ (237, 9)
-				id [TK_DIV] @ (237, 2)
-				id [ASCII_SLASH] @ (237, 11)
-			= @ (238, 12)
-				id [TK_LPAREN] @ (238, 2)
-				id [ASCII_LPAREN] @ (238, 14)
-			= @ (239, 12)
-				id [TK_RPAREN] @ (239, 2)
-				id [ASCII_RPAREN] @ (239, 14)
-			= @ (240, 10)
-				id [TK_EOLN] @ (240, 2)
-				id [ASCII_NL] @ (240, 12)
+				int [123] sig=int @ (6, 10)
 
 
 STDERR:
@@ -1366,5 +419,662 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Mar  7 14:40:23 2023
+-------------------------------------------------------------------------------
+Test: function name as lvalue |
+-------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t18
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t18:6:8
+  | 
+6 |     foo = 123
+  |           ^~~ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: humongous integer literal |
+---------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t19
+
+STDOUT:
+program
+	func sym=0x5c33c0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x5c29c0
+		block
+			var sym=0x5c3450 @ (4, 2)
+				newid [i] @ (4, 6)
+				typeid [int] sym=0x5c2ae0 @ (4, 8)
+			= sig=void @ (5, 4)
+				id [i] sig=int sym=0x5c3450 @ (5, 2)
+				int [999999999999999999999999999999999999999999999999] sig=int @ (5, 6)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: positive integer literal out of range |
+---------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t20
+
+STDOUT:
+program
+	func sym=0xc59c30 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0xc59450
+		block
+			var sym=0xc59cc0 @ (4, 2)
+				newid [i] @ (4, 6)
+				typeid [int] sym=0xc59570 @ (4, 8)
+			= sig=void @ (5, 4)
+				id [i] sig=int sym=0xc59cc0 @ (5, 2)
+				int [2147483647] sig=int @ (5, 6)
+			= sig=void @ (6, 4)
+				id [i] sig=int sym=0xc59cc0 @ (6, 2)
+				int [2147483648] sig=int @ (6, 6)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: negative integer literal out of range |
+---------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t21
+
+STDOUT:
+program
+	func sym=0x17b4960 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x17b4180
+		block
+			var sym=0x17b49f0 @ (4, 2)
+				newid [i] @ (4, 6)
+				typeid [int] sym=0x17b42a0 @ (4, 8)
+			= sig=void @ (5, 4)
+				id [i] sig=int sym=0x17b49f0 @ (5, 2)
+				int [-2147483648] sig=int @ (5, 6)
+			= sig=void @ (6, 4)
+				id [i] sig=int sym=0x17b49f0 @ (6, 2)
+				int [-2147483649] sig=int @ (6, 6)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: "break" not inside "for" loop |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t22
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t22:7:2
+  | 
+7 |     break
+  |     ^~~~~ error: break must be inside a for loop
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "break" in block, but not in "for" |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t23
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t23:5:3
+  | 
+5 |         break
+  |         ^~~~~ error: break must be inside a for loop
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "break" in "if" block |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t24
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t24:5:3
+  | 
+5 |         break
+  |         ^~~~~ error: break must be inside a for loop
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: missing return statement |
+--------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t25
+
+STDOUT:
+program
+	func sym=0x1884a10 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x1884230
+		block
+			emptystmt
+	func sym=0x1884aa0 @ (6, 1)
+		newid [foo] @ (6, 6)
+		sig
+			formals
+			typeid [string] sym=0x18843e0 @ (6, 12)
+		block
+			emptystmt
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: returning value from void function |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t26
+
+STDOUT:
+program
+	func sym=0x1cb3b80 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x1cb33a0
+		block
+			return @ (4, 2)
+				int [123] sig=int @ (4, 9)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: return type mismatch |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t27
+
+STDOUT:
+program
+	func sym=0x21e5be0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x21e5400
+		block
+			emptystmt
+	func sym=0x21e5c70 @ (6, 1)
+		newid [foo] @ (6, 6)
+		sig
+			formals
+			typeid [bool] sym=0x21e5490 @ (6, 12)
+		block
+			return @ (7, 2)
+				int [123] sig=int @ (7, 9)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: missing return type |
+---------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t28
+
+STDOUT:
+program
+	func sym=0x1b4baa0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x1b4b2c0
+		block
+			emptystmt
+	func sym=0x1b4bb30 @ (6, 1)
+		newid [foo] @ (6, 6)
+		sig
+			formals
+			typeid [bool] sym=0x1b4b350 @ (6, 12)
+		block
+			return @ (7, 2)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: "if" expr not a boolean type |
+------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t29
+
+STDOUT:
+program
+	func sym=0x14f0ff0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x14f0690
+		block
+			if @ (4, 2)
+				int [1] sig=int @ (4, 5)
+				block
+					emptystmt
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: "if"-"else" not a boolean type |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t30
+
+STDOUT:
+program
+	func sym=0x1d659a0 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x1d651c0
+		block
+			if @ (4, 2)
+				int [1] sig=int @ (4, 5)
+				block
+					emptystmt
+				else
+					block
+						emptystmt
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: "for" expr not a boolean type |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t31
+
+STDOUT:
+program
+	func sym=0x1e34940 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x1e34160
+		block
+			for @ (4, 2)
+				id [$true] sig=bool sym=0x1e343a0
+				block
+					emptystmt
+			var sym=0x1e349d0 @ (6, 2)
+				newid [four] @ (6, 6)
+				typeid [bool] sym=0x1e341f0 @ (6, 11)
+			for @ (7, 2)
+				id [four] sig=bool sym=0x1e349d0 @ (7, 6)
+				block
+					emptystmt
+			var sym=0x1e34a60 @ (9, 2)
+				newid [ever] @ (9, 6)
+				typeid [string] sym=0x1e34310 @ (9, 11)
+			for @ (10, 2)
+				id [ever] sig=str sym=0x1e34a60 @ (10, 6)
+				block
+					emptystmt
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: legit expression statements |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t32
+
+STDOUT:
+program
+	func sym=0x21d5110 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x21d4800
+		block
+			var sym=0x21d51a0 @ (4, 2)
+				newid [i] @ (4, 6)
+				typeid [int] sym=0x21d4920 @ (4, 8)
+			id [i] sig=int sym=0x21d51a0 @ (5, 2)
+			int [42] sig=int @ (6, 2)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: built-in routine check |
+------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t33
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t33:4:15
+  | 
+4 |         prints("Hello, world!\n");
+  |               ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: actual parameter type check |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t34
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t34:4:8
+  | 
+4 |     prints(main)
+  |           ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: operand type mismatch |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t35
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t35:10:15
+   | 
+10 |         a = a + b
+   |               ^ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: another actual parameter type check |
+-------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t36
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t36:7:12
+  | 
+7 |         foo(123, 456)
+  |            ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: return+argument checks |
+------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t37
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t37:4:24
+  | 
+4 |         return bar(bar(i))
+  |                        ^ error: unknown identifier "i"
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: scope check and undefined variable |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t38
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t38:10:3
+   | 
+10 |         c = 789
+   |         ^ error: unknown identifier "c"
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: redefined variable |
+--------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t39
+
+STDOUT:
+program
+	globalvar sym=0x736e60 @ (3, 1)
+		newid [a] @ (3, 5)
+		typeid [int] sym=0x7367a0 @ (3, 7)
+	func sym=0x736ef0 @ (5, 1)
+		newid [main] @ (5, 6)
+		sig
+			formals
+			typeid [$void] sym=0x735e80
+		block
+			var sym=0x736f80 @ (6, 2)
+				newid [a] @ (6, 6)
+				typeid [bool] sym=0x735f10 @ (6, 8)
+			if @ (7, 2)
+				id [true] sig=bool sym=0x736950 @ (7, 5)
+				block
+					var sym=0x737010 @ (8, 3)
+						newid [a] @ (8, 7)
+						typeid [string] sym=0x736830 @ (8, 9)
+					var sym=0x7370a0 @ (9, 3)
+						newid [b] @ (9, 7)
+						typeid [int] sym=0x7367a0 @ (9, 9)
+					block
+						var sym=0x737130 @ (11, 4)
+							newid [b] @ (11, 8)
+							typeid [bool] sym=0x735f10 @ (11, 10)
+					var sym=0x7370a0 @ (13, 3)
+						newid [b] @ (13, 7)
+						typeid [string] sym=0x736830 @ (13, 9)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: comparable and ordered comparisons |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t40
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t40:4:12
+  | 
+4 |     "abc" == "def"
+  |               ^~~ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: int/bool distinction |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t41
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t41:5:6
+  | 
+5 |     i = true
+  |         ^~~~ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: deep type propagation |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t42
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t42:5:14
+  | 
+5 |     2 + 3 * 5 - 123 >= -(-(-x))
+  |                 ^~~ error: invalid operand
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: redefining "true" and "false" |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t43
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t43:7:8
+  | 
+7 |     printi(true * false)
+  |           ^ error: function call does not match function signature
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: call of non-function |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t44
+
+STDOUT:
+
+
+STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t44:0:0
+ | 
+0| 
+ | ~~~ error: unknown identifier "asdf"
+double free or corruption (out)
+
+
+*** TERMINATION VIA SIGNAL: Aborted
+
+-------------------------------------------------------------------------------
+Test: type id used in wrong context |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t45
+
+STDOUT:
+program
+	func sym=0x72a230 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x7298d0
+		block
+			var sym=0x72a2c0 @ (4, 2)
+				newid [x] @ (4, 6)
+				typeid [int] sym=0x7299f0 @ (4, 8)
+			= sig=void @ (5, 4)
+				id [x] sig=int sym=0x72a2c0 @ (5, 2)
+				id [int] sig=int sym=0x7299f0 @ (5, 6)
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+Run ended on Tue Mar 21 13:08:58 2023
 

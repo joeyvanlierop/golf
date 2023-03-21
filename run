@@ -25,7 +25,7 @@ import signal
 import socket
 import subprocess
 
-TESTPATH = '/home/profs/aycock/411/TEST/ms2'
+TESTPATH = '/home/profs/aycock/411/TEST/ms3'
 LOGFILE = 'run.output'
 JARCLASS = 'golf'
 JAR = 'golf.jar'
@@ -41,29 +41,51 @@ WIDTH = 79
 #
 
 TESTS = (
-	( 'parse.t1',	'func open brace in wrong place' ),
-	( 'parse.t2',	'"for" open brace exception' ),
-	( 'parse.t3',	'"for" open brace in wrong place' ),
-	( 'parse.t4',	'"if" open brace in wrong place' ),
-	( 'parse.t5',	'weird but correct formatting' ),
-	( 'parse.t6',	'precedence check' ),
-	( 'parse.t7',	'formal and actual params' ),
-	( 'parse.t8',	'unary and binary minus' ),
-	( 'parse.t9',	'func open brace in wrong place, with semicolon' ),
-	( 'parse.t10',	'func open brace with bonus semicolon' ),
-	( 'parse.t11',	'"for" open brace in wrong place, with semicolon' ),
-	( 'parse.t12',	'"for" with bonus semicolon' ),
-	( 'parse.t13',	'"if" open brace in wrong place, with semicolon' ),
-	( 'parse.t14',	'"if" with bonus semicolon' ),
-	( 'parse.t15',	'func line breaks using trailing commas' ),
-	( 'parse.t16',	'func line breaks sans trailing comma' ),
-	( 'parse.t17',	'func call line breaks with trailing commas' ),
-	( 'parse.t18',	'func call line breaks sans trailing comma' ),
-	( 'parse.t19',	'legit syntax salad' ),
-	( 'parse.t20',	'assignment' ),
-	( 'parse.t21',	'associativity test' ),
-	# oh hai how did you get in here
-	( 'gen.t18',	'a calculated move' ),
+	( 'check.t1',	'later global "int" redeclaration' ),
+	( 'check.t2',	'global var declaration loop' ),
+	( 'check.t3',	'local var version of check.t2' ),
+	( 'check.t4',	'global name test' ),
+	( 'check.t5',	'block scope check' ),
+	( 'check.t6',	'global var declaration, complex loop' ),
+	( 'check.t7',	'parameter scope test' ),
+	( 'check.t8',	"constants can't be changed" ),
+	( 'check.t9',	'nonexistent type name' ),
+	( 'check.t10',	'type name not a type' ),
+	( 'check.t11',	'formal parameters need types' ),
+	( 'check.t12',	'multiple (main) functions, same name' ),
+	( 'check.t13',	'no main function' ),
+	( 'check.t14',	"main can't have arguments" ),
+	( 'check.t15',	"main can't have a return value" ),
+	( 'check.t16',	'dup check for formal parameters' ),
+	( 'check.t17',	'function call as lvalue' ),
+	( 'check.t18',	'function name as lvalue' ),
+	( 'check.t19',	'humongous integer literal' ),
+	( 'check.t20',	'positive integer literal out of range' ),
+	( 'check.t21',	'negative integer literal out of range' ),
+	( 'check.t22',	'"break" not inside "for" loop' ),
+	( 'check.t23',	'"break" in block, but not in "for"' ),
+	( 'check.t24',	'"break" in "if" block' ),
+	( 'check.t25',	'missing return statement' ),
+	( 'check.t26',	'returning value from void function' ),
+	( 'check.t27',	'return type mismatch' ),
+	( 'check.t28',	'missing return type' ),
+	( 'check.t29',	'"if" expr not a boolean type' ),
+	( 'check.t30',	'"if"-"else" not a boolean type' ),
+	( 'check.t31',	'"for" expr not a boolean type' ),
+	( 'check.t32',	'legit expression statements' ),
+	( 'check.t33',	'built-in routine check' ),
+	( 'check.t34',	'actual parameter type check' ),
+	( 'check.t35',	'operand type mismatch' ),
+	( 'check.t36',	'another actual parameter type check' ),
+	( 'check.t37',	'return+argument checks' ),
+	( 'check.t38',	'scope check and undefined variable' ),
+	( 'check.t39',	'redefined variable' ),
+	( 'check.t40',	'comparable and ordered comparisons' ),
+	( 'check.t41',	'int/bool distinction' ),
+	( 'check.t42',	'deep type propagation' ),
+	( 'check.t43',	'redefining "true" and "false"' ),
+	( 'check.t44',	'call of non-function' ),
+	( 'check.t45',	'type id used in wrong context' ),
 )
 
 #
