@@ -15,14 +15,15 @@
  * @return EXIT_SUCCESS if the program executes successfully, EXIT_FAILURE otherwise
  */
 int main(int argc, char* argv[]) {
-//    // Validate input
-//    if (argc < 2)
-//    {
-//        printf("Usage: %s [filename]\n", argv[0]);
-//        exit(EXIT_FAILURE);
-//    }
+    // Validate input
+    if (argc < 2)
+    {
+        printf("Usage: %s [filename]\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
     // TODO: Make this not garbage
-    bool interactive = argc == 1;
+    bool interactive = argv[1] == "repl";
 
     do {
         // Read input
