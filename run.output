@@ -1,4 +1,4 @@
-Run started on Tue Mar 21 13:24:21 2023
+Run started on Tue Mar 21 13:24:57 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -130,8 +130,6 @@ Test: global name test |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t4
 
 STDOUT:
-f(int), f(int)
-f(), f(int)
 
 
 STDERR:
@@ -150,9 +148,6 @@ Test: block scope check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t5
 
 STDOUT:
-f(str), f(str)
-f(bool), f(bool)
-f(int), f(int)
 
 
 STDERR:
@@ -185,7 +180,6 @@ Test: parameter scope test |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t7
 
 STDOUT:
-f(int), f(int)
 
 
 STDERR:
@@ -346,7 +340,6 @@ Test: function call as lvalue |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t17
 
 STDOUT:
-f(), f()
 
 
 STDERR:
@@ -571,12 +564,6 @@ Test: built-in routine check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t33
 
 STDOUT:
-f(str), f(str)
-f(bool), f(bool)
-f(int), f(int)
-f(int), f(int)
-f(), f()
-f(), f()
 
 
 STDERR:
@@ -591,7 +578,6 @@ Test: actual parameter type check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t34
 
 STDOUT:
-f(f()), f(str)
 
 
 STDERR:
@@ -624,7 +610,6 @@ Test: another actual parameter type check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t36
 
 STDOUT:
-f(int,int), f(int,int,int)
 
 
 STDERR:
@@ -743,7 +728,6 @@ Test: redefining "true" and "false" |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t43
 
 STDOUT:
-f(), f(int)
 
 
 STDERR:
@@ -783,5 +767,5 @@ STDERR:
 
 *** TERMINATION VIA SIGNAL: Segmentation fault
 
-Run ended on Tue Mar 21 13:24:28 2023
+Run ended on Tue Mar 21 13:25:05 2023
 
