@@ -150,7 +150,6 @@ void Semantic::pass_3() {
 		} else if (ast->type == "funccall") {
 			auto func_call = encode_func_call(ast);
 			auto func_decl = ast->get_child(0)->sym;
-			std::cout << func_call << ", " << func_decl->sig << std::endl;
 			if (func_call != func_decl->sig)
 				Logger::error(input, ast->line, ast->column, ast->attr.length(),
 							  "function call does not match function signature");
