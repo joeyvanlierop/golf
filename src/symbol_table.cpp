@@ -13,7 +13,7 @@ Record* SymbolTable::define(AST* ast, Record record) {
     auto column = ast->column;
 
     // Check if a record with the given name already exists
-    if (scopes.back().contains(name))
+    if (scopes.back().count(name))
         Logger::error(input, line, column, name.length(), "\"" + name + "\"" + " redefined");
 
     // Create and insert new record
@@ -34,7 +34,7 @@ Record* SymbolTable::lookup(AST* ast) {
 
     // Find record, starting at the top-most scope
     for (int i = scopes.size() - 1; i >= 0; i--)
-        if(scopes[i].contains(name))
+        if(scopes[i].count(name))
             return &scopes[i][name];
 
     // Error if no record exists
@@ -44,7 +44,7 @@ Record* SymbolTable::lookup(AST* ast) {
 Record* SymbolTable::lookup(std::string name) {
     // Find record, starting at the top-most scope
     for (int i = scopes.size() - 1; i >= 0; i--)
-        if(scopes[i].contains(name))
+        if(scopes[i].count(name))
             return &scopes[i][name];
 
     // Error if no record exists
