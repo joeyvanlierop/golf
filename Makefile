@@ -36,7 +36,7 @@ semantic.o: src/semantic.cpp src/semantic.h
 symbol_table.o: src/symbol_table.cpp src/symbol_table.h
 	g++ -c src/symbol_table.cpp
 
-symbol_table.o: src/record.cpp src/record.h
+record.o: src/record.cpp src/record.h
 	g++ -c src/record.cpp
 
 clean:
