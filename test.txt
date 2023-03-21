@@ -1,7 +1,0 @@
-func main() {
-	test(1, true)
-}
-
-func test(a int, b bool) string {
-	return "done"
-}
