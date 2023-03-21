@@ -1,9 +1,15 @@
 // this should fail because the later top-level declaration's scope
 // is the file block
 
-var foo int
-
 func main() {
+    test(1, true)
 }
 
-var int bool
+func test(a int, b bool) string {
+    //var a bool
+    //var b bool
+    //a && b
+    //var c int
+    //c - c
+    //b = a && b
+}

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <string>
 
 #include "input.h"
@@ -47,12 +48,10 @@ private:
     AST ast;
     SymbolTable symbol_table;
 
-    void check_identifiers();
-    void tag_nodes();
-    void check_main();
-    void check_int_literal();
-    void check_constant_assignment();
-    void check_break_staktement();
+	std::string check_binary(AST* ast);
+	std::string check_unary(AST* ast);
+	std::string encode_func_decl(AST* ast);
+	std::string encode_func_call(AST* ast);
 
     void pass_0();
     void pass_1();
@@ -60,3 +59,21 @@ private:
     void pass_3();
     void pass_4();
 };
+
+using BinaryOpTable = std::map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>>;
+inline BinaryOpTable legal_binary = {
+		{"||", {{"bool", "bool", "bool"}}},
+		{"&&", {{"bool", "bool", "bool"}}},
+		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
+		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"},  {"string", "string", "bool"}}},
+		{"=",  {{"bool", "bool", "void"}, {"int", "int", "void"},  {"string", "string", "void"}}},
+		{"-",  {{"int", "int", "int"}}}
+};
+
+using UnaryOpTable = std::map<std::string, std::vector<std::tuple<std::string, std::string>>>;
+inline UnaryOpTable legal_unary = {
+		{"!", {{"bool", "bool"}}},
+		{"u-", {{"int", "int"}}}
+};
+
+

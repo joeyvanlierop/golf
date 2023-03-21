@@ -1,7 +1,7 @@
 .PHONY: clean
 
-golf: golf.o lexer.o token.o logger.o input.o file_input.o repl_input.o ast.o parser.o semantic.o symbol_table.o
-	g++ -g golf.o lexer.o token.o logger.o input.o file_input.o repl_input.o ast.o parser.o semantic.o symbol_table.o -o golf
+golf: golf.o lexer.o token.o logger.o input.o file_input.o repl_input.o ast.o parser.o semantic.o symbol_table.o record.o
+	g++ -g golf.o lexer.o token.o logger.o input.o file_input.o repl_input.o ast.o parser.o semantic.o symbol_table.o record.o -o golf
 
 golf.o: src/golf.cpp src/golf.h
 	g++ -c src/golf.cpp
@@ -35,6 +35,9 @@ semantic.o: src/semantic.cpp src/semantic.h
 
 symbol_table.o: src/symbol_table.cpp src/symbol_table.h
 	g++ -c src/symbol_table.cpp
+
+symbol_table.o: src/record.cpp src/record.h
+	g++ -c src/record.cpp
 
 clean:
 	-rm *.o golf

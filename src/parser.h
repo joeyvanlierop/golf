@@ -27,7 +27,7 @@ private:
     bool check(TokenType type);
     bool match(TokenType expected);
     AST* decl();
-    AST* var_decl();
+    AST* var_decl(bool global);
     AST* func_decl();
     AST* func_sig();
     AST* block();

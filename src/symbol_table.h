@@ -3,26 +3,26 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <iostream>
 
 #include "input.h"
-
-struct Record {
-    std::string sig;
-    std::string rt_sig;
-    bool is_const;
-    bool is_type;
-};
+#include "ast.h"
+#include "record.h"
 
 class SymbolTable {
 public:
     SymbolTable(Input* input);
-    void define(std::string name, std::string type, int line, int column);
-    Record* lookup(std::string name, int line, int column);
+	Record* define(AST* ast, Record record);
+	Record* define(std::string name, Record record);
+    Record* lookup(AST* ast);
+    Record* lookup(std::string name);
     void open_scope();
     void close_scope();
+    void print();
+    void print_scope(int i);
 
 private:
     Input* input;
-    std::vector<std::map<std::string, Record*>> scopes;
+    std::vector<std::map<std::string, Record>> scopes;
 };
 

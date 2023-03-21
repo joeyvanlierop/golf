@@ -3,7 +3,7 @@
 #include <sstream>
 
 AST::AST(std::string type, std::string attr, int line, int column) : type(type), attr(attr), line(line),
-                                                                     column(column) {}
+                                                                     column(column), sym(nullptr) {}
 
 AST::AST(std::string type) : AST(type, "", -1, -1) {}
 
@@ -39,7 +39,7 @@ void AST::print(int indent) {
         ss << " sig=" << sig;
 
     // AST has a sym(bol table reference)
-    if (sym.length() > 0)
+    if (sym != NULL)
         ss << " sym=" << sym;
 
     // AST has location data

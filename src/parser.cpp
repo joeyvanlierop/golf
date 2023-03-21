@@ -124,7 +124,7 @@ AST *Parser::decl() {
     AST *ast;
 
     switch (peek().type) {
-        case Var:ast = var_decl();
+        case Var:ast = var_decl(true);
             break;
         case Func:ast = func_decl();
             break;
@@ -140,9 +140,9 @@ AST *Parser::decl() {
 /**
  * VarDecl ::= "var" identifier identifier
  */
-AST *Parser::var_decl() {
+AST *Parser::var_decl(bool global) {
     auto token = consume(Var);
-    auto ast = new AST("var", token.line, token.column);
+    auto ast = new AST(global ? "globalvar" : "var", token.line, token.column);
 
     // Variable name
     auto id = consume(Identifier, "variable identifier must follow the \"var\" keyword");
@@ -248,7 +248,7 @@ AST *Parser::stmt() {
     AST *ast;
 
     switch (peek().type) {
-        case Var:ast = var_decl();
+        case Var:ast = var_decl(false);
             break;
         case If:ast = if_stmt();
             break;
@@ -481,7 +481,7 @@ AST *Parser::func_call() {
 
     // Arguments
     while (match(LeftParen)) {
-        ast = (new AST("funccall"))->add_child(ast);
+        ast = (new AST("funccall", previous().line, previous().column))->add_child(ast);
         auto actuals = new AST("actuals");
         ast->add_child(actuals);
         while (!match(RightParen)) {

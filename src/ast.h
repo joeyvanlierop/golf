@@ -3,13 +3,14 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include "record.h"
 
 class AST {
 public:
     std::string attr;
     std::string type;
-    std::string sig;
-    std::string sym;
+	std::string sig;
+	Record* sym;
     int line;
     int column;
     std::vector<AST*> children;
