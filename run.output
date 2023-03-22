@@ -1,6 +1,6 @@
-Run started on Tue Mar 21 13:34:39 2023
+Run started on Tue Mar 21 22:38:03 2023
 
-Hostname: csx2.cs.ucalgary.ca
+Hostname: csx.cs.ucalgary.ca
 
 -------------------------------------------------------------------------------
 Running make |
@@ -148,47 +148,47 @@ Test: block scope check |
 
 STDOUT:
 program
-	func sym=0x1ad10f0 @ (3, 1)
+	func sym=0x1fe5620 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0x1ad0910
+			typeid [$void] sym=0x1fe4e40
 		block
-			var sym=0x1ad1180 @ (4, 2)
+			var sym=0x1fe56b0 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0x1ad0a30 @ (4, 8)
+				typeid [int] sym=0x1fe4f60 @ (4, 8)
 			block
-				var sym=0x1ad1210 @ (6, 3)
+				var sym=0x1fe5740 @ (6, 3)
 					newid [x] @ (6, 7)
-					typeid [bool] sym=0x1ad09a0 @ (6, 9)
+					typeid [bool] sym=0x1fe4ed0 @ (6, 9)
 				block
-					var sym=0x1ad12a0 @ (8, 4)
+					var sym=0x1fe57d0 @ (8, 4)
 						newid [x] @ (8, 8)
-						typeid [string] sym=0x1ad0ac0 @ (8, 10)
+						typeid [string] sym=0x1fe4ff0 @ (8, 10)
 					= sig=void @ (9, 6)
-						id [x] sig=str sym=0x1ad12a0 @ (9, 4)
+						id [x] sig=str sym=0x1fe57d0 @ (9, 4)
 						string [asdf] sig=str @ (9, 9)
 					block
-						var sym=0x1ad1330 @ (11, 5)
+						var sym=0x1fe5860 @ (11, 5)
 							newid [x] @ (11, 9)
-							typeid [int] sym=0x1ad0a30 @ (11, 11)
+							typeid [int] sym=0x1fe4f60 @ (11, 11)
 						= sig=void @ (12, 7)
-							id [x] sig=int sym=0x1ad1330 @ (12, 5)
+							id [x] sig=int sym=0x1fe5860 @ (12, 5)
 							+ sig=int @ (12, 11)
-								id [x] sig=int sym=0x1ad1330 @ (12, 9)
+								id [x] sig=int sym=0x1fe5860 @ (12, 9)
 								int [1] sig=int @ (12, 13)
 					funccall sig=void @ (14, 10)
-						id [prints] sig=f(str) sym=0x1ad0eb0 @ (14, 4)
+						id [prints] sig=f(str) sym=0x1fe53e0 @ (14, 4)
 						actuals
-							id [x] sig=str sym=0x1ad12a0 @ (14, 11)
+							id [x] sig=str sym=0x1fe57d0 @ (14, 11)
 				funccall sig=void @ (16, 9)
-					id [printb] sig=f(bool) sym=0x1ad0d00 @ (16, 3)
+					id [printb] sig=f(bool) sym=0x1fe5230 @ (16, 3)
 					actuals
-						id [x] sig=bool sym=0x1ad1210 @ (16, 10)
+						id [x] sig=bool sym=0x1fe5740 @ (16, 10)
 			funccall sig=void @ (18, 8)
-				id [printi] sig=f(int) sym=0x1ad0e20 @ (18, 2)
+				id [printi] sig=f(int) sym=0x1fe5350 @ (18, 2)
 				actuals
-					id [x] sig=int sym=0x1ad1180 @ (18, 9)
+					id [x] sig=int sym=0x1fe56b0 @ (18, 9)
 
 
 STDERR:
@@ -221,56 +221,16 @@ Test: parameter scope test |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t7
 
 STDOUT:
-program
-	func sym=0x1b4cf20 @ (3, 1)
-		newid [foo] @ (3, 6)
-		sig
-			formals
-				formal
-					newid [int] @ (3, 10)
-					typeid [int] sym=0x1b4c860 @ (3, 14)
-			typeid [int] sym=0x1b4c860 @ (3, 19)
-		block
-			funccall sig=void @ (4, 8)
-				id [printi] sig=f(int) sym=0x1b4cc50 @ (4, 2)
-				actuals
-					id [int] sig=int sym=0x1b4c860 @ (4, 9)
-			return @ (5, 2)
-				id [int] sig=int sym=0x1b4c860 @ (5, 9)
-	func sym=0x1b4cfb0 @ (8, 1)
-		newid [bar] @ (8, 6)
-		sig
-			formals
-				formal
-					newid [bar] @ (8, 10)
-					typeid [int] sym=0x1b4c860 @ (8, 14)
-			typeid [$void] sym=0x1b4c740
-		block
-			emptystmt
-	func sym=0x1b4d040 @ (11, 1)
-		newid [string] @ (11, 6)
-		sig
-			formals
-				formal
-					newid [string] @ (11, 13)
-					typeid [int] sym=0x1b4c860 @ (11, 20)
-			typeid [bool] sym=0x1b4c7d0 @ (11, 25)
-		block
-			return @ (12, 2)
-				id [true] sig=bool sym=0x1b4ca10 @ (12, 9)
-	func sym=0x1b4d0d0 @ (15, 1)
-		newid [main] @ (15, 6)
-		sig
-			formals
-			typeid [$void] sym=0x1b4c740
-		block
-			emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t7:3:14
+  | 
+3 | func foo(int int) int {
+  |              ^~~ error: expected type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: constants can't be changed |
@@ -423,36 +383,16 @@ Test: dup check for formal parameters |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t16
 
 STDOUT:
-program
-	func sym=0x2084390 @ (4, 1)
-		newid [main] @ (4, 6)
-		sig
-			formals
-			typeid [$void] sym=0x2083bb0
-		block
-			emptystmt
-	func sym=0x2084420 @ (7, 1)
-		newid [foo] @ (7, 6)
-		sig
-			formals
-				formal
-					newid [i] @ (7, 10)
-					typeid [int] sym=0x2083cd0 @ (7, 12)
-				formal
-					newid [b] @ (7, 17)
-					typeid [bool] sym=0x2083c40 @ (7, 19)
-				formal
-					newid [i] @ (7, 25)
-					typeid [int] sym=0x2083cd0 @ (7, 27)
-			typeid [$void] sym=0x2083bb0
-		block
-			emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t16:7:25
+  | 
+7 | func foo(i int, b bool, i int) {
+  |                         ^ error: "i" redefined
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: function call as lvalue |
@@ -464,9 +404,13 @@ STDOUT:
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t17:6:5
+  | 
+6 |     foo() = 123
+  |        ^ error: cannot assign to a function
 
 
-*** TERMINATION VIA SIGNAL: Segmentation fault
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: function name as lvalue |
@@ -493,25 +437,16 @@ Test: humongous integer literal |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t19
 
 STDOUT:
-program
-	func sym=0x1ad76c0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x1ad6ee0
-		block
-			var sym=0x1ad7750 @ (4, 2)
-				newid [i] @ (4, 6)
-				typeid [int] sym=0x1ad7000 @ (4, 8)
-			= sig=void @ (5, 4)
-				id [i] sig=int sym=0x1ad7750 @ (5, 2)
-				int [999999999999999999999999999999999999999999999999] sig=int @ (5, 6)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t19:5:6
+  | 
+5 |     i = 999999999999999999999999999999999999999999999999
+  |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ error: integer literal out of range
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: positive integer literal out of range |
@@ -520,28 +455,16 @@ Test: positive integer literal out of range |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t20
 
 STDOUT:
-program
-	func sym=0x1d24080 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x1d238a0
-		block
-			var sym=0x1d24110 @ (4, 2)
-				newid [i] @ (4, 6)
-				typeid [int] sym=0x1d239c0 @ (4, 8)
-			= sig=void @ (5, 4)
-				id [i] sig=int sym=0x1d24110 @ (5, 2)
-				int [2147483647] sig=int @ (5, 6)
-			= sig=void @ (6, 4)
-				id [i] sig=int sym=0x1d24110 @ (6, 2)
-				int [2147483648] sig=int @ (6, 6)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t20:6:6
+  | 
+6 |     i = 2147483648    // less ok
+  |         ^~~~~~~~~~ error: integer literal too large
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: negative integer literal out of range |
@@ -550,28 +473,16 @@ Test: negative integer literal out of range |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t21
 
 STDOUT:
-program
-	func sym=0x6f7db0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x6f75d0
-		block
-			var sym=0x6f7e40 @ (4, 2)
-				newid [i] @ (4, 6)
-				typeid [int] sym=0x6f76f0 @ (4, 8)
-			= sig=void @ (5, 4)
-				id [i] sig=int sym=0x6f7e40 @ (5, 2)
-				int [-2147483648] sig=int @ (5, 6)
-			= sig=void @ (6, 4)
-				id [i] sig=int sym=0x6f7e40 @ (6, 2)
-				int [-2147483649] sig=int @ (6, 6)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t21:6:6
+  | 
+6 |     i = -2147483649    // less ok
+  |         ^~~~~~~~~~~ error: integer literal too small
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: "break" not inside "for" loop |
@@ -634,27 +545,16 @@ Test: missing return statement |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t25
 
 STDOUT:
-program
-	func sym=0x1607ea0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x16076c0
-		block
-			emptystmt
-	func sym=0x1607f30 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [string] sym=0x1607870 @ (6, 12)
-		block
-			emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t25:6:1
+  | 
+6 | func foo() string {
+  | ^ error: missing return statement in non-void function
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: returning value from void function |
@@ -663,21 +563,16 @@ Test: returning value from void function |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t26
 
 STDOUT:
-program
-	func sym=0x73f140 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x73e960
-		block
-			return @ (4, 2)
-				int [123] sig=int @ (4, 9)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t26:4:9
+  | 
+4 |     return 123
+  |            ^~~ error: incorrect return type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: return type mismatch |
@@ -686,28 +581,16 @@ Test: return type mismatch |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t27
 
 STDOUT:
-program
-	func sym=0x6e6050 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x6e5870
-		block
-			emptystmt
-	func sym=0x6e60e0 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [bool] sym=0x6e5900 @ (6, 12)
-		block
-			return @ (7, 2)
-				int [123] sig=int @ (7, 9)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t27:7:9
+  | 
+7 |     return 123
+  |            ^~~ error: incorrect return type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: missing return type |
@@ -716,27 +599,16 @@ Test: missing return type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t28
 
 STDOUT:
-program
-	func sym=0xed8f30 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xed8750
-		block
-			emptystmt
-	func sym=0xed8fc0 @ (6, 1)
-		newid [foo] @ (6, 6)
-		sig
-			formals
-			typeid [bool] sym=0xed87e0 @ (6, 12)
-		block
-			return @ (7, 2)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t28:7:2
+  | 
+7 |     return
+  |     ^ error: non-void function must return a value
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: "if" expr not a boolean type |
@@ -745,23 +617,16 @@ Test: "if" expr not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t29
 
 STDOUT:
-program
-	func sym=0xfa6410 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xfa5c30
-		block
-			if @ (4, 2)
-				int [1] sig=int @ (4, 5)
-				block
-					emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t29:4:5
+  | 
+4 |     if 1 {
+  |        ^ error: if expression must be a boolean type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: "if"-"else" not a boolean type |
@@ -770,26 +635,16 @@ Test: "if"-"else" not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t30
 
 STDOUT:
-program
-	func sym=0x704e10 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x704630
-		block
-			if @ (4, 2)
-				int [1] sig=int @ (4, 5)
-				block
-					emptystmt
-				else
-					block
-						emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t30:4:5
+  | 
+4 |     if 1 {
+  |        ^ error: if expression must be a boolean type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: "for" expr not a boolean type |
@@ -798,37 +653,16 @@ Test: "for" expr not a boolean type |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t31
 
 STDOUT:
-program
-	func sym=0xc84db0 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xc845d0
-		block
-			for @ (4, 2)
-				id [$true] sig=bool sym=0xc84810
-				block
-					emptystmt
-			var sym=0xc84e40 @ (6, 2)
-				newid [four] @ (6, 6)
-				typeid [bool] sym=0xc84660 @ (6, 11)
-			for @ (7, 2)
-				id [four] sig=bool sym=0xc84e40 @ (7, 6)
-				block
-					emptystmt
-			var sym=0xc84ed0 @ (9, 2)
-				newid [ever] @ (9, 6)
-				typeid [string] sym=0xc84780 @ (9, 11)
-			for @ (10, 2)
-				id [ever] sig=str sym=0xc84ed0 @ (10, 6)
-				block
-					emptystmt
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t31:10:6
+   | 
+10 |     for ever {
+   |         ^~~~ error: for expression must be a boolean type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: legit expression statements |
@@ -838,16 +672,16 @@ Test: legit expression statements |
 
 STDOUT:
 program
-	func sym=0x19f15c0 @ (3, 1)
+	func sym=0x1c81ac0 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0x19f0de0
+			typeid [$void] sym=0x1c812e0
 		block
-			var sym=0x19f1650 @ (4, 2)
+			var sym=0x1c81b50 @ (4, 2)
 				newid [i] @ (4, 6)
-				typeid [int] sym=0x19f0f00 @ (4, 8)
-			id [i] sig=int sym=0x19f1650 @ (5, 2)
+				typeid [int] sym=0x1c81400 @ (4, 8)
+			id [i] sig=int sym=0x1c81b50 @ (5, 2)
 			int [42] sig=int @ (6, 2)
 
 
@@ -863,16 +697,46 @@ Test: built-in routine check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t33
 
 STDOUT:
+program
+	func sym=0x6d2b70 @ (3, 1)
+		newid [main] @ (3, 6)
+		sig
+			formals
+			typeid [$void] sym=0x6d2390
+		block
+			funccall sig=void @ (4, 15)
+				id [prints] sig=f(str) sym=0x6d2930 @ (4, 9)
+				actuals
+					string [Hello, world!\n] sig=str @ (4, 17)
+			funccall sig=void @ (5, 15)
+				id [printb] sig=f(bool) sym=0x6d2780 @ (5, 9)
+				actuals
+					id [true] sig=bool sym=0x6d2660 @ (5, 16)
+			funccall sig=void @ (6, 15)
+				id [printi] sig=f(int) sym=0x6d28a0 @ (6, 9)
+				actuals
+					int [123] sig=int @ (6, 16)
+			funccall sig=void @ (7, 15)
+				id [printc] sig=f(int) sym=0x6d2810 @ (7, 9)
+				actuals
+					int [123] sig=int @ (7, 16)
+			var sym=0x6d2c00 @ (8, 9)
+				newid [ch] @ (8, 13)
+				typeid [int] sym=0x6d24b0 @ (8, 16)
+			= sig=void @ (9, 5)
+				id [ch] sig=int sym=0x6d2c00 @ (9, 2)
+				funccall sig=int @ (9, 14)
+					id [getchar] sig=f() sym=0x6d29c0 @ (9, 7)
+					actuals
+			funccall sig=void @ (10, 6)
+				id [halt] sig=f() sym=0x6d2a50 @ (10, 2)
+				actuals
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t33:9:2
-  | 
-9 |     ch = getchar()
-  |     ^~ error: cannot assign "void" to "ch"
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: actual parameter type check |
@@ -902,10 +766,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t35:10:17
+--> /home/profs/aycock/411/TEST/ms3/check.t35:10:15
    | 
 10 |         a = a + b
-   |                 ^ error: invalid operand
+   |               ^ error: operand type mismatch
 
 
 RETURN CODE: 1
@@ -938,10 +802,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t37:4:24
+--> /home/profs/aycock/411/TEST/ms3/check.t37:8:19
   | 
-4 |         return bar(bar(i))
-  |                        ^ error: unknown identifier "i"
+8 |         return foo(foo(b))
+  |                   ^ error: function call does not match function signature
 
 
 RETURN CODE: 1
@@ -971,41 +835,16 @@ Test: redefined variable |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t39
 
 STDOUT:
-program
-	globalvar sym=0xc7b2c0 @ (3, 1)
-		newid [a] @ (3, 5)
-		typeid [int] sym=0xc7ac00 @ (3, 7)
-	func sym=0xc7b350 @ (5, 1)
-		newid [main] @ (5, 6)
-		sig
-			formals
-			typeid [$void] sym=0xc7aae0
-		block
-			var sym=0xc7b3e0 @ (6, 2)
-				newid [a] @ (6, 6)
-				typeid [bool] sym=0xc7ab70 @ (6, 8)
-			if @ (7, 2)
-				id [true] sig=bool sym=0xc7adb0 @ (7, 5)
-				block
-					var sym=0xc7b470 @ (8, 3)
-						newid [a] @ (8, 7)
-						typeid [string] sym=0xc7ac90 @ (8, 9)
-					var sym=0xc7b500 @ (9, 3)
-						newid [b] @ (9, 7)
-						typeid [int] sym=0xc7ac00 @ (9, 9)
-					block
-						var sym=0xc7b590 @ (11, 4)
-							newid [b] @ (11, 8)
-							typeid [bool] sym=0xc7ab70 @ (11, 10)
-					var sym=0xc7b500 @ (13, 3)
-						newid [b] @ (13, 7)
-						typeid [string] sym=0xc7ac90 @ (13, 9)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t39:13:7
+   | 
+13 |         var b string
+   |             ^ error: "b" redefined
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: comparable and ordered comparisons |
@@ -1017,10 +856,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t40:4:12
+--> /home/profs/aycock/411/TEST/ms3/check.t40:4:8
   | 
 4 |     "abc" == "def"
-  |               ^~~ error: invalid operand
+  |           ^ error: operand type mismatch
 
 
 RETURN CODE: 1
@@ -1051,15 +890,15 @@ Test: deep type propagation |
 
 STDOUT:
 program
-	func sym=0x11a4d60 @ (3, 1)
+	func sym=0x13e0290 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0x11a4580
+			typeid [$void] sym=0x13dfab0
 		block
-			var sym=0x11a4df0 @ (4, 2)
+			var sym=0x13e0320 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0x11a46a0 @ (4, 8)
+				typeid [int] sym=0x13dfbd0 @ (4, 8)
 			>= sig=bool @ (5, 18)
 				- sig=int @ (5, 12)
 					+ sig=int @ (5, 4)
@@ -1071,21 +910,21 @@ program
 				u- sig=int @ (5, 21)
 					u- sig=int @ (5, 23)
 						u- sig=int @ (5, 25)
-							id [x] sig=int sym=0x11a4df0 @ (5, 26)
-			var sym=0x11a4e80 @ (7, 2)
+							id [x] sig=int sym=0x13e0320 @ (5, 26)
+			var sym=0x13e03b0 @ (7, 2)
 				newid [b] @ (7, 6)
-				typeid [bool] sym=0x11a4610 @ (7, 8)
+				typeid [bool] sym=0x13dfb40 @ (7, 8)
 			!= sig=bool @ (8, 34)
 				! sig=bool @ (8, 2)
 					! sig=bool @ (8, 3)
 						! sig=bool @ (8, 4)
 							|| sig=bool @ (8, 20)
 								&& sig=bool @ (8, 11)
-									id [true] sig=bool sym=0x11a4850 @ (8, 6)
-									id [false] sig=bool sym=0x11a48e0 @ (8, 14)
+									id [true] sig=bool sym=0x13dfd80 @ (8, 6)
+									id [false] sig=bool sym=0x13dfe10 @ (8, 14)
 								== sig=bool @ (8, 25)
-									id [b] sig=bool sym=0x11a4e80 @ (8, 23)
-									id [true] sig=bool sym=0x11a4850 @ (8, 28)
+									id [b] sig=bool sym=0x13e03b0 @ (8, 23)
+									id [true] sig=bool sym=0x13dfd80 @ (8, 28)
 				<= sig=bool @ (8, 40)
 					int [5] sig=int @ (8, 38)
 					int [6] sig=int @ (8, 43)
@@ -1104,24 +943,24 @@ Test: redefining "true" and "false" |
 
 STDOUT:
 program
-	globalvar sym=0x2397fa0 @ (3, 1)
+	globalvar sym=0x12a9510 @ (3, 1)
 		newid [true] @ (3, 5)
-		typeid [int] sym=0x23978e0 @ (3, 10)
-	func sym=0x2398030 @ (5, 1)
+		typeid [int] sym=0x12a8e50 @ (3, 10)
+	func sym=0x12a95a0 @ (5, 1)
 		newid [main] @ (5, 6)
 		sig
 			formals
-			typeid [$void] sym=0x23977c0
+			typeid [$void] sym=0x12a8d30
 		block
-			var sym=0x23980c0 @ (6, 2)
+			var sym=0x12a9630 @ (6, 2)
 				newid [false] @ (6, 6)
-				typeid [int] sym=0x23978e0 @ (6, 12)
+				typeid [int] sym=0x12a8e50 @ (6, 12)
 			funccall sig=void @ (7, 8)
-				id [printi] sig=f(int) sym=0x2397cd0 @ (7, 2)
+				id [printi] sig=f(int) sym=0x12a9240 @ (7, 2)
 				actuals
 					* sig=int @ (7, 14)
-						id [true] sig=int sym=0x2397fa0 @ (7, 9)
-						id [false] sig=int sym=0x23980c0 @ (7, 16)
+						id [true] sig=int sym=0x12a9510 @ (7, 9)
+						id [false] sig=int sym=0x12a9630 @ (7, 16)
 
 
 STDERR:
@@ -1139,9 +978,13 @@ STDOUT:
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t44:4:3
+  | 
+4 |     "asdf"(1,2,3)
+  |      ^~~~ error: invalid function id
 
 
-*** TERMINATION VIA SIGNAL: Segmentation fault
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: type id used in wrong context |
@@ -1151,18 +994,18 @@ Test: type id used in wrong context |
 
 STDOUT:
 program
-	func sym=0xe77650 @ (3, 1)
+	func sym=0xe4bb50 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0xe76e70
+			typeid [$void] sym=0xe4b370
 		block
-			var sym=0xe776e0 @ (4, 2)
+			var sym=0xe4bbe0 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0xe76f90 @ (4, 8)
+				typeid [int] sym=0xe4b490 @ (4, 8)
 			= sig=void @ (5, 4)
-				id [x] sig=int sym=0xe776e0 @ (5, 2)
-				id [int] sig=int sym=0xe76f90 @ (5, 6)
+				id [x] sig=int sym=0xe4bbe0 @ (5, 2)
+				id [int] sig=int sym=0xe4b490 @ (5, 6)
 
 
 STDERR:
@@ -1170,5 +1013,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Tue Mar 21 13:34:39 2023
+Run ended on Tue Mar 21 22:38:03 2023
 
