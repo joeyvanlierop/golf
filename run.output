@@ -1,4 +1,4 @@
-Run started on Wed Mar 22 00:29:36 2023
+Run started on Wed Mar 22 00:41:54 2023
 
 Hostname: csx.cs.ucalgary.ca
 
@@ -97,19 +97,19 @@ Test: local var version of check.t2 |
 
 STDOUT:
 program
-	func sym=0x20e1250 @ (4, 1)
+	func sym=0xacf250 @ (4, 1)
 		newid [main] @ (4, 6)
 		sig
 			formals
 			typeid [$void]
 		block
-			var sym=0x20e12e0 @ (5, 2)
+			var sym=0xacf2e0 @ (5, 2)
 				newid [int] @ (5, 6)
-				typeid [int] sym=0x20e0b90 @ (5, 10)
+				typeid [int] sym=0xaceb90 @ (5, 10)
 			funccall sig=void @ (6, 8)
-				id [printi] sig=f(int) sym=0x20e0f80 @ (6, 2)
+				id [printi] sig=f(int) sym=0xacef80 @ (6, 2)
 				actuals
-					id [int] sig=int sym=0x20e12e0 @ (6, 9)
+					id [int] sig=int sym=0xacf2e0 @ (6, 9)
 
 
 STDERR:
@@ -125,50 +125,50 @@ Test: global name test |
 
 STDOUT:
 program
-	globalvar sym=0xd2f840 @ (3, 1)
+	globalvar sym=0x1c2f840 @ (3, 1)
 		newid [b4int] @ (3, 5)
 		typeid [int] @ (3, 11)
-	func sym=0xd2f8d0 @ (5, 1)
+	func sym=0x1c2f8d0 @ (5, 1)
 		newid [b4func] @ (5, 6)
 		sig
 			formals
 			typeid [$void]
 		block
 			funccall sig=void @ (6, 8)
-				id [printi] sig=f(int) sym=0xd2f570 @ (6, 2)
+				id [printi] sig=f(int) sym=0x1c2f570 @ (6, 2)
 				actuals
-					id [b4int] sig=int sym=0xd2f840 @ (6, 9)
+					id [b4int] sig=int sym=0x1c2f840 @ (6, 9)
 			funccall sig=void @ (7, 8)
-				id [printi] sig=f(int) sym=0xd2f570 @ (7, 2)
+				id [printi] sig=f(int) sym=0x1c2f570 @ (7, 2)
 				actuals
-					id [aft3rint] sig=int sym=0xd2fa80 @ (7, 9)
+					id [aft3rint] sig=int sym=0x1c2fa80 @ (7, 9)
 			funccall sig=void @ (8, 11)
-				id [aft3rfunc] sig=f() sym=0xd2f9f0 @ (8, 2)
+				id [aft3rfunc] sig=f() sym=0x1c2f9f0 @ (8, 2)
 				actuals
-	func sym=0xd2f960 @ (11, 1)
+	func sym=0x1c2f960 @ (11, 1)
 		newid [main] @ (11, 6)
 		sig
 			formals
 			typeid [$void]
 		block
 			funccall sig=void @ (12, 8)
-				id [b4func] sig=f() sym=0xd2f8d0 @ (12, 2)
+				id [b4func] sig=f() sym=0x1c2f8d0 @ (12, 2)
 				actuals
-	func sym=0xd2f9f0 @ (15, 1)
+	func sym=0x1c2f9f0 @ (15, 1)
 		newid [aft3rfunc] @ (15, 6)
 		sig
 			formals
 			typeid [$void]
 		block
 			funccall sig=void @ (16, 8)
-				id [printi] sig=f(int) sym=0xd2f570 @ (16, 2)
+				id [printi] sig=f(int) sym=0x1c2f570 @ (16, 2)
 				actuals
-					id [b4int] sig=int sym=0xd2f840 @ (16, 9)
+					id [b4int] sig=int sym=0x1c2f840 @ (16, 9)
 			funccall sig=void @ (17, 8)
-				id [printi] sig=f(int) sym=0xd2f570 @ (17, 2)
+				id [printi] sig=f(int) sym=0x1c2f570 @ (17, 2)
 				actuals
-					id [aft3rint] sig=int sym=0xd2fa80 @ (17, 9)
-	globalvar sym=0xd2fa80 @ (20, 1)
+					id [aft3rint] sig=int sym=0x1c2fa80 @ (17, 9)
+	globalvar sym=0x1c2fa80 @ (20, 1)
 		newid [aft3rint] @ (20, 5)
 		typeid [int] @ (20, 14)
 
@@ -186,47 +186,47 @@ Test: block scope check |
 
 STDOUT:
 program
-	func sym=0x16355f0 @ (3, 1)
+	func sym=0x21b55f0 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
 			typeid [$void]
 		block
-			var sym=0x1635680 @ (4, 2)
+			var sym=0x21b5680 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0x1634f30 @ (4, 8)
+				typeid [int] sym=0x21b4f30 @ (4, 8)
 			block
-				var sym=0x1635710 @ (6, 3)
+				var sym=0x21b5710 @ (6, 3)
 					newid [x] @ (6, 7)
-					typeid [bool] sym=0x1634ea0 @ (6, 9)
+					typeid [bool] sym=0x21b4ea0 @ (6, 9)
 				block
-					var sym=0x16357a0 @ (8, 4)
+					var sym=0x21b57a0 @ (8, 4)
 						newid [x] @ (8, 8)
-						typeid [string] sym=0x1634fc0 @ (8, 10)
+						typeid [string] sym=0x21b4fc0 @ (8, 10)
 					= sig=void @ (9, 6)
-						id [x] sig=str sym=0x16357a0 @ (9, 4)
+						id [x] sig=str sym=0x21b57a0 @ (9, 4)
 						string [asdf] sig=str @ (9, 9)
 					block
-						var sym=0x1635830 @ (11, 5)
+						var sym=0x21b5830 @ (11, 5)
 							newid [x] @ (11, 9)
-							typeid [int] sym=0x1634f30 @ (11, 11)
+							typeid [int] sym=0x21b4f30 @ (11, 11)
 						= sig=void @ (12, 7)
-							id [x] sig=int sym=0x1635830 @ (12, 5)
+							id [x] sig=int sym=0x21b5830 @ (12, 5)
 							+ sig=int @ (12, 11)
-								id [x] sig=int sym=0x1635830 @ (12, 9)
+								id [x] sig=int sym=0x21b5830 @ (12, 9)
 								int [1] sig=int @ (12, 13)
 					funccall sig=void @ (14, 10)
-						id [prints] sig=f(str) sym=0x16353b0 @ (14, 4)
+						id [prints] sig=f(str) sym=0x21b53b0 @ (14, 4)
 						actuals
-							id [x] sig=str sym=0x16357a0 @ (14, 11)
+							id [x] sig=str sym=0x21b57a0 @ (14, 11)
 				funccall sig=void @ (16, 9)
-					id [printb] sig=f(bool) sym=0x1635200 @ (16, 3)
+					id [printb] sig=f(bool) sym=0x21b5200 @ (16, 3)
 					actuals
-						id [x] sig=bool sym=0x1635710 @ (16, 10)
+						id [x] sig=bool sym=0x21b5710 @ (16, 10)
 			funccall sig=void @ (18, 8)
-				id [printi] sig=f(int) sym=0x1635320 @ (18, 2)
+				id [printi] sig=f(int) sym=0x21b5320 @ (18, 2)
 				actuals
-					id [x] sig=int sym=0x1635680 @ (18, 9)
+					id [x] sig=int sym=0x21b5680 @ (18, 9)
 
 
 STDERR:
@@ -260,43 +260,43 @@ Test: parameter scope test |
 
 STDOUT:
 program
-	func sym=0x1cde3b0 @ (3, 1)
+	func sym=0x1cdf3b0 @ (3, 1)
 		newid [foo] @ (3, 6)
 		sig
-			formals sym=0x1cde5f0
+			formals sym=0x1cdf5f0
 				formal
 					newid [int] @ (3, 10)
-					typeid [int] sym=0x1cddcf0 @ (3, 14)
+					typeid [int] sym=0x1cdecf0 @ (3, 14)
 			typeid [int] @ (3, 19)
 		block
 			funccall sig=void @ (4, 8)
-				id [printi] sig=f(int) sym=0x1cde0e0 @ (4, 2)
+				id [printi] sig=f(int) sym=0x1cdf0e0 @ (4, 2)
 				actuals
-					id [int] sig=int sym=0x1cddcf0 @ (4, 9)
+					id [int] sig=int sym=0x1cdf5f0 @ (4, 9)
 			return @ (5, 2)
-				id [int] sig=int sym=0x1cddcf0 @ (5, 9)
-	func sym=0x1cde440 @ (8, 1)
+				id [int] sig=int sym=0x1cdf5f0 @ (5, 9)
+	func sym=0x1cdf440 @ (8, 1)
 		newid [bar] @ (8, 6)
 		sig
-			formals sym=0x1cde5f0
+			formals sym=0x1cdf5f0
 				formal
 					newid [bar] @ (8, 10)
-					typeid [int] sym=0x1cddcf0 @ (8, 14)
+					typeid [int] sym=0x1cdecf0 @ (8, 14)
 			typeid [$void]
 		block
 			emptystmt
-	func sym=0x1cde4d0 @ (11, 1)
+	func sym=0x1cdf4d0 @ (11, 1)
 		newid [string] @ (11, 6)
 		sig
-			formals sym=0x1cde5f0
+			formals sym=0x1cdf5f0
 				formal
 					newid [string] @ (11, 13)
-					typeid [int] sym=0x1cddcf0 @ (11, 20)
+					typeid [int] sym=0x1cdecf0 @ (11, 20)
 			typeid [bool] @ (11, 25)
 		block
 			return @ (12, 2)
-				id [true] sig=bool sym=0x1cddea0 @ (12, 9)
-	func sym=0x1cde560 @ (15, 1)
+				id [true] sig=bool sym=0x1cdeea0 @ (12, 9)
+	func sym=0x1cdf560 @ (15, 1)
 		newid [main] @ (15, 6)
 		sig
 			formals
@@ -374,14 +374,13 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t11:-1:-1
- | 
--1| 
-terminate called after throwing an instance of 'std::length_error'
-  what():  basic_string::_M_replace_aux
+--> /home/profs/aycock/411/TEST/ms3/check.t11:6:21
+  | 
+6 | func foo(a1 int, a2 main, a3 bool) {
+  |                     ^~~~ error: expected type
 
 
-*** TERMINATION VIA SIGNAL: Aborted
+RETURN CODE: 1
 
 -------------------------------------------------------------------------------
 Test: multiple (main) functions, same name |
@@ -751,16 +750,16 @@ Test: legit expression statements |
 
 STDOUT:
 program
-	func sym=0x10f6a00 @ (3, 1)
+	func sym=0x498a00 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
 			typeid [$void]
 		block
-			var sym=0x10f6a90 @ (4, 2)
+			var sym=0x498a90 @ (4, 2)
 				newid [i] @ (4, 6)
-				typeid [int] sym=0x10f6230 @ (4, 8)
-			id [i] sig=int sym=0x10f6a90 @ (5, 2)
+				typeid [int] sym=0x498230 @ (4, 8)
+			id [i] sig=int sym=0x498a90 @ (5, 2)
 			int [42] sig=int @ (6, 2)
 
 
@@ -777,38 +776,38 @@ Test: built-in routine check |
 
 STDOUT:
 program
-	func sym=0x1e8eab0 @ (3, 1)
+	func sym=0x16a8ab0 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
 			typeid [$void]
 		block
 			funccall sig=void @ (4, 15)
-				id [prints] sig=f(str) sym=0x1e8e870 @ (4, 9)
+				id [prints] sig=f(str) sym=0x16a8870 @ (4, 9)
 				actuals
 					string [Hello, world!\n] sig=str @ (4, 17)
 			funccall sig=void @ (5, 15)
-				id [printb] sig=f(bool) sym=0x1e8e6c0 @ (5, 9)
+				id [printb] sig=f(bool) sym=0x16a86c0 @ (5, 9)
 				actuals
-					id [true] sig=bool sym=0x1e8e5a0 @ (5, 16)
+					id [true] sig=bool sym=0x16a85a0 @ (5, 16)
 			funccall sig=void @ (6, 15)
-				id [printi] sig=f(int) sym=0x1e8e7e0 @ (6, 9)
+				id [printi] sig=f(int) sym=0x16a87e0 @ (6, 9)
 				actuals
 					int [123] sig=int @ (6, 16)
 			funccall sig=void @ (7, 15)
-				id [printc] sig=f(int) sym=0x1e8e750 @ (7, 9)
+				id [printc] sig=f(int) sym=0x16a8750 @ (7, 9)
 				actuals
 					int [123] sig=int @ (7, 16)
-			var sym=0x1e8eb40 @ (8, 9)
+			var sym=0x16a8b40 @ (8, 9)
 				newid [ch] @ (8, 13)
-				typeid [int] sym=0x1e8e3f0 @ (8, 16)
+				typeid [int] sym=0x16a83f0 @ (8, 16)
 			= sig=void @ (9, 5)
-				id [ch] sig=int sym=0x1e8eb40 @ (9, 2)
+				id [ch] sig=int sym=0x16a8b40 @ (9, 2)
 				funccall sig=int @ (9, 14)
-					id [getchar] sig=f() sym=0x1e8e900 @ (9, 7)
+					id [getchar] sig=f() sym=0x16a8900 @ (9, 7)
 					actuals
 			funccall sig=void @ (10, 6)
-				id [halt] sig=f() sym=0x1e8e990 @ (10, 2)
+				id [halt] sig=f() sym=0x16a8990 @ (10, 2)
 				actuals
 
 
@@ -881,10 +880,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t37:4:24
+--> /home/profs/aycock/411/TEST/ms3/check.t37:8:19
   | 
-4 |         return bar(bar(i))
-  |                        ^ error: unknown identifier "i"
+8 |         return foo(foo(b))
+  |                   ^ error: function call does not match function signature
 
 
 RETURN CODE: 1
@@ -969,15 +968,15 @@ Test: deep type propagation |
 
 STDOUT:
 program
-	func sym=0x9eb200 @ (3, 1)
+	func sym=0x1b34200 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
 			typeid [$void]
 		block
-			var sym=0x9eb290 @ (4, 2)
+			var sym=0x1b34290 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0x9eab40 @ (4, 8)
+				typeid [int] sym=0x1b33b40 @ (4, 8)
 			>= sig=bool @ (5, 18)
 				- sig=int @ (5, 12)
 					+ sig=int @ (5, 4)
@@ -989,21 +988,21 @@ program
 				u- sig=int @ (5, 21)
 					u- sig=int @ (5, 23)
 						u- sig=int @ (5, 25)
-							id [x] sig=int sym=0x9eb290 @ (5, 26)
-			var sym=0x9eb320 @ (7, 2)
+							id [x] sig=int sym=0x1b34290 @ (5, 26)
+			var sym=0x1b34320 @ (7, 2)
 				newid [b] @ (7, 6)
-				typeid [bool] sym=0x9eaab0 @ (7, 8)
+				typeid [bool] sym=0x1b33ab0 @ (7, 8)
 			!= sig=bool @ (8, 34)
 				! sig=bool @ (8, 2)
 					! sig=bool @ (8, 3)
 						! sig=bool @ (8, 4)
 							|| sig=bool @ (8, 20)
 								&& sig=bool @ (8, 11)
-									id [true] sig=bool sym=0x9eacf0 @ (8, 6)
-									id [false] sig=bool sym=0x9ead80 @ (8, 14)
+									id [true] sig=bool sym=0x1b33cf0 @ (8, 6)
+									id [false] sig=bool sym=0x1b33d80 @ (8, 14)
 								== sig=bool @ (8, 25)
-									id [b] sig=bool sym=0x9eb320 @ (8, 23)
-									id [true] sig=bool sym=0x9eacf0 @ (8, 28)
+									id [b] sig=bool sym=0x1b34320 @ (8, 23)
+									id [true] sig=bool sym=0x1b33cf0 @ (8, 28)
 				<= sig=bool @ (8, 40)
 					int [5] sig=int @ (8, 38)
 					int [6] sig=int @ (8, 43)
@@ -1022,24 +1021,24 @@ Test: redefining "true" and "false" |
 
 STDOUT:
 program
-	globalvar sym=0x1722460 @ (3, 1)
+	globalvar sym=0x1b14460 @ (3, 1)
 		newid [true] @ (3, 5)
 		typeid [int] @ (3, 10)
-	func sym=0x17224f0 @ (5, 1)
+	func sym=0x1b144f0 @ (5, 1)
 		newid [main] @ (5, 6)
 		sig
 			formals
 			typeid [$void]
 		block
-			var sym=0x1722580 @ (6, 2)
+			var sym=0x1b14580 @ (6, 2)
 				newid [false] @ (6, 6)
-				typeid [int] sym=0x1721da0 @ (6, 12)
+				typeid [int] sym=0x1b13da0 @ (6, 12)
 			funccall sig=void @ (7, 8)
-				id [printi] sig=f(int) sym=0x1722190 @ (7, 2)
+				id [printi] sig=f(int) sym=0x1b14190 @ (7, 2)
 				actuals
 					* sig=int @ (7, 14)
-						id [true] sig=int sym=0x1722460 @ (7, 9)
-						id [false] sig=int sym=0x1722580 @ (7, 16)
+						id [true] sig=int sym=0x1b14460 @ (7, 9)
+						id [false] sig=int sym=0x1b14580 @ (7, 16)
 
 
 STDERR:
@@ -1083,5 +1082,5 @@ STDERR:
 
 RETURN CODE: 1
 
-Run ended on Wed Mar 22 00:29:37 2023
+Run ended on Wed Mar 22 00:41:54 2023
 
