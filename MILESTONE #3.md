@@ -1,8 +1,8 @@
-# Milestone 1: GoLF Parser
+# Milestone 3: GoLF Semantic Checking
 
 ## What is this
 
-The purpose of this first milestone is to implement a parser for GoLF. You can find my
+The purpose of the second milestone is to implement semantic checking for GoLF. You can find my
 implementation here: https://gitlab.cpsc.ucalgary.ca/joseph.vanlierop/cpsc-411
 
 ## Who am I
@@ -13,16 +13,16 @@ Email address: joseph.vanlierop@ucalgary.ca
 
 ## Where do I need feedback
 
-In order to make the grammar work properly, I restructured it in such a way that it doesn't clearly match the original (
-visually), but it does match the functionality (at least as far as I could tell from rigorous testing). Is this an
-acceptable approach, or should I have tried to more closely restructure the original grammar?
-
-Sorry if my question isn't super clear. I can try to clarify it during tutorial (T04)
+I chose to use strings as types because that's what Aycock did in his video series, but I am interested in hearing about
+how you structured yours using formal types. I would also like to hear how I could make my code more readable, since its
+starting to approach spaghetti. Some resources online use the visitor pattern which seems pretty verbose, but maybe
+useful? Not sure, would love to hear your thoughts if you know about it.
 
 ## What grade have I earned
 
-I would argue that I have earned an 8/8. Besides the objective evidence that I will point out below, I have also put in
-a lot of work to match the reference compiler's output 1:1.
+I think that I have earned an 8/8, but I think its debatable. I have also put in a lot of work to match the reference
+compiler's output 1:1, however I think my code could use some refactoring to make more resilient and less reliant on
+magic values.
 
 ### Tool (milestone) properties
 
@@ -31,30 +31,32 @@ a lot of work to match the reference compiler's output 1:1.
       error itself. One bug I have found is that it doesn't properly align code indented by tabs, but I am working on a
       fix.
   ```shell
-  --> ../test/parse.t0:2:9
-    |
-  2 |     if a; {
-    |         ^ error: expected {, got ;
+  --> ../test/check.t12:7:6
+      |
+    7 | func main() {
+      |      ^~~~ error: "main" redefined
   ```
-- Predictable:
-    - I handle all legal input cases properly, and any unknown inputs are verbosely errored. After parsing, an AST is
-      printed using proper indentation and any relevant information.
+    - Predictable:
+        - I handle all legal input cases properly, and any unknown inputs are verbosely errored. After parsing, an AST
+          is
+          printed using proper indentation and any relevant information.
 
-  ```shell
-    program
-        func @ (3, 0)
-          newid [foo] @ (3, 5)
-          sig
-            formals
-            typeid [$void]
-          block
-            funccall
-              id [garbled] @ (4, 1)
-              actuals
-                id [a] @ (4, 9)
-                id [b] @ (5, 2)
-                id [c] @ (6, 2)
-  ```
+      ```shell
+        program
+            func sym=0x9d7250 @ (4, 1)
+                newid [main] @ (4, 6)
+                sig
+                  formals
+                  typeid [$void]
+                block
+                  var sym=0x9d72e0 @ (5, 2)
+                    newid [int] @ (5, 6)
+                    typeid [int] sym=0x9d6b90 @ (5, 10)
+                  funccall sig=void @ (6, 8)
+                    id [printi] sig=f(int) sym=0x9d6f80 @ (6, 2)
+                    actuals
+                      id [int] sig=int sym=0x9d72e0 @ (6, 9)
+      ```
 
 ### Development practices
 
@@ -74,7 +76,7 @@ a lot of work to match the reference compiler's output 1:1.
       modern style conventions.
 - Code is modular and extensible
     - I split up code in order to adhere to the single-responsibility principle. Tokens, logging, lexing, parsing, and
-      I/O are
+      I/O, semantic analysis, symbol table, and records
       all handled individually which makes it very easy to refactor and implement new functionality. I also split up the
       parsing functionality in a way that I am quite proud of. Although it might be a little jumbled to read at first, I
       found it quite scalable and pleasant once I got used to it.
@@ -86,27 +88,7 @@ a lot of work to match the reference compiler's output 1:1.
     - The important aspects of the project are well documented in a consistent structure.
 - Speed
     - The code executes the test cases just as fast as the reference compiler
-- Easy to build, and building without errors or warnings (ok there are 2 warnings, but they are only there because the compiler doesn't have fancy static analysis)
-  ```shell
-    joseph.vanlierop@csx2:~/Documents/cpsc-411$ make clean && make
-    rm *.o golf
-    g++ -c src/golf.cpp
-    g++ -c src/lexer.cpp
-    g++ -c src/token.cpp
-    g++ -c src/logger.cpp
-    g++ -c src/filereader.cpp
-    g++ -c src/ast.cpp
-    g++ -c src/parser.cpp
-    src/parser.cpp: In member function ‘Token Parser::consume(TokenType)’:
-    src/parser.cpp:62:1: warning: control reaches end of non-void function [-Wreturn-type]
-       62 | }
-          | ^
-    src/parser.cpp: In member function ‘AST* Parser::operand()’:
-    src/parser.cpp:513:1: warning: control reaches end of non-void function [-Wreturn-type]
-      513 | }
-          | ^
-    g++ -g golf.o lexer.o token.o logger.o filereader.o ast.o parser.o -o golf
-  ```
+- Easy to build, and building without errors or warnings
 
 ### Relationship with the environment.
 
@@ -117,7 +99,7 @@ a lot of work to match the reference compiler's output 1:1.
 - Easy to run
     - The executable is very simple to run. All that needs to be provided is the file to parse:
   ```
-  $ ./golf test/parse.t7
+  $ ./golf test/check.t7
   ```
 - Meta-documentation
-    - A README is included in the root of the repository.
+    - A README is included in the root of the repository with an additional SPECIFICATION document.
