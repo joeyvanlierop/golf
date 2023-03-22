@@ -103,13 +103,14 @@ void Semantic::pass_2() {
 						 ast->sig = type->sig;
 					 } else if (ast->type == "block") {
 						 symbol_table.open_scope();
-					 } else if (ast->type == "formals") {
+					 } else if (ast->type == "func") {
 						 symbol_table.open_scope();
+					 } else if (ast->type == "formals") {
 						 for (auto formal: ast->children) {
 							 auto type = symbol_table.lookup(formal->get_child(1));
 							 ast->sym = symbol_table.define(formal->get_child(0), {type->sig, "", false, false});
 							 if (!type->is_type)
-								 Logger::error(input, formal->line, formal->column, formal->attr.length(), "expected type");
+								 Logger::error(input, formal->get_child(1)->line, formal->get_child(1)->column, formal->get_child(1)->attr.length(), "expected type");
 							 formal->get_child(1)->sym = type;
 						 }
 					 }
@@ -117,14 +118,14 @@ void Semantic::pass_2() {
 				 [this](auto ast) {
 					 if (ast->type == "block") {
 						 symbol_table.close_scope();
+					 } else if (ast->type == "func") {
+						 symbol_table.close_scope();
 					 } else if (ast->type == "var") {
 						 auto type = symbol_table.lookup(ast->get_child(1));
 						 ast->sym = symbol_table.define(ast->get_child(0), {type->sig, "", false, false});
 						 if (!type->is_type)
 							 Logger::error(input, ast->line, ast->column, ast->attr.length(), "expected type");
 						 ast->get_child(1)->sym = type;
-					 } else if (ast->type == "formals") {
-						 symbol_table.close_scope();
 					 }
 				 });
 }
