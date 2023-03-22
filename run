@@ -182,8 +182,8 @@ def main():
 	log(f'Hostname: {socket.gethostname()}')
 
 	# build it; this'll also permit variants on "Makefile" like "makefile"
-	banner('Running make')
-	run([ MAKE ])
+	#banner('Running make')
+	#run([ MAKE ])
 
 	# figure out how to run the compiler
 	banner('Locating GoLF compiler')

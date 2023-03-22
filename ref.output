@@ -1,0 +1,1022 @@
+Run started on Wed Mar 22 00:28:58 2023
+
+Hostname: csx.cs.ucalgary.ca
+
+-------------------------------------------------------------------------------
+Locating GoLF compiler |
+------------------------
+
+Compiler will be run as ./golf
+
+-------------------------------------------------------------------------------
+Test: too few arguments |
+-------------------------
+
+% ./golf
+
+STDOUT:
+
+
+STDERR:
+Usage: ./golf [option] file.golf
+  -show string
+    	show output from a specific part of the compiler;
+    	string can be:
+    	    tokens	tokens from scanner
+    	    ast		AST constructed by parser (textual)
+    	    astview	AST constructed by parser (graphical)
+    	    aast	annotated AST after semantic analysis (textual)
+    	    aastview	annotated AST after semantic analysis (graphical)
+    	 (default "aast")
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: too many arguments |
+--------------------------
+
+% ./golf /dev/null /dev/zero
+
+STDOUT:
+
+
+STDERR:
+Usage: ./golf [option] file.golf
+  -show string
+    	show output from a specific part of the compiler;
+    	string can be:
+    	    tokens	tokens from scanner
+    	    ast		AST constructed by parser (textual)
+    	    astview	AST constructed by parser (graphical)
+    	    aast	annotated AST after semantic analysis (textual)
+    	    aastview	annotated AST after semantic analysis (graphical)
+    	 (default "aast")
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: nonexistent file |
+------------------------
+
+% ./golf /i/do/not/exist
+
+STDOUT:
+
+
+STDERR:
+open /i/do/not/exist: no such file or directory
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: later global "int" redeclaration |
+----------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t1
+
+STDOUT:
+
+
+STDERR:
+error: expected type, got 'int' at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: global var declaration loop |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t2
+
+STDOUT:
+
+
+STDERR:
+error: expected type, got 'int' at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: local var version of check.t2 |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t3
+
+STDOUT:
+program sym=0xc0000784b0
+    func sym=0xc0000784b0 @ line 4
+        newid [main] @ line 4
+        sig
+            formals
+            typeid [$void] sym=0xc000078050
+        block
+            var sym=0xc000078500 @ line 5
+                newid [int] @ line 5
+                typeid [int] sym=0xc0000780f0 @ line 5
+            exprstmt @ line 6
+                funccall sig=void @ line 6
+                    id [printi] sig=f(int) sym=0xc000078320 @ line 6
+                    actuals
+                        id [int] sig=int sym=0xc000078500 @ line 6
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: global name test |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t4
+
+STDOUT:
+program sym=0xc0000c6500
+    globvar sym=0xc0000c6460 @ line 3
+        newid [b4int] @ line 3
+        typeid [int] sym=0xc0000c60a0 @ line 3
+    func sym=0xc0000c64b0 @ line 5
+        newid [b4func] @ line 5
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            exprstmt @ line 6
+                funccall sig=void @ line 6
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 6
+                    actuals
+                        id [b4int] sig=int sym=0xc0000c6460 @ line 6
+            exprstmt @ line 7
+                funccall sig=void @ line 7
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 7
+                    actuals
+                        id [aft3rint] sig=int sym=0xc0000c65a0 @ line 7
+            exprstmt @ line 8
+                funccall sig=void @ line 8
+                    id [aft3rfunc] sig=f() sym=0xc0000c6550 @ line 8
+                    actuals
+    func sym=0xc0000c6500 @ line 11
+        newid [main] @ line 11
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            exprstmt @ line 12
+                funccall sig=void @ line 12
+                    id [b4func] sig=f() sym=0xc0000c64b0 @ line 12
+                    actuals
+    func sym=0xc0000c6550 @ line 15
+        newid [aft3rfunc] @ line 15
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            exprstmt @ line 16
+                funccall sig=void @ line 16
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 16
+                    actuals
+                        id [b4int] sig=int sym=0xc0000c6460 @ line 16
+            exprstmt @ line 17
+                funccall sig=void @ line 17
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 17
+                    actuals
+                        id [aft3rint] sig=int sym=0xc0000c65a0 @ line 17
+    globvar sym=0xc0000c65a0 @ line 20
+        newid [aft3rint] @ line 20
+        typeid [int] sym=0xc0000c60a0 @ line 20
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: block scope check |
+-------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t5
+
+STDOUT:
+program sym=0xc0000c8460
+    func sym=0xc0000c8460 @ line 3
+        newid [main] @ line 3
+        sig
+            formals
+            typeid [$void] sym=0xc0000c8000
+        block
+            var sym=0xc0000c84b0 @ line 4
+                newid [x] @ line 4
+                typeid [int] sym=0xc0000c80a0 @ line 4
+            block
+                var sym=0xc0000c8500 @ line 6
+                    newid [x] @ line 6
+                    typeid [bool] sym=0xc0000c8050 @ line 6
+                block
+                    var sym=0xc0000c8550 @ line 8
+                        newid [x] @ line 8
+                        typeid [string] sym=0xc0000c80f0 @ line 8
+                    = sig=void @ line 9
+                        id [x] sig=str sym=0xc0000c8550 @ line 9
+                        string [asdf] sig=str @ line 9
+                    block
+                        var sym=0xc0000c85a0 @ line 11
+                            newid [x] @ line 11
+                            typeid [int] sym=0xc0000c80a0 @ line 11
+                        = sig=void @ line 12
+                            id [x] sig=int sym=0xc0000c85a0 @ line 12
+                            + sig=int @ line 12
+                                id [x] sig=int sym=0xc0000c85a0 @ line 12
+                                int [1] sig=int @ line 12
+                    exprstmt @ line 14
+                        funccall sig=void @ line 14
+                            id [prints] sig=f(str) sym=0xc0000c8320 @ line 14
+                            actuals
+                                id [x] sig=str sym=0xc0000c8550 @ line 14
+                exprstmt @ line 16
+                    funccall sig=void @ line 16
+                        id [printb] sig=f(bool) sym=0xc0000c8230 @ line 16
+                        actuals
+                            id [x] sig=bool sym=0xc0000c8500 @ line 16
+            exprstmt @ line 18
+                funccall sig=void @ line 18
+                    id [printi] sig=f(int) sym=0xc0000c82d0 @ line 18
+                    actuals
+                        id [x] sig=int sym=0xc0000c84b0 @ line 18
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: global var declaration, complex loop |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t6
+
+STDOUT:
+
+
+STDERR:
+error: expected type, got 'bool' at or near line 3
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: parameter scope test |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t7
+
+STDOUT:
+program sym=0xc0000c6550
+    func sym=0xc0000c6460 @ line 3
+        newid [foo] @ line 3
+        sig
+            formals
+                formal
+                    newid [int] sym=0xc0000c65a0 @ line 3
+                    typeid [int] sym=0xc0000c60a0 @ line 3
+            typeid [int] sym=0xc0000c60a0 @ line 3
+        block
+            exprstmt @ line 4
+                funccall sig=void @ line 4
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 4
+                    actuals
+                        id [int] sig=int sym=0xc0000c65a0 @ line 4
+            return @ line 5
+                id [int] sig=int sym=0xc0000c65a0 @ line 5
+    func sym=0xc0000c64b0 @ line 8
+        newid [bar] @ line 8
+        sig
+            formals
+                formal
+                    newid [bar] sym=0xc0000c65f0 @ line 8
+                    typeid [int] sym=0xc0000c60a0 @ line 8
+            typeid [$void] sym=0xc0000c6000
+        block
+            emptystmt
+    func sym=0xc0000c6500 @ line 11
+        newid [string] @ line 11
+        sig
+            formals
+                formal
+                    newid [string] sym=0xc0000c6640 @ line 11
+                    typeid [int] sym=0xc0000c60a0 @ line 11
+            typeid [bool] sym=0xc0000c6050 @ line 11
+        block
+            return @ line 12
+                id [true] sig=bool sym=0xc0000c6190 @ line 12
+    func sym=0xc0000c6550 @ line 15
+        newid [main] @ line 15
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            emptystmt
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: constants can't be changed |
+----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t8
+
+STDOUT:
+
+
+STDERR:
+error: can't assign to a constant at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: nonexistent type name |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t9
+
+STDOUT:
+
+
+STDERR:
+error: unknown name 'notthere' at or near line 3
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: type name not a type |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t10
+
+STDOUT:
+
+
+STDERR:
+error: expected type, got 't' at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: formal parameters need types |
+------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t11
+
+STDOUT:
+
+
+STDERR:
+error: expected type, got 'main' at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: multiple (main) functions, same name |
+--------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t12
+
+STDOUT:
+
+
+STDERR:
+error: 'main' redefined at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: no main function |
+------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t13
+
+STDOUT:
+
+
+STDERR:
+error: missing main() function
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: main can't have arguments |
+---------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t14
+
+STDOUT:
+
+
+STDERR:
+error: main() can't have arguments at or near line 3
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: main can't have a return value |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t15
+
+STDOUT:
+
+
+STDERR:
+error: main() can't have a return value at or near line 3
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: dup check for formal parameters |
+---------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t16
+
+STDOUT:
+
+
+STDERR:
+error: 'i' redefined at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: function call as lvalue |
+-------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t17
+
+STDOUT:
+
+
+STDERR:
+error: can only assign to a variable at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: function name as lvalue |
+-------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t18
+
+STDOUT:
+
+
+STDERR:
+error: operand type mismatch for '=' at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: humongous integer literal |
+---------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t19
+
+STDOUT:
+
+
+STDERR:
+error: integer literal out of range at or near line 5
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: positive integer literal out of range |
+---------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t20
+
+STDOUT:
+
+
+STDERR:
+error: integer literal too large at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: negative integer literal out of range |
+---------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t21
+
+STDOUT:
+
+
+STDERR:
+error: integer literal too small at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "break" not inside "for" loop |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t22
+
+STDOUT:
+
+
+STDERR:
+error: break must be inside 'for' at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "break" in block, but not in "for" |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t23
+
+STDOUT:
+
+
+STDERR:
+error: break must be inside 'for' at or near line 5
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "break" in "if" block |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t24
+
+STDOUT:
+
+
+STDERR:
+error: break must be inside 'for' at or near line 5
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: missing return statement |
+--------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t25
+
+STDOUT:
+
+
+STDERR:
+error: no return statement in function at or near line 6
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: returning value from void function |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t26
+
+STDOUT:
+
+
+STDERR:
+error: this function can't return a value at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: return type mismatch |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t27
+
+STDOUT:
+
+
+STDERR:
+error: returned value has the wrong type at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: missing return type |
+---------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t28
+
+STDOUT:
+
+
+STDERR:
+error: this function must return a value at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "if" expr not a boolean type |
+------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t29
+
+STDOUT:
+
+
+STDERR:
+error: if expression must be boolean type at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "if"-"else" not a boolean type |
+--------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t30
+
+STDOUT:
+
+
+STDERR:
+error: if expression must be boolean type at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: "for" expr not a boolean type |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t31
+
+STDOUT:
+
+
+STDERR:
+error: for expression must be boolean type at or near line 10
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: legit expression statements |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t32
+
+STDOUT:
+program sym=0xc0000784b0
+    func sym=0xc0000784b0 @ line 3
+        newid [main] @ line 3
+        sig
+            formals
+            typeid [$void] sym=0xc000078050
+        block
+            var sym=0xc000078500 @ line 4
+                newid [i] @ line 4
+                typeid [int] sym=0xc0000780f0 @ line 4
+            exprstmt @ line 5
+                id [i] sig=int sym=0xc000078500 @ line 5
+            exprstmt @ line 6
+                int [42] sig=int @ line 6
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: built-in routine check |
+------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t33
+
+STDOUT:
+program sym=0xc0000c6460
+    func sym=0xc0000c6460 @ line 3
+        newid [main] @ line 3
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            exprstmt @ line 4
+                funccall sig=void @ line 4
+                    id [prints] sig=f(str) sym=0xc0000c6320 @ line 4
+                    actuals
+                        string [Hello, world!\n] sig=str @ line 4
+            exprstmt @ line 5
+                funccall sig=void @ line 5
+                    id [printb] sig=f(bool) sym=0xc0000c6230 @ line 5
+                    actuals
+                        id [true] sig=bool sym=0xc0000c6190 @ line 5
+            exprstmt @ line 6
+                funccall sig=void @ line 6
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 6
+                    actuals
+                        int [123] sig=int @ line 6
+            exprstmt @ line 7
+                funccall sig=void @ line 7
+                    id [printc] sig=f(int) sym=0xc0000c6280 @ line 7
+                    actuals
+                        int [123] sig=int @ line 7
+            var sym=0xc0000c64b0 @ line 8
+                newid [ch] @ line 8
+                typeid [int] sym=0xc0000c60a0 @ line 8
+            = sig=void @ line 9
+                id [ch] sig=int sym=0xc0000c64b0 @ line 9
+                funccall sig=int @ line 9
+                    id [getchar] sig=f() sym=0xc0000c6370 @ line 9
+                    actuals
+            exprstmt @ line 10
+                funccall sig=void @ line 10
+                    id [halt] sig=f() sym=0xc0000c63c0 @ line 10
+                    actuals
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: actual parameter type check |
+-----------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t34
+
+STDOUT:
+
+
+STDERR:
+error: number/type of arguments doesn't match function declaration at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: operand type mismatch |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t35
+
+STDOUT:
+
+
+STDERR:
+error: operand type mismatch for '+' at or near line 10
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: another actual parameter type check |
+-------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t36
+
+STDOUT:
+
+
+STDERR:
+error: number/type of arguments doesn't match function declaration at or near line 7
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: return+argument checks |
+------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t37
+
+STDOUT:
+
+
+STDERR:
+error: number/type of arguments doesn't match function declaration at or near line 8
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: scope check and undefined variable |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t38
+
+STDOUT:
+
+
+STDERR:
+error: unknown name 'c' at or near line 10
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: redefined variable |
+--------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t39
+
+STDOUT:
+
+
+STDERR:
+error: 'b' redefined at or near line 13
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: comparable and ordered comparisons |
+------------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t40
+
+STDOUT:
+
+
+STDERR:
+error: operand type mismatch for '>' at or near line 8
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: int/bool distinction |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t41
+
+STDOUT:
+
+
+STDERR:
+error: operand type mismatch for '=' at or near line 5
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: deep type propagation |
+-----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t42
+
+STDOUT:
+program sym=0xc0000c6460
+    func sym=0xc0000c6460 @ line 3
+        newid [main] @ line 3
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            var sym=0xc0000c64b0 @ line 4
+                newid [x] @ line 4
+                typeid [int] sym=0xc0000c60a0 @ line 4
+            exprstmt @ line 5
+                >= sig=bool @ line 5
+                    - sig=int @ line 5
+                        + sig=int @ line 5
+                            int [2] sig=int @ line 5
+                            * sig=int @ line 5
+                                int [3] sig=int @ line 5
+                                int [5] sig=int @ line 5
+                        int [123] sig=int @ line 5
+                    u- sig=int @ line 5
+                        u- sig=int @ line 5
+                            u- sig=int @ line 5
+                                id [x] sig=int sym=0xc0000c64b0 @ line 5
+            var sym=0xc0000c6500 @ line 7
+                newid [b] @ line 7
+                typeid [bool] sym=0xc0000c6050 @ line 7
+            exprstmt @ line 8
+                != sig=bool @ line 8
+                    ! sig=bool @ line 8
+                        ! sig=bool @ line 8
+                            ! sig=bool @ line 8
+                                || sig=bool @ line 8
+                                    && sig=bool @ line 8
+                                        id [true] sig=bool sym=0xc0000c6190 @ line 8
+                                        id [false] sig=bool sym=0xc0000c61e0 @ line 8
+                                    == sig=bool @ line 8
+                                        id [b] sig=bool sym=0xc0000c6500 @ line 8
+                                        id [true] sig=bool sym=0xc0000c6190 @ line 8
+                    <= sig=bool @ line 8
+                        int [5] sig=int @ line 8
+                        int [6] sig=int @ line 8
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: redefining "true" and "false" |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t43
+
+STDOUT:
+program sym=0xc0000c64b0
+    globvar sym=0xc0000c6460 @ line 3
+        newid [true] @ line 3
+        typeid [int] sym=0xc0000c60a0 @ line 3
+    func sym=0xc0000c64b0 @ line 5
+        newid [main] @ line 5
+        sig
+            formals
+            typeid [$void] sym=0xc0000c6000
+        block
+            var sym=0xc0000c6500 @ line 6
+                newid [false] @ line 6
+                typeid [int] sym=0xc0000c60a0 @ line 6
+            exprstmt @ line 7
+                funccall sig=void @ line 7
+                    id [printi] sig=f(int) sym=0xc0000c62d0 @ line 7
+                    actuals
+                        * sig=int @ line 7
+                            id [true] sig=int sym=0xc0000c6460 @ line 7
+                            id [false] sig=int sym=0xc0000c6500 @ line 7
+
+
+
+STDERR:
+
+
+RETURN CODE: 0
+
+-------------------------------------------------------------------------------
+Test: call of non-function |
+----------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t44
+
+STDOUT:
+
+
+STDERR:
+error: can't call something that isn't a function at or near line 4
+
+
+RETURN CODE: 1
+
+-------------------------------------------------------------------------------
+Test: type id used in wrong context |
+-------------------------------------
+
+% ./golf /home/profs/aycock/411/TEST/ms3/check.t45
+
+STDOUT:
+
+
+STDERR:
+error: can't use type 'int' here at or near line 5
+
+
+RETURN CODE: 1
+
+Run ended on Wed Mar 22 00:28:58 2023
+
