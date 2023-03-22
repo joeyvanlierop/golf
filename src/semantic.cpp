@@ -42,6 +42,27 @@ void Semantic::pass_1() {
 			symbol_table.define(ast->get_child(0), {});
 		}
 	});
+
+	// Populate the global identifiers
+	ast.pre([this](auto ast) {
+		if (ast->type == "globalvar") {
+			auto var_decl = symbol_table.lookup(ast->get_child(0));
+			auto type = symbol_table.lookup(ast->get_child(1));
+			var_decl->sig = type->sig;
+			var_decl->is_const = false;
+			var_decl->is_type = false;
+			ast->sym = var_decl;
+		} else if (ast->type == "func") {
+			auto func_decl = symbol_table.lookup(ast->get_child(0));
+			auto sig = encode_func_decl(ast);
+			func_decl->sig = sig;
+			auto rt_sig = symbol_table.lookup(ast->get_child(1)->get_child(1));
+			func_decl->rt_sig = rt_sig->sig;
+			func_decl->is_const = false;
+			func_decl->is_type = false;
+			ast->sym = func_decl;
+		}
+	});
 }
 
 /**
@@ -56,26 +77,7 @@ void Semantic::pass_1() {
  */
 void Semantic::pass_2() {
 	ast.pre_post([this](auto ast) {
-					 if (ast->type == "globalvar") {
-						 auto var_decl = symbol_table.lookup(ast->get_child(0));
-						 auto type = symbol_table.lookup(ast->get_child(1));
-						 var_decl->sig = type->sig;
-						 var_decl->is_const = false;
-						 var_decl->is_type = false;
-						 ast->sym = var_decl;
-					 } else if (ast->type == "func") {
-						 auto func_decl = symbol_table.lookup(ast->get_child(0));
-						 auto sig = encode_func_decl(ast);
-						 func_decl->sig = sig;
-						 auto rt_sig = symbol_table.lookup(ast->get_child(1)->get_child(1));
-						 func_decl->rt_sig = rt_sig->sig;
-						 func_decl->is_const = false;
-						 func_decl->is_type = false;
-						 ast->sym = func_decl;
-					 } else if (ast->type == "var") {
-						 auto type = symbol_table.lookup(ast->get_child(1));
-						 ast->sym = symbol_table.define(ast->get_child(0), {type->sig, "", false, false});
-					 } else if (ast->type == "typeid") {
+					 if (ast->type == "typeid") {
 						 auto type = symbol_table.lookup(ast);
 						 if (!type->is_type)
 							 Logger::error(input, ast->line, ast->column, ast->attr.length(), "expected type");
@@ -115,6 +117,9 @@ void Semantic::pass_2() {
 				 [this](auto ast) {
 					 if (ast->type == "block") {
 						 symbol_table.close_scope();
+					 } else if (ast->type == "var") {
+						 auto type = symbol_table.lookup(ast->get_child(1));
+						 ast->sym = symbol_table.define(ast->get_child(0), {type->sig, "", false, false});
 					 }
 				 });
 }
@@ -243,7 +248,7 @@ void Semantic::pass_4() {
 								 Logger::error(input, ast->line, ast->column, ast->attr.length(),
 											   "main function cannot have a return type");
 							 main_count++;
-						 } else {
+						 } else if (ast->get_child(1)->get_child(1)->attr != "$void") {
 							 unreturned = ast->get_child(1)->get_child(1)->attr;
 						 }
 					 } else if (ast->type == "return") {
@@ -263,10 +268,12 @@ void Semantic::pass_4() {
 					 } else if (ast->type == "=") {
 						 auto left = ast->get_child(0);
 						 auto right = ast->get_child(1);
-						 if (left->type == "funccall")
-							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a function");
+						 if (left->type != "id")
+							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a non-variable");
 						 else if (left->sym->is_const)
 							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a constant");
+						 else if (right->sym->is_type)
+							 Logger::error(input, right->line, right->column, right->attr.length(), "cannot assign a type");
 						 else if (left->sig != right->sig)
 							 Logger::error(input, left->line, left->column, left->attr.length(),
 										   "cannot assign \"" + right->sig + "\" to \"" + left->attr + "\"");
