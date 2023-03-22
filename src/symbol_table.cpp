@@ -39,6 +39,7 @@ Record* SymbolTable::lookup(AST* ast) {
 
     // Error if no record exists
     Logger::error(input, line, column, name.length(), "unknown identifier \"" + name + "\"");
+	throw 0;
 }
 
 Record* SymbolTable::lookup(std::string name) {
@@ -49,6 +50,7 @@ Record* SymbolTable::lookup(std::string name) {
 
     // Error if no record exists
     Logger::error(input, 0, 0, name.length(), "unknown identifier \"" + name + "\"");
+	throw 0;
 }
 
 void SymbolTable::open_scope() {
