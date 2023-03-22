@@ -48,6 +48,8 @@ void Semantic::pass_1() {
 		if (ast->type == "globalvar") {
 			auto var_decl = symbol_table.lookup(ast->get_child(0));
 			auto type = symbol_table.lookup(ast->get_child(1));
+			if (!type->is_type)
+				Logger::error(input, ast->get_child(1)->line, ast->get_child(1)->column, ast->get_child(1)->attr.length(), "expected type");
 			var_decl->sig = type->sig;
 			var_decl->is_const = false;
 			var_decl->is_type = false;
