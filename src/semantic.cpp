@@ -77,12 +77,7 @@ void Semantic::pass_1() {
  */
 void Semantic::pass_2() {
 	ast.pre_post([this](auto ast) {
-					 if (ast->type == "typeid") {
-						 auto type = symbol_table.lookup(ast);
-						 if (!type->is_type)
-							 Logger::error(input, ast->line, ast->column, ast->attr.length(), "expected type");
-						 ast->sym = type;
-					 } else if (ast->type == "id") {
+					 if (ast->type == "id") {
 						 auto var_decl = symbol_table.lookup(ast);
 						 ast->sym = var_decl;
 						 ast->sig = var_decl->sig;
@@ -111,6 +106,9 @@ void Semantic::pass_2() {
 						 for (auto formal: ast->children) {
 							 auto type = symbol_table.lookup(formal->get_child(1));
 							 ast->sym = symbol_table.define(formal->get_child(0), {type->sig, "", false, false});
+							 if (!type->is_type)
+								 Logger::error(input, formal->line, formal->column, formal->attr.length(), "expected type");
+							 formal->get_child(1)->sym = type;
 						 }
 					 }
 				 },
@@ -120,6 +118,11 @@ void Semantic::pass_2() {
 					 } else if (ast->type == "var") {
 						 auto type = symbol_table.lookup(ast->get_child(1));
 						 ast->sym = symbol_table.define(ast->get_child(0), {type->sig, "", false, false});
+						 if (!type->is_type)
+							 Logger::error(input, ast->line, ast->column, ast->attr.length(), "expected type");
+						 ast->get_child(1)->sym = type;
+					 } else if (ast->type == "formals") {
+						 symbol_table.close_scope();
 					 }
 				 });
 }
@@ -272,7 +275,7 @@ void Semantic::pass_4() {
 							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a non-variable");
 						 else if (left->sym->is_const)
 							 Logger::error(input, left->line, left->column, left->attr.length(), "cannot assign to a constant");
-						 else if (right->sym->is_type)
+						 else if (right->type == "id" && right->sym->is_type)
 							 Logger::error(input, right->line, right->column, right->attr.length(), "cannot assign a type");
 						 else if (left->sig != right->sig)
 							 Logger::error(input, left->line, left->column, left->attr.length(),
