@@ -7,8 +7,12 @@ golf.exe
 *.swp
 
 # CLion stuff
-cmake-build-debug/
+cmake-build-debug*/
+.cmake
 
-# Testing stuff
-# run
-# run.output
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
