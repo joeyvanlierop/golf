@@ -1,4 +1,4 @@
-Run started on Tue Mar 21 22:38:03 2023
+Run started on Tue Mar 21 23:20:10 2023
 
 Hostname: csx.cs.ucalgary.ca
 
@@ -111,16 +111,26 @@ Test: local var version of check.t2 |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t3
 
 STDOUT:
+program
+	func sym=0x12a5250 @ (4, 1)
+		newid [main] @ (4, 6)
+		sig
+			formals
+			typeid [$void] sym=0x12a4a70
+		block
+			var sym=0x12a52e0 @ (5, 2)
+				newid [int] @ (5, 6)
+				typeid [int] sym=0x12a4b90 @ (5, 10)
+			funccall sig=void @ (6, 8)
+				id [printi] sig=f(int) sym=0x12a4f80 @ (6, 2)
+				actuals
+					id [int] sig=int sym=0x12a52e0 @ (6, 9)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t3:5:10
-  | 
-5 |     var int int
-  |             ^~~ error: expected type
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: global name test |
@@ -129,16 +139,59 @@ Test: global name test |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t4
 
 STDOUT:
+program
+	globalvar sym=0x10ee840 @ (3, 1)
+		newid [b4int] @ (3, 5)
+		typeid [int] sym=0x10ee180 @ (3, 11)
+	func sym=0x10ee8d0 @ (5, 1)
+		newid [b4func] @ (5, 6)
+		sig
+			formals
+			typeid [$void] sym=0x10ee060
+		block
+			funccall sig=void @ (6, 8)
+				id [printi] sig=f(int) sym=0x10ee570 @ (6, 2)
+				actuals
+					id [b4int] sig=int sym=0x10ee840 @ (6, 9)
+			funccall sig=void @ (7, 8)
+				id [printi] sig=f(int) sym=0x10ee570 @ (7, 2)
+				actuals
+					id [aft3rint] sig=int sym=0x10eea80 @ (7, 9)
+			funccall sig=void @ (8, 11)
+				id [aft3rfunc] sig=f() sym=0x10ee9f0 @ (8, 2)
+				actuals
+	func sym=0x10ee960 @ (11, 1)
+		newid [main] @ (11, 6)
+		sig
+			formals
+			typeid [$void] sym=0x10ee060
+		block
+			funccall sig=void @ (12, 8)
+				id [b4func] sig=f() sym=0x10ee8d0 @ (12, 2)
+				actuals
+	func sym=0x10ee9f0 @ (15, 1)
+		newid [aft3rfunc] @ (15, 6)
+		sig
+			formals
+			typeid [$void] sym=0x10ee060
+		block
+			funccall sig=void @ (16, 8)
+				id [printi] sig=f(int) sym=0x10ee570 @ (16, 2)
+				actuals
+					id [b4int] sig=int sym=0x10ee840 @ (16, 9)
+			funccall sig=void @ (17, 8)
+				id [printi] sig=f(int) sym=0x10ee570 @ (17, 2)
+				actuals
+					id [aft3rint] sig=int sym=0x10eea80 @ (17, 9)
+	globalvar sym=0x10eea80 @ (20, 1)
+		newid [aft3rint] @ (20, 5)
+		typeid [int] sym=0x10ee180 @ (20, 14)
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t4:7:8
-  | 
-7 |     printi(aft3rint)
-  |           ^ error: function call does not match function signature
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: block scope check |
@@ -147,54 +200,12 @@ Test: block scope check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t5
 
 STDOUT:
-program
-	func sym=0x1fe5620 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x1fe4e40
-		block
-			var sym=0x1fe56b0 @ (4, 2)
-				newid [x] @ (4, 6)
-				typeid [int] sym=0x1fe4f60 @ (4, 8)
-			block
-				var sym=0x1fe5740 @ (6, 3)
-					newid [x] @ (6, 7)
-					typeid [bool] sym=0x1fe4ed0 @ (6, 9)
-				block
-					var sym=0x1fe57d0 @ (8, 4)
-						newid [x] @ (8, 8)
-						typeid [string] sym=0x1fe4ff0 @ (8, 10)
-					= sig=void @ (9, 6)
-						id [x] sig=str sym=0x1fe57d0 @ (9, 4)
-						string [asdf] sig=str @ (9, 9)
-					block
-						var sym=0x1fe5860 @ (11, 5)
-							newid [x] @ (11, 9)
-							typeid [int] sym=0x1fe4f60 @ (11, 11)
-						= sig=void @ (12, 7)
-							id [x] sig=int sym=0x1fe5860 @ (12, 5)
-							+ sig=int @ (12, 11)
-								id [x] sig=int sym=0x1fe5860 @ (12, 9)
-								int [1] sig=int @ (12, 13)
-					funccall sig=void @ (14, 10)
-						id [prints] sig=f(str) sym=0x1fe53e0 @ (14, 4)
-						actuals
-							id [x] sig=str sym=0x1fe57d0 @ (14, 11)
-				funccall sig=void @ (16, 9)
-					id [printb] sig=f(bool) sym=0x1fe5230 @ (16, 3)
-					actuals
-						id [x] sig=bool sym=0x1fe5740 @ (16, 10)
-			funccall sig=void @ (18, 8)
-				id [printi] sig=f(int) sym=0x1fe5350 @ (18, 2)
-				actuals
-					id [x] sig=int sym=0x1fe56b0 @ (18, 9)
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: global var declaration, complex loop |
@@ -407,7 +418,7 @@ STDERR:
 --> /home/profs/aycock/411/TEST/ms3/check.t17:6:5
   | 
 6 |     foo() = 123
-  |        ^ error: cannot assign to a function
+  |        ^ error: cannot assign to a non-variable
 
 
 RETURN CODE: 1
@@ -422,13 +433,9 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t18:6:2
-  | 
-6 |     foo = 123
-  |     ^~~ error: cannot assign "int" to "foo"
 
 
-RETURN CODE: 1
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: humongous integer literal |
@@ -672,16 +679,16 @@ Test: legit expression statements |
 
 STDOUT:
 program
-	func sym=0x1c81ac0 @ (3, 1)
+	func sym=0x1adfa00 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0x1c812e0
+			typeid [$void] sym=0x1adf110
 		block
-			var sym=0x1c81b50 @ (4, 2)
+			var sym=0x1adfa90 @ (4, 2)
 				newid [i] @ (4, 6)
-				typeid [int] sym=0x1c81400 @ (4, 8)
-			id [i] sig=int sym=0x1c81b50 @ (5, 2)
+				typeid [int] sym=0x1adf230 @ (4, 8)
+			id [i] sig=int sym=0x1adfa90 @ (5, 2)
 			int [42] sig=int @ (6, 2)
 
 
@@ -697,46 +704,12 @@ Test: built-in routine check |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t33
 
 STDOUT:
-program
-	func sym=0x6d2b70 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0x6d2390
-		block
-			funccall sig=void @ (4, 15)
-				id [prints] sig=f(str) sym=0x6d2930 @ (4, 9)
-				actuals
-					string [Hello, world!\n] sig=str @ (4, 17)
-			funccall sig=void @ (5, 15)
-				id [printb] sig=f(bool) sym=0x6d2780 @ (5, 9)
-				actuals
-					id [true] sig=bool sym=0x6d2660 @ (5, 16)
-			funccall sig=void @ (6, 15)
-				id [printi] sig=f(int) sym=0x6d28a0 @ (6, 9)
-				actuals
-					int [123] sig=int @ (6, 16)
-			funccall sig=void @ (7, 15)
-				id [printc] sig=f(int) sym=0x6d2810 @ (7, 9)
-				actuals
-					int [123] sig=int @ (7, 16)
-			var sym=0x6d2c00 @ (8, 9)
-				newid [ch] @ (8, 13)
-				typeid [int] sym=0x6d24b0 @ (8, 16)
-			= sig=void @ (9, 5)
-				id [ch] sig=int sym=0x6d2c00 @ (9, 2)
-				funccall sig=int @ (9, 14)
-					id [getchar] sig=f() sym=0x6d29c0 @ (9, 7)
-					actuals
-			funccall sig=void @ (10, 6)
-				id [halt] sig=f() sym=0x6d2a50 @ (10, 2)
-				actuals
 
 
 STDERR:
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Segmentation fault
 
 -------------------------------------------------------------------------------
 Test: actual parameter type check |
@@ -856,10 +829,10 @@ STDOUT:
 
 
 STDERR:
---> /home/profs/aycock/411/TEST/ms3/check.t40:4:8
+--> /home/profs/aycock/411/TEST/ms3/check.t40:8:7
   | 
-4 |     "abc" == "def"
-  |           ^ error: operand type mismatch
+8 |     true > false
+  |          ^ error: operand type mismatch
 
 
 RETURN CODE: 1
@@ -890,15 +863,15 @@ Test: deep type propagation |
 
 STDOUT:
 program
-	func sym=0x13e0290 @ (3, 1)
+	func sym=0x15eb200 @ (3, 1)
 		newid [main] @ (3, 6)
 		sig
 			formals
-			typeid [$void] sym=0x13dfab0
+			typeid [$void] sym=0x15eaa20
 		block
-			var sym=0x13e0320 @ (4, 2)
+			var sym=0x15eb290 @ (4, 2)
 				newid [x] @ (4, 6)
-				typeid [int] sym=0x13dfbd0 @ (4, 8)
+				typeid [int] sym=0x15eab40 @ (4, 8)
 			>= sig=bool @ (5, 18)
 				- sig=int @ (5, 12)
 					+ sig=int @ (5, 4)
@@ -910,21 +883,21 @@ program
 				u- sig=int @ (5, 21)
 					u- sig=int @ (5, 23)
 						u- sig=int @ (5, 25)
-							id [x] sig=int sym=0x13e0320 @ (5, 26)
-			var sym=0x13e03b0 @ (7, 2)
+							id [x] sig=int sym=0x15eb290 @ (5, 26)
+			var sym=0x15eb320 @ (7, 2)
 				newid [b] @ (7, 6)
-				typeid [bool] sym=0x13dfb40 @ (7, 8)
+				typeid [bool] sym=0x15eaab0 @ (7, 8)
 			!= sig=bool @ (8, 34)
 				! sig=bool @ (8, 2)
 					! sig=bool @ (8, 3)
 						! sig=bool @ (8, 4)
 							|| sig=bool @ (8, 20)
 								&& sig=bool @ (8, 11)
-									id [true] sig=bool sym=0x13dfd80 @ (8, 6)
-									id [false] sig=bool sym=0x13dfe10 @ (8, 14)
+									id [true] sig=bool sym=0x15eacf0 @ (8, 6)
+									id [false] sig=bool sym=0x15ead80 @ (8, 14)
 								== sig=bool @ (8, 25)
-									id [b] sig=bool sym=0x13e03b0 @ (8, 23)
-									id [true] sig=bool sym=0x13dfd80 @ (8, 28)
+									id [b] sig=bool sym=0x15eb320 @ (8, 23)
+									id [true] sig=bool sym=0x15eacf0 @ (8, 28)
 				<= sig=bool @ (8, 40)
 					int [5] sig=int @ (8, 38)
 					int [6] sig=int @ (8, 43)
@@ -943,24 +916,24 @@ Test: redefining "true" and "false" |
 
 STDOUT:
 program
-	globalvar sym=0x12a9510 @ (3, 1)
+	globalvar sym=0xa0f460 @ (3, 1)
 		newid [true] @ (3, 5)
-		typeid [int] sym=0x12a8e50 @ (3, 10)
-	func sym=0x12a95a0 @ (5, 1)
+		typeid [int] sym=0xa0eda0 @ (3, 10)
+	func sym=0xa0f4f0 @ (5, 1)
 		newid [main] @ (5, 6)
 		sig
 			formals
-			typeid [$void] sym=0x12a8d30
+			typeid [$void] sym=0xa0ec80
 		block
-			var sym=0x12a9630 @ (6, 2)
+			var sym=0xa0f580 @ (6, 2)
 				newid [false] @ (6, 6)
-				typeid [int] sym=0x12a8e50 @ (6, 12)
+				typeid [int] sym=0xa0eda0 @ (6, 12)
 			funccall sig=void @ (7, 8)
-				id [printi] sig=f(int) sym=0x12a9240 @ (7, 2)
+				id [printi] sig=f(int) sym=0xa0f190 @ (7, 2)
 				actuals
 					* sig=int @ (7, 14)
-						id [true] sig=int sym=0x12a9510 @ (7, 9)
-						id [false] sig=int sym=0x12a9630 @ (7, 16)
+						id [true] sig=int sym=0xa0f460 @ (7, 9)
+						id [false] sig=int sym=0xa0f580 @ (7, 16)
 
 
 STDERR:
@@ -993,25 +966,16 @@ Test: type id used in wrong context |
 % ./golf /home/profs/aycock/411/TEST/ms3/check.t45
 
 STDOUT:
-program
-	func sym=0xe4bb50 @ (3, 1)
-		newid [main] @ (3, 6)
-		sig
-			formals
-			typeid [$void] sym=0xe4b370
-		block
-			var sym=0xe4bbe0 @ (4, 2)
-				newid [x] @ (4, 6)
-				typeid [int] sym=0xe4b490 @ (4, 8)
-			= sig=void @ (5, 4)
-				id [x] sig=int sym=0xe4bbe0 @ (5, 2)
-				id [int] sig=int sym=0xe4b490 @ (5, 6)
 
 
 STDERR:
+--> /home/profs/aycock/411/TEST/ms3/check.t45:5:6
+  | 
+5 |     x = int
+  |         ^~~ error: cannot assign a type
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
-Run ended on Tue Mar 21 22:38:03 2023
+Run ended on Tue Mar 21 23:20:11 2023
 
