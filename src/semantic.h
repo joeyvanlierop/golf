@@ -72,8 +72,8 @@ using BinaryOpTable = std::map<std::string, std::vector<std::tuple<std::string, 
 inline BinaryOpTable legal_binary = {
 		{"&&", {{"bool", "bool", "bool"}}},
 		{"||", {{"bool", "bool", "bool"}}},
-		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"string", "string", "bool"}}},
-		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"string", "string", "bool"}}},
+		{"==", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"str", "str", "bool"}}},
+		{"!=", {{"bool", "bool", "bool"}, {"int", "int", "bool"}, {"str", "str", "bool"}}},
 		{">=", {{"int",  "int",  "bool"}}},
 		{">",  {{"int",  "int",  "bool"}}},
 		{"<=", {{"int",  "int",  "bool"}}},
@@ -91,4 +91,20 @@ inline UnaryOpTable legal_unary = {
 		{"u-", {{"int",  "int"}}}
 };
 
+inline std::vector<std::pair<std::string, Record>> universal_records = {
+		{"$void",   {"void",    "",     false, true}},
+		{"bool",    {"bool",    "",     false, true}},
+		{"int",     {"int",     "",     false, true}},
+		{"string",  {"str",     "",     false, true}},
+		{"$true",   {"bool",    "",     true,  false}},
+		{"true",    {"bool",    "",     true,  false}},
+		{"false",   {"bool",    "",     true,  false}},
+		{"printb",  {"f(bool)", "void", false, false}},
+		{"printc",  {"f(int)",  "void", false, false}},
+		{"printi",  {"f(int)",  "void", false, false}},
+		{"prints",  {"f(str)",  "void", false, false}},
+		{"getchar", {"f()",     "int",  false, false}},
+		{"halt",    {"f()",     "void", false, false}},
+		{"len",     {"f(str)",  "int",  false, false}},
+};
 
