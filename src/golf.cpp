@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     }
 
     // TODO: Make this not garbage
-    bool interactive = argv[1] == "repl";
+    bool interactive = std::string(argv[1]) == "repl";
 
     do {
         // Read input
