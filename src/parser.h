@@ -11,7 +11,7 @@
 class Parser {
 public:
     Parser(Input *input, std::vector<Token> tokens);
-    AST* parse(bool verbose);
+	std::shared_ptr<AST> parse(bool verbose);
 
 private:
     int current = 0;
@@ -26,25 +26,25 @@ private:
     Token consume(TokenType type, const std::string &error_message);
     bool check(TokenType type);
     bool match(TokenType expected);
-    AST* decl();
-    AST* var_decl(bool global);
-    AST* func_decl();
-    AST* func_sig();
-    AST* block();
-    AST* stmt();
-    AST* if_stmt();
-    AST* for_stmt();
-    AST* break_stmt();
-    AST* return_stmt();
-    AST* expr_stmt();
-    AST* expr();
-    AST *assignment();
-    AST *or_expr();
-    AST *and_expr();
-    AST *rel_expr();
-    AST *add_expr();
-    AST *mul_expr();
-    AST *unary_expr();
-    AST *func_call();
-    AST *operand();
+    std::shared_ptr<AST> decl();
+    std::shared_ptr<AST> var_decl(bool global);
+    std::shared_ptr<AST> func_decl();
+    std::shared_ptr<AST> func_sig();
+    std::shared_ptr<AST> block();
+    std::shared_ptr<AST> stmt();
+    std::shared_ptr<AST> if_stmt();
+    std::shared_ptr<AST> for_stmt();
+    std::shared_ptr<AST> break_stmt();
+    std::shared_ptr<AST> return_stmt();
+    std::shared_ptr<AST> expr_stmt();
+    std::shared_ptr<AST> expr();
+    std::shared_ptr<AST> assignment();
+    std::shared_ptr<AST> or_expr();
+    std::shared_ptr<AST> and_expr();
+    std::shared_ptr<AST> rel_expr();
+    std::shared_ptr<AST> add_expr();
+    std::shared_ptr<AST> mul_expr();
+    std::shared_ptr<AST> unary_expr();
+    std::shared_ptr<AST> func_call();
+    std::shared_ptr<AST> operand();
 };

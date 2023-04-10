@@ -106,27 +106,31 @@ bool Parser::match(TokenType expected) {
  * @param verbose should the abstract syntax tree be printed
  * @return abstract syntax tree (AST) representing the given list of tokens
  */
-AST *Parser::parse(bool verbose) {
-    auto ast = new AST("program");
+std::shared_ptr<AST> Parser::parse(bool verbose) {
+	// Gather statements
+	std::vector<std::shared_ptr<AST>> statements;
     while (!is_at_end()) {
         auto child = decl();
-        ast->add_child(child);
+		statements.push_back(child);
     }
+
+	// Construct program
+	auto program = std::make_shared<Program>(statements);
     if (verbose)
-        ast->print();
-    return ast;
+		program->print();
+    return program;
 }
 
 /**
  * Declaration ::= VarDecl | FuncDecl ";"
  */
-AST *Parser::decl() {
-    AST *ast;
+std::shared_ptr<AST> Parser::decl() {
+    std::shared_ptr<AST> ast;
 
     switch (peek().type) {
-        case Var:ast = var_decl(true);
+        case Var: ast = var_decl(true);
             break;
-        case Func:ast = func_decl();
+        case Func: ast = func_decl();
             break;
         default:
             Logger::error(input, peek().line, peek().column, peek().lexeme.length(),
@@ -140,62 +144,65 @@ AST *Parser::decl() {
 /**
  * VarDecl ::= "var" identifier identifier
  */
-AST *Parser::var_decl(bool global) {
+std::shared_ptr<AST> Parser::var_decl(bool global) {
+	// Must start with "var" keyword
     auto token = consume(Var);
-    auto ast = new AST(global ? "globalvar" : "var", token.line, token.column);
 
-    // Variable name
-    auto id = consume(Identifier, "variable identifier must follow the \"var\" keyword");
-    ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
+	// Variable name
+	auto idToken = consume(Identifier, "variable identifier must follow the \"var\" keyword");
+	auto id = std::make_shared<Id>(idToken.line, idToken.column, idToken.lexeme);
 
-    // Variable type
-    auto type = consume(Identifier, "variable type must follow the identifier");
-    ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
+	// Variable type
+	auto typeToken = consume(Identifier, "variable type must follow the identifier");
+	auto type = std::make_shared<Type>(typeToken.line, typeToken.column, typeToken.lexeme);
 
+
+	// Construct variable
+	// TODO: Fix this with namespaces
+    auto ast = std::make_shared<Variable>(token.line, token.column, id, type);
     return ast;
 }
 
 /**
  * FuncDecl ::= "func" identifier Signature Block
  */
-AST *Parser::func_decl() {
-    auto token = consume(Func);
-    auto ast = new AST("func", token.line, token.column);
+std::shared_ptr<AST> Parser::func_decl() {
+	// Must start with "func" keyword
+	auto token = consume(Func);
 
-    // Function name
-    auto id = consume(Identifier, "function identifier must follow the \"func\" keyword");
-    ast->add_child(new AST("newid", id.lexeme, id.line, id.column));
+	// Function name
+	auto idToken = consume(Identifier, "function identifier must follow the \"func\" keyword");
+	auto id = std::make_shared<Id>(idToken.line, idToken.column, idToken.lexeme);
 
-    // Function signature
-    auto signature = func_sig();
-    ast->add_child(signature);
+	// Function signature
+	auto signature = func_sig();
 
-    // Function body
-    auto body = block();
-    ast->add_child(body);
+	// Function body
+	auto body = block();
 
+	// Construct function
+    auto ast = std::make_shared<Function>(token.line, token.column, id, body);
     return ast;
 }
 
 /**
  * Signature ::= "(" { identifier identifier "," } ")" [ identifier ]
  */
-AST *Parser::func_sig() {
-    auto ast = new AST("sig");
-
+std::shared_ptr<AST> Parser::func_sig() {
     // Opening paren
     consume(LeftParen, "function signature must open with \"(\"");
 
     // Formals
-    auto formals = new AST("formals");
-    ast->add_child(formals);
+    std::vector<std::shared_ptr<AST>> formals;
     while (check(Identifier)) {
-        auto formal = new AST("formal");
-        auto id = consume(Identifier, "signature formal must begin with an identifier");
-        formal->add_child(new AST("newid", id.lexeme, id.line, id.column));
-        auto type = consume(Identifier, "expected a type to follow the formal identifier");
-        formal->add_child(new AST("typeid", type.lexeme, type.line, type.column));
-        formals->add_child(formal);
+        auto idToken = consume(Identifier, "signature formal must begin with an identifier");
+        auto id = std::make_shared<Id>(idToken.line, idToken.column, idToken.lexeme);
+
+        auto typeToken = consume(Identifier, "expected a type to follow the formal identifier");
+		auto type = std::make_shared<Type>(typeToken.line, typeToken.column, typeToken.lexeme);
+
+		auto formal = std::make_shared<Formal>(id, type);
+		formals.push_back(formal);
 
         if (!match(Comma))
             break;
@@ -205,31 +212,36 @@ AST *Parser::func_sig() {
     consume(RightParen, "function signature must be closed with \")\"");
 
     // Optional return type
-    auto has_type = check(Identifier);
-    if (has_type) {
-        auto type = consume(Identifier);
-        ast->add_child(new AST("typeid", type.lexeme, type.line, type.column));
+	std::shared_ptr<Type> type;
+    if (check(Identifier)) {
+        auto typeToken = consume(Identifier);
+		type = std::make_shared<Type>(typeToken.line, typeToken.column, typeToken.lexeme);
     } else {
-        ast->add_child(new AST("typeid", "$void"));
+		type = std::make_shared<Type>(-1, -1, "$void");
     }
 
+	// Construct function signature
+	auto ast = std::make_shared<FunctionSignature>(formals, type);
     return ast;
 }
 
 /**
  * Block ::= "{" { Statement } "}"
  */
-AST *Parser::block() {
-    auto ast = new AST("block");
+std::shared_ptr<AST> Parser::block() {
     consume(LeftBracket, "block must begin with \"{\"");
 
     // Block body
+	std::vector<std::shared_ptr<AST>> statements;
     while (!check(RightBracket)) {
         auto child = stmt();
-        ast->add_child(child);
+        statements.push_back(child);
     }
 
     consume(RightBracket, "block must close with \"}\"");
+
+	// Construct block
+	auto ast = std::make_shared<Block>(statements);
     return ast;
 }
 
@@ -244,8 +256,8 @@ AST *Parser::block() {
  *  | ExpressionStmt
  *  ";"
  */
-AST *Parser::stmt() {
-    AST *ast;
+std::shared_ptr<AST> Parser::stmt() {
+    std::shared_ptr<AST> ast;
 
     switch (peek().type) {
         case Var:ast = var_decl(false);
@@ -271,83 +283,92 @@ AST *Parser::stmt() {
 /**
  * IfStmt ::= "if" Expression block [ "else" IfStmt | block ]
  */
-AST *Parser::if_stmt() {
+std::shared_ptr<AST> Parser::if_stmt() {
+	// Must start with "if" keyword
     auto token = consume(If);
-    auto ast = new AST("if", token.line, token.column);
 
     // Condition
     auto condition = expr();
-    ast->add_child(condition);
 
     // If body
     auto body = block();
-    ast->add_child(body);
 
     // Optional else/else-if
+	std::shared_ptr<AST> branch;
     if (match(Else)) {
         // Else-if
-        if (check(If))
-            ast->add_child(if_stmt());
-            // Else
-        else
-            ast->add_child((new AST("else"))->add_child(block()));
-    }
+        if (check(If)) {
+			branch = if_stmt();
+		}
+		// Else
+        else {
+			auto else_body = block();
+			branch = std::make_shared<class Else>(token.line, token.column, else_body);
+		}
+	}
 
+	// Construct if
+	auto ast = std::make_shared<class If>(token.line, token.column, condition, body, branch);
     return ast;
 }
 
 /**
  * ForStmt ::= "for" Expression block
  */
-AST *Parser::for_stmt() {
+std::shared_ptr<AST> Parser::for_stmt() {
+	// Must start with "for" keyword
     auto token = consume(For);
-    auto ast = new AST("for", token.line, token.column);
 
     // Optional condition
-    AST *condition;
+    std::shared_ptr<AST> condition;
     if (check(LeftBracket)) {
-        condition = new AST("id", "$true");
+        condition = std::make_shared<Id>(-1, -1, "$true");
     } else {
         condition = expr();
     }
-    ast->add_child(condition);
 
     // For body
     auto body = block();
-    ast->add_child(body);
 
+	// Construct for
+	auto ast = std::make_shared<class For>(token.line, token.column, condition, body);
     return ast;
 }
 
 /**
  * BreakStmt ::= "break"
  */
-AST *Parser::break_stmt() {
+std::shared_ptr<AST> Parser::break_stmt() {
+	// Must start with "break" keyword
     auto token = consume(Break);
-    auto ast = new AST("break", token.line, token.column);
-    return ast;
+
+	// Construct break
+	auto ast = std::make_shared<class Break>(token.line, token.column);
+	return ast;
 }
 
 /**
  * ReturnStmt ::= "return" [ Expression ]
  */
-AST *Parser::return_stmt() {
+std::shared_ptr<AST> Parser::return_stmt() {
+	// Must start with "return" keyword
     auto token = consume(Return);
-    auto ast = new AST("return", token.line, token.column);
 
     // Optional return expression
+	std::shared_ptr<AST> value;
     if (!check(Semicolon)) {
-        auto child = expr();
-        ast->add_child(child);
-    }
+        value = expr();
+	}
 
+	// Construct return
+	auto ast = std::make_shared<class Return>(token.line, token.column, value);
     return ast;
 }
 
 /**
  * ExpressionStmt ::= Assignment
  */
-AST *Parser::expr_stmt() {
+std::shared_ptr<AST> Parser::expr_stmt() {
     auto ast = assignment();
     return ast;
 }
@@ -355,13 +376,13 @@ AST *Parser::expr_stmt() {
 /**
  * Assignment ::= Expr "=" Expr | Expr
  */
-AST *Parser::assignment() {
+std::shared_ptr<AST> Parser::assignment() {
     auto l = expr();
 
     if (match(Equal)) {
         auto op = previous();
         auto r = expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+        l = std::make_shared<Assignment>(op.line, op.column, l, r);
     }
 
     return l;
@@ -370,7 +391,7 @@ AST *Parser::assignment() {
 /**
  * Expression ::= OrExpr
  */
-AST *Parser::expr() {
+std::shared_ptr<AST> Parser::expr() {
     auto ast = or_expr();
     return ast;
 }
@@ -378,13 +399,13 @@ AST *Parser::expr() {
 /**
  * OrExpr ::= AndExpr { "||" AndExpr }
  */
-AST *Parser::or_expr() {
+std::shared_ptr<AST> Parser::or_expr() {
     auto l = and_expr();
 
     while (match(Or)) {
         auto op = previous();
         auto r = and_expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+        l = std::make_shared<Binary>(op.line, op.column, op.lexeme, l, r);
     }
 
     return l;
@@ -393,13 +414,13 @@ AST *Parser::or_expr() {
 /**
  * AndExpr ::= RelExpr { "&&" RelExpr }
  */
-AST *Parser::and_expr() {
+std::shared_ptr<AST> Parser::and_expr() {
     auto l = rel_expr();
 
     while (match(And)) {
         auto op = previous();
         auto r = rel_expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+		l = std::make_shared<Binary>(op.line, op.column, op.lexeme, l, r);
     }
 
     return l;
@@ -408,14 +429,14 @@ AST *Parser::and_expr() {
 /**
  * RelExpr ::= AddExpr { ("==" | "!=" | "<" | "<=" | ">" | ">=") AddExpr }
  */
-AST *Parser::rel_expr() {
+std::shared_ptr<AST> Parser::rel_expr() {
     auto l = add_expr();
 
     while (match(EqualEqual) || match(NotEqual) || match(Less) ||
            match(LessEqual) || match(Greater) || match(GreaterEqual)) {
         auto op = previous();
         auto r = add_expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+		l = std::make_shared<Binary>(op.line, op.column, op.lexeme, l, r);
     }
 
     return l;
@@ -424,13 +445,13 @@ AST *Parser::rel_expr() {
 /**
  * AddExpr ::= MulExpr { ("+" | "-") MulExpr }
  */
-AST *Parser::add_expr() {
+std::shared_ptr<AST> Parser::add_expr() {
     auto l = mul_expr();
 
     while (match(Add) || match(Subtract)) {
         auto op = previous();
         auto r = mul_expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+		l = std::make_shared<Binary>(op.line, op.column, op.lexeme, l, r);
     }
 
     return l;
@@ -439,13 +460,13 @@ AST *Parser::add_expr() {
 /**
  * MulExpr ::= UnaryExpr { ("*" | "/" | "%") UnaryExpr }
  */
-AST *Parser::mul_expr() {
+std::shared_ptr<AST> Parser::mul_expr() {
     auto l = unary_expr();
 
     while (match(Multiply) || match(Divide) || match(Modulo)) {
         auto op = previous();
         auto r = unary_expr();
-        l = (new AST(op.lexeme, op.line, op.column))->add_child(l)->add_child(r);
+		l = std::make_shared<Binary>(op.line, op.column, op.lexeme, l, r);
     }
 
     return l;
@@ -454,20 +475,20 @@ AST *Parser::mul_expr() {
 /**
  * UnaryExpr ::= ("!" | "-") UnaryExpr | FuncCall
  */
-AST *Parser::unary_expr() {
+std::shared_ptr<AST> Parser::unary_expr() {
     // TODO: Refactor this to be more concise if you are out of fun things to do in life :)
     if (match(Not)) {
         auto op = previous();
         auto r = unary_expr();
-        return (new AST(op.lexeme, op.line, op.column))->add_child(r);
+        return std::make_shared<Unary>(op.line, op.column, op.lexeme, r);
     }
     if (match(Subtract)) {
         // TODO: Hacky solution for negative integers
         if(match(Integer))
-            return new AST("int", "-" + previous().lexeme, previous().line, previous().column - 1);
+			return std::make_shared<Literal>(previous().line, previous().column - 1, "-" + previous().lexeme, Literal::Type::Int);
         auto op = previous();
         auto r = unary_expr();
-        return (new AST("u" + op.lexeme, op.line, op.column))->add_child(r);
+		return std::make_shared<Unary>(op.line, op.column, "u" + op.lexeme, r);
     }
 
     return func_call();
@@ -476,41 +497,44 @@ AST *Parser::unary_expr() {
 /**
  * FuncCall ::= Operand | Operand "(" [ Expression { "," Expression } ] ")"
  */
-AST *Parser::func_call() {
+std::shared_ptr<AST> Parser::func_call() {
     auto ast = operand();
 
-    // Arguments
-    while (match(LeftParen)) {
-        ast = (new AST("funccall", previous().line, previous().column))->add_child(ast);
-        auto actuals = new AST("actuals");
-        ast->add_child(actuals);
-        while (!match(RightParen)) {
-            actuals->add_child(expr());
-            if (!match(Comma)) {
-                consume(RightParen, "function call must closed with \")\"");
-                break;
-            }
-        }
-    }
+	// Not a function without the paren
+	if(!match(LeftParen)) {
+		return ast;
+	}
 
+    // Arguments
+	std::vector<std::shared_ptr<AST>> actuals;
+	while (!match(RightParen)) {
+		actuals.push_back(expr());
+		if (!match(Comma)) {
+			consume(RightParen, "function call must closed with \")\"");
+			break;
+		}
+	}
+
+	ast = std::make_shared<FunctionCall>(ast, actuals);
     return ast;
 }
 
 /**
  * Operand ::= int_lit | string_lit | identifier | ";" | "(" Expression ")"
  */
-AST *Parser::operand() {
+std::shared_ptr<AST> Parser::operand() {
     if (match(Integer))
-        return new AST("int", previous().lexeme, previous().line, previous().column);
+        return std::make_shared<Literal>(previous().line, previous().column, previous().lexeme, Literal::Type::Int);
 
     if (match(String))
-        return new AST("string", previous().lexeme, previous().line, previous().column);
+        return std::make_shared<Literal>(previous().line, previous().column, previous().lexeme, Literal::Type::String);
 
     if (match(Identifier))
-        return new AST("id", previous().lexeme, previous().line, previous().column);
+        return std::make_shared<Id>(previous().line, previous().column, previous().lexeme);
 
     if (check(Semicolon))
-        return new AST("emptystmt");
+        return std::make_shared<Empty>();
+
 
     if (match(LeftParen)) {
         auto ast = expr();

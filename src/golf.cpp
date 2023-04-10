@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
         auto ast = parser.parse(false);
 
         // Analyze syntax
-        Semantic semantic(input, *ast);
-        auto annotated_ast = semantic.analyze(true);
+//        Semantic semantic(input, *ast);
+//        auto annotated_ast = semantic.analyze(true);
     } while(interactive);
 
     return EXIT_SUCCESS;

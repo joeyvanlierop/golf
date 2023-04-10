@@ -54,13 +54,13 @@ enum TokenType {
 };
 
 static std::map<std::string, TokenType> Keywords = {
-        {"break", Break},
-        {"else", Else},
-        {"for", For},
-        {"func", Func},
-        {"if", If},
+        {"break",  Break},
+        {"else",   Else},
+        {"for",    For},
+        {"func",   Func},
+        {"if",     If},
         {"return", Return},
-        {"var", Var},
+        {"var",    Var},
 };
 
 std::ostream &operator<<(std::ostream &os, TokenType tokenType);

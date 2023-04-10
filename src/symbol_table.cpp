@@ -8,7 +8,8 @@ SymbolTable::SymbolTable(Input *input): input(input), scopes(0) { }
 
 Record* SymbolTable::define(AST* ast, Record record) {
     // What info do we need from the ast
-    auto name = ast->attr;
+//    auto name = ast->attr;
+    auto name = std::string("TODO");
     auto line = ast->line;
     auto column = ast->column;
 
@@ -28,7 +29,8 @@ Record* SymbolTable::define(std::string name, Record record) {
 
 Record* SymbolTable::lookup(AST* ast) {
     // What info do we need from the ast
-    auto name = ast->attr;
+//    auto name = ast->attr;
+	auto name = std::string("TODO");
     auto line = ast->line;
     auto column = ast->column;
 
