@@ -5,6 +5,7 @@
 #include "input.h"
 #include "repl_input.h"
 #include "semantic.h"
+#include "code_gen.h"
 
 /**
  * The main function of the program
@@ -44,7 +45,10 @@ int main(int argc, char* argv[]) {
 
         // Analyze syntax
         Semantic semantic(input, *ast);
-        auto annotated_ast = semantic.analyze(true);
+        auto annotated_ast = semantic.analyze(false);
+
+        // Generate code
+		traverse(ast);
     } while(interactive);
 
     return EXIT_SUCCESS;

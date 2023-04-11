@@ -10,6 +10,8 @@ public:
     std::string attr;
     std::string type;
 	std::string sig;
+	std::string reg;
+	std::string parent_id;
 	Record* sym;
     int line;
     int column;
