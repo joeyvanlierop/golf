@@ -1,22 +1,51 @@
 #pragma once
 
 #include <string>
-#include <iostream>
+#include <map>
 
 #include "ast.h"
 
-void get_char();
-void prints();
-void printi();
-void halt();
-void printb();
-void printc();
+class Label {
+private:
+	static int counter;
+	int value;
+public:
+	Label() {
+		value = counter++;
+	}
+	std::string to_string() {
+		return "L" + std::to_string(value);
+	}
+};
 
-void gen_pass1(AST * node, int direction);
-void gen_pass2(AST * node, int direction);
+class Global {
+private:
+	static int counter;
+	int value;
+public:
+	Global() {
+		value = counter++;
+	}
+	std::string to_string() {
+		return "G" + std::to_string(value);
+	}
+};
 
-std::string get_reg(AST * node);
-std::string get_identifier_addr(std::string id);
+class StrGlobal {
+private:
+	static int counter;
+	int value;
+public:
+	StrGlobal() {
+		value = counter++;
+	}
+	std::string to_string() {
+		return "S" + std::to_string(value);
+	}
+};
 
-void customTraverse(AST * root, void (*callback)(AST *, int));
-void traverse(AST * root);
+void emit(std::string line);
+void gen_pass_0(AST *ast);
+void gen_pass_1(AST *ast, std::map<std::string, int> locals, int offset);
+void gen_pass_2();
+void generate_code(AST * root);

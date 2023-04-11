@@ -45,10 +45,10 @@ int main(int argc, char* argv[]) {
 
         // Analyze syntax
         Semantic semantic(input, *ast);
-        auto annotated_ast = semantic.analyze(false);
+        auto annotated_ast = semantic.analyze(true);
 
         // Generate code
-		traverse(ast);
+		generate_code(ast);
     } while(interactive);
 
     return EXIT_SUCCESS;
