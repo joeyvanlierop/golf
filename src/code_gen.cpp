@@ -350,10 +350,10 @@ void gen_pass_1(AST *ast) {
 	else if (ast->type == "/") {
 		gen_pass_1(ast->get_child(0));
 		gen_pass_1(ast->get_child(1));
-		emit("    move $a0," + ast->get_child(0)->reg);
-		emit("    move $a1," + ast->get_child(1)->reg);
-		emit("    jal divmodchk");
-		emit("    move " + ast->get_child(1)->reg + ",$v0");
+//		emit("    move $a0," + ast->get_child(0)->reg);
+//		emit("    move $a1," + ast->get_child(1)->reg);
+//		emit("    jal divmodchk");
+//		emit("    move " + ast->get_child(1)->reg + ",$v0");
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    div " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -364,10 +364,10 @@ void gen_pass_1(AST *ast) {
 	else if (ast->type == "%") {
 		gen_pass_1(ast->get_child(0));
 		gen_pass_1(ast->get_child(1));
-		emit("    move $a0," + ast->get_child(0)->reg);
-		emit("    move $a1," + ast->get_child(1)->reg);
-		emit("    jal divmodchk");
-		emit("    move " + ast->get_child(1)->reg + ",$v0");
+//		emit("    move $a0," + ast->get_child(0)->reg);
+//		emit("    move $a1," + ast->get_child(1)->reg);
+//		emit("    jal divmodchk");
+//		emit("    move " + ast->get_child(1)->reg + ",$v0");
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    rem " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
