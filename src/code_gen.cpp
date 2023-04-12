@@ -597,8 +597,8 @@ void len(){
 	emit("len_loop:");
 	emit("    lb $t1,0($a0)");
 	emit("    beqz $t1,len_epilogue");
-	emit("    addi $a0,$a0");
-	emit("    addi $t0,$t0");
+	emit("    addi $a0,$a0,1");
+	emit("    addi $t0,$t0,1");
 	emit("    j len_loop");
 	emit("len_epilogue:");
 	emit("    lw $ra 0($sp)");
