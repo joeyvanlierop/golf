@@ -209,6 +209,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "block") {
 		for (auto child: ast->children) {
 			gen_pass_1(child);
+			freereg(child->reg);
 		}
 	}
 
