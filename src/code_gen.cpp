@@ -336,17 +336,11 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "id") {
-		if(vars[ast->sym] == "G5") {
-			auto q = 0;
-		}
-		if(ast->attr == "ch") {
-			auto q = 0;
-		}
 		auto reg = alloc_reg();
 		ast->reg = reg;
-		if ((ast->attr == "true" || ast->attr == "$true") && vars.count(ast->sym) == 0) {
+		if (ast->attr == "true" || ast->attr == "$true") {
 			emit("    li " + reg + ",Ltrue");
-		} else if (ast->attr == "false" && vars.count(ast->sym) == 0) {
+		} else if (ast->attr == "false" && ast->sym->sig == "bool") {
 			emit("    li " + reg + ",Lfalse");
 		} else {
 			emit("    lw " + reg + "," + vars[ast->sym]);
