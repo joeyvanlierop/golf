@@ -394,15 +394,33 @@ int count_locals(AST *ast) {
 }
 
 void gen_pass_2() {
+	std::map<char, char> escapes = {
+		{'b' , '\b'},
+		{'t' , '\t' },
+		{'n' , '\n' },
+		{'f' , '\f' },
+		{'r' , '\r' },
+		{'"' , '"' },
+		{'\'', '\'' },
+		{'\\' , '\\' },
+	};
+
 	if (strings.empty()) {
 		return;
 	}
 
 	emit("    .data");
+	auto escaping = false;
 	for (auto &[label, value]: strings) {
 		emit(label + ":");
 		for (char &c: value) {
-			emit("    .byte " + std::to_string(int(c)));
+			if(c == 92) {
+				escaping = true;
+			} else if(escaping && escapes.contains(c)) {
+				emit("    .byte " + std::to_string(escapes[c]));
+			} else {
+				emit("    .byte " + std::to_string(int(c)));
+			}
 		}
 		emit("    .byte 0");
 	}
