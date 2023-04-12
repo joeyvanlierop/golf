@@ -160,7 +160,7 @@ void gen_pass_1(AST *ast) {
 		available_registers = saved_available;
 		used_registers = saved;
 		for(auto reg : saved) {
-			emit("    lw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
+			emit("    lw " + reg + "," + std::to_string(i * 4) + "($sp)");
 			i++;
 		}
 		emit("    addu $sp,$sp," + std::to_string(saved.size() * 4));
