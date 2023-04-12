@@ -14,8 +14,13 @@ std::string current_func;
 int current_offset;
 
 std::map<void*, std::string> vars = {};
-std::map<std::string, std::string> strings = {
-		{StrGlobal().to_string(), ""}
+
+auto empty_string = StrGlobal();
+std::map<std::string, std::string> global_to_string = {
+		{empty_string.to_string(), ""}
+};
+std::map<std::string, std::string> string_to_global = {
+		{"", empty_string.to_string()}
 };
 
 std::vector<std::string> all_registers {
@@ -106,15 +111,16 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 
 		// Store parameters
 		int i = 0;
+		current_offset = 4;
 		for(auto formal : ast->get_child(1)->get_child(0)->children) {
 			auto offset = i * 4 + 4;
-			emit("    sw $a" + std::to_string(i) + "," + std::to_string(offset) + "($sp)");
+			emit("    sw $a" + std::to_string(i) + "," + std::to_string(current_offset) + "($sp)");
 			vars[formal->get_child(0)->sym] = std::to_string(offset) + "($sp)";
+			current_offset += 4;
 			i++;
 		}
 
 		// Body
-		current_offset = 4;
 		gen_pass_1(ast->get_child(2));
 
 		// Epilogue
@@ -270,9 +276,14 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "string") {
 		auto reg = alloc_reg();
 		ast->reg = reg;
-		auto str_global = StrGlobal();
-		emit("    la " + reg + "," + str_global.to_string());
-		strings[str_global.to_string()] = ast->attr;
+		std::string str_global;
+		if(string_to_global.count(ast->attr)) {
+			str_global = string_to_global[ast->attr];
+		} else {
+			str_global = StrGlobal().to_string();
+		}
+		emit("    la " + reg + "," + str_global);
+		global_to_string[str_global] = ast->attr;
 	}
 
 	else if (ast->type == "id") {
@@ -479,13 +490,13 @@ void gen_pass_2() {
 		{'\\' , '\\' },
 	};
 
-	if (strings.empty()) {
+	if (global_to_string.empty()) {
 		return;
 	}
 
 	emit("    .data");
 	auto escaping = false;
-	for (auto &[label, value]: strings) {
+	for (auto &[label, value]: global_to_string) {
 		emit(label + ":");
 		for (char &c: value) {
 			if(c == 92 && !escaping) {

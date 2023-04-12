@@ -280,7 +280,7 @@ A variable is a storage location for holding a value. The set of permissible val
 
 The type of a variable is the type given in its declaration.
 
-A variable's value is retrieved by referring to the variable in an expression; it is the most recent value assigned to the variable. If a variable has not yet been assigned a value, its value is the zero value for its type: `false` for booleans, `0` for numeric types, `""` for strings.
+A variable's value is retrieved by referring to the variable in an expression; it is the most recent value assigned to the variable. If a variable has not yet been assigned a value, its value is the zero value for its type: `false` for booleans, `0` for numeric types, `""` for global_to_string.
 
 ## Types
 

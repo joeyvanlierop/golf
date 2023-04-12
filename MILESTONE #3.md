@@ -13,7 +13,7 @@ Email address: joseph.vanlierop@ucalgary.ca
 
 ## Where do I need feedback
 
-I chose to use strings as types because that's what Aycock did in his video series, but I am interested in hearing about
+I chose to use global_to_string as types because that's what Aycock did in his video series, but I am interested in hearing about
 how you structured yours using formal types. I would also like to hear how I could make my code more readable, since its
 starting to approach spaghetti. Some resources online use the visitor pattern which seems pretty verbose, but maybe
 useful? Not sure, would love to hear your thoughts if you know about it.
