@@ -25,6 +25,16 @@ std::map<std::string, std::string> string_to_global = {
 };
 
 std::vector<std::string> all_registers {
+		"$s9",
+		"$s8",
+		"$s7",
+		"$s6",
+		"$s5",
+		"$s4",
+		"$s3",
+		"$s2",
+		"$s1",
+		"$s0",
 		"$t9",
 		"$t8",
 		"$t7",
@@ -65,6 +75,10 @@ std::string alloc_reg(){
 }
 
 void freereg(std::string reg){
+	if(std::find(available_registers[current_func].begin(), available_registers[current_func].end(), reg) != available_registers[current_func].end()) {
+		return;
+	}
+
 	available_registers[current_func].push_back(reg);
 	used_registers.erase(std::remove(used_registers.begin(), used_registers.end(), reg), used_registers.end());
 }
@@ -292,6 +306,12 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "id") {
+		if(vars[ast->sym] == "G5") {
+			auto q = 0;
+		}
+		if(ast->attr == "ch") {
+			auto q = 0;
+		}
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		if (ast->attr == "true" || ast->attr == "$true") {
