@@ -211,6 +211,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		for (auto child: ast->children) {
 			gen_pass_1(child);
 		}
+		populate_registers(current_func);
+		used_registers.clear();
 	}
 
 	else if (ast->type == "if") {
