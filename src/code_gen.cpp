@@ -136,6 +136,7 @@ void gen_pass_1(AST *ast) {
 			i++;
 		}
 		emit("    jal " + ast->get_child(0)->attr);
+		ast->reg = "$v0";
 	}
 
 	else if (ast->type == "var") {
@@ -204,6 +205,7 @@ void gen_pass_1(AST *ast) {
 
 	else if (ast->type == "return") {
 		if (!ast->children.empty()) {
+			gen_pass_1(ast->get_child(0));
 			emit("    move $v0," + ast->get_child(0)->reg);
 		}
 		emit("    j " + current_func + "_epilogue");
