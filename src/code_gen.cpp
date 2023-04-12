@@ -50,6 +50,7 @@ std::map<std::string, std::vector<std::string>> available_registers {};
 std::vector<std::string> used_registers {};
 
 void populate_registers(std::string func){
+	available_registers[func].clear();
 	for (auto r : all_registers) {
 		available_registers[func].push_back(r);
 	}
@@ -209,8 +210,9 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "block") {
 		for (auto child: ast->children) {
 			gen_pass_1(child);
-			freereg(child->reg);
 		}
+		populate_registers(current_func);
+		used_registers.clear();
 	}
 
 	else if (ast->type == "if") {
