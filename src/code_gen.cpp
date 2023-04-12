@@ -518,6 +518,7 @@ void generate_code(AST *root) {
 	halt();
 	printb();
 	printc();
+	len();
 
 	gen_pass_0(root);
 	gen_pass_1(root);
@@ -525,40 +526,39 @@ void generate_code(AST *root) {
 }
 
 void get_char(){
-	emit(".data");
-	emit("char: .space 2");
-	emit(".text");
-
-	emit("getchar: ");
-	emit("  addi $sp,$sp,-4");
-	emit("  sw $s0,0($sp)");
-	emit("  li $v0,8");
-	emit("  la $a0,char");
-	emit("  la $a1,2");
-	emit("  syscall");
-	emit("  lb $v0,char");
-	emit("  li $s0,4");
-	emit("  beq $v0,$s0,getchar_eof");
-	emit("  li $s0,0");
-	emit("  beq $v0,$s0,getchar_eof");
-	emit("getchar_return:");
-	emit("  lw $s0 0($sp)");
-	emit("  addi $sp,$sp,4");
-	emit("  jr $ra ");
+	emit("    .data");
+	emit("    char: .space 2");
+	emit("    .text");
+	emit("getchar:");
+	emit("    addi $sp,$sp,-4");
+	emit("    sw $s0,0($sp)");
+	emit("    li $v0,8");
+	emit("    la $a0,char");
+	emit("    la $a1,2");
+	emit("    syscall");
+	emit("    lb $v0,char");
+	emit("    li $s0,4");
+	emit("    beq $v0,$s0,getchar_eof");
+	emit("    li $s0,0");
+	emit("    beq $v0,$s0,getchar_eof");
+	emit("getchar_epilogue:");
+	emit("    lw $s0 0($sp)");
+	emit("    addi $sp,$sp,4");
+	emit("    jr $ra ");
 	emit("getchar_eof:");
-	emit("  li $v0,-1");
-	emit("  j getchar_return");
+	emit("    li $v0,-1");
+	emit("    j getchar_epilogue");
 }
 
 void prints(){
-	emit("prints: ");
-	emit("  li $v0,4");
-	emit("  syscall");
-	emit("  jr $ra ");
+	emit("prints:");
+	emit("    li $v0,4");
+	emit("    syscall");
+	emit("    jr $ra ");
 }
 
 void printi(){
-	emit("printi: ");
+	emit("printi:");
 	emit("    li $v0,1");
 	emit("    syscall");
 	emit("    jr $ra ");
@@ -566,7 +566,7 @@ void printi(){
 }
 
 void halt(){
-	emit("halt: ");
+	emit("halt:");
 	emit("    li $v0,10");
 	emit("    syscall");
 	emit("    jr $ra ");
@@ -574,16 +574,34 @@ void halt(){
 }
 
 void printb(){
-	emit("printb: ");
-	emit("  li $v0,1");
-	emit("  syscall");
-	emit("  jr $ra ");
+	emit("printb:");
+	emit("    li $v0,1");
+	emit("    syscall");
+	emit("    jr $ra ");
 
 }
 
 void printc(){
-	emit("printc: ");
-	emit("  li $v0,11");
-	emit("  syscall");
-	emit("  jr $ra ");
+	emit("printc:");
+	emit("    li $v0,11");
+	emit("    syscall");
+	emit("    jr $ra ");
+}
+
+void len(){
+	emit("len:");
+	emit("    subu $sp,$sp,8");
+	emit("    sw $ra,0($sp)");
+	emit("    sw $a0,4($sp)");
+	emit("    li $t0,0");
+	emit("len_loop:");
+	emit("    lb $t1,0($a0)");
+	emit("    beqz $t1,len_epilogue");
+	emit("    addi $a0,$a0");
+	emit("    addi $t0,$t0");
+	emit("    j len_loop");
+	emit("len_epilogue:");
+	emit("    lw $ra 0($sp)");
+	emit("    addi $sp,$sp,8");
+	emit("    jr $ra ");
 }

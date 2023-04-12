@@ -61,3 +61,4 @@ void printi();
 void halt();
 void printb();
 void printc();
+void len();
