@@ -417,7 +417,7 @@ void generate_code(AST *root) {
 	emit("    .globl _start");
 	emit("_start:");
 	emit("    jal main");
-	emit("    j Lhalt");
+	emit("    j halt");
 
 	get_char();
 	prints();
@@ -436,7 +436,7 @@ void get_char(){
 	emit("char: .space 2");
 	emit(".text");
 
-	emit("Lgetchar: ");
+	emit("getchar: ");
 	emit("  addi $sp,$sp,-4");
 	emit("  sw $s0,0($sp)");
 	emit("  li $v0,8");
@@ -445,27 +445,27 @@ void get_char(){
 	emit("  syscall");
 	emit("  lb $v0,char");
 	emit("  li $s0,4");
-	emit("  beq $v0,$s0,Lgetchar_eof");
+	emit("  beq $v0,$s0,getchar_eof");
 	emit("  li $s0,0");
-	emit("  beq $v0,$s0,Lgetchar_eof");
-	emit("Lgetchar_return:");
+	emit("  beq $v0,$s0,getchar_eof");
+	emit("getchar_return:");
 	emit("  lw $s0 0($sp)");
 	emit("  addi $sp,$sp,4");
 	emit("  jr $ra ");
-	emit("Lgetchar_eof:");
+	emit("getchar_eof:");
 	emit("  li $v0,-1");
-	emit("  j Lgetchar_return");
+	emit("  j getchar_return");
 }
 
 void prints(){
-	emit("Lprints: ");
+	emit("prints: ");
 	emit("  li $v0,4");
 	emit("  syscall");
 	emit("  jr $ra ");
 }
 
 void printi(){
-	emit("Lprinti: ");
+	emit("printi: ");
 	emit("    li $v0,1");
 	emit("    syscall");
 	emit("    jr $ra ");
@@ -473,7 +473,7 @@ void printi(){
 }
 
 void halt(){
-	emit("Lhalt: ");
+	emit("halt: ");
 	emit("    li $v0,10");
 	emit("    syscall");
 	emit("    jr $ra ");
@@ -481,7 +481,7 @@ void halt(){
 }
 
 void printb(){
-	emit("Lprintb: ");
+	emit("printb: ");
 	emit("  li $v0,1");
 	emit("  syscall");
 	emit("  jr $ra ");
