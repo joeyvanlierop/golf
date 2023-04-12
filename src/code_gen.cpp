@@ -361,8 +361,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "==") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    seq " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -371,8 +371,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "!=") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    sne " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -381,8 +381,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == ">=") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    sge " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -391,8 +391,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == ">") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    sgt " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -401,8 +401,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "<=") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    sle " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -411,8 +411,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "<") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    slt " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -421,8 +421,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "*") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    mul " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -431,8 +431,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "/") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 //		emit("    move $a0," + ast->get_child(0)->reg);
 //		emit("    move $a1," + ast->get_child(1)->reg);
 //		emit("    jal divmodchk");
@@ -445,8 +445,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "%") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 //		emit("    move $a0," + ast->get_child(0)->reg);
 //		emit("    move $a1," + ast->get_child(1)->reg);
 //		emit("    jal divmodchk");
@@ -459,8 +459,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "+") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    addu " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -469,8 +469,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "-") {
-		gen_pass_1(ast->get_child(0));
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(0), true);
+		gen_pass_1(ast->get_child(1), true);
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    subu " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -479,7 +479,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "!") {
-		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(0), true);
 		freereg(ast->get_child(0)->reg);
 		auto reg = alloc_reg();
 		ast->reg = reg;
@@ -487,7 +487,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "=") {
-		gen_pass_1(ast->get_child(1));
+		gen_pass_1(ast->get_child(1), true);
 		emit("    sw " + ast->get_child(1)->reg + "," + vars[ast->get_child(0)->sym]);
 		freereg		(ast->get_child(1)->reg);
 	}
