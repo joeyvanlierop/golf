@@ -42,6 +42,7 @@ void populate_registers(std::string func){
 std::string alloc_reg(){
 	if (available_registers.find(current_func) == available_registers.end()) {
 		populate_registers(current_func);
+		used_registers.clear();
 	}
 
 	if (!available_registers[current_func].empty()) {
@@ -128,15 +129,20 @@ void gen_pass_1(AST *ast) {
 		int i = 0;
 		for(auto actual : ast->get_child(1)->children) {
 			gen_pass_1(actual);
-			freereg(actual->reg);
 			i++;
+		}
+		for(auto actual : ast->get_child(1)->children) {
+			freereg(actual->reg);
 		}
 
 		// Save registers
-		emit("    subu $sp,$sp," + std::to_string(used_registers.size() * 4));
+		auto saved_available = available_registers;
+		auto saved = used_registers;
+		emit("    subu $sp,$sp," + std::to_string(saved.size() * 4));
 		i = 0;
-		for(auto reg : used_registers) {
+		for(auto reg : saved) {
 			emit("    sw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
+			freereg(reg);
 			i++;
 		}
 
@@ -151,11 +157,13 @@ void gen_pass_1(AST *ast) {
 
 		// Load registers
 		i = 0;
-		for(auto reg : used_registers) {
+		available_registers = saved_available;
+		used_registers = saved;
+		for(auto reg : saved) {
 			emit("    lw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
 			i++;
 		}
-		emit("    addu $sp,$sp," + std::to_string(used_registers.size() * 4));
+		emit("    addu $sp,$sp," + std::to_string(saved.size() * 4));
 
 		auto reg = alloc_reg();
 		ast->reg = reg;
