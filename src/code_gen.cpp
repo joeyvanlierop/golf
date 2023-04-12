@@ -136,7 +136,9 @@ void gen_pass_1(AST *ast) {
 			i++;
 		}
 		emit("    jal " + ast->get_child(0)->attr);
-		ast->reg = "$v0";
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    move " + reg + ",$v0");
 	}
 
 	else if (ast->type == "var") {
