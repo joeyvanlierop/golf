@@ -203,7 +203,10 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "return") {
-		emit("TODO RETURN");
+		if (!ast->children.empty()) {
+			emit("    move $v0," + ast->get_child(0)->reg);
+		}
+		emit("    j " + current_func + "_epilogue");
 	}
 
 	else if (ast->type == "int") {

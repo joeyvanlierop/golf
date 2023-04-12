@@ -1,9 +1,8 @@
 func main() {
-	var a bool
-	a = true
-	if a {
-	    a = false
-	} else {
-	    a = true
-	}
+	var a int
+	a = foo(10)
+}
+
+func foo(a int) int {
+    return a * 2
 }
