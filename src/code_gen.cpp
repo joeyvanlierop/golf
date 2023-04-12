@@ -454,7 +454,7 @@ void gen_pass_2() {
 	for (auto &[label, value]: strings) {
 		emit(label + ":");
 		for (char &c: value) {
-			if(c == 92) {
+			if(c == 92 && !escaping) {
 				escaping = true;
 			} else if(escaping && escapes.count(c)) {
 				emit("    .byte " + std::to_string(escapes[c]));
