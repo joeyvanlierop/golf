@@ -141,7 +141,7 @@ void gen_pass_1(AST *ast) {
 		emit("    subu $sp,$sp," + std::to_string(saved.size() * 4));
 		i = 0;
 		for(auto reg : saved) {
-			emit("    sw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
+			emit("    sw " + reg + "," + std::to_string(i * 4) + "($sp)");
 			freereg(reg);
 			i++;
 		}
