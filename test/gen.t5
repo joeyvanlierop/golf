@@ -1,10 +1,17 @@
 func main() {
 	var i int
-	var x int
 
 	i = 0
+	// exceeds a 32-bit signed int for fib(47)
+	//for i <= 47 {
+	// exceeds my patience
+	//for i <= 46 {
 	for i <= 23 {
-		x = fib(i)
+		prints("fib(")
+		printi(i)
+		prints(") = ")
+		printi(fib(i))
+		prints("\n")
 		i = i + 1
 	}
 }
