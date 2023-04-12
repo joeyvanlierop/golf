@@ -49,7 +49,7 @@ public:
 
 void emit(std::string line);
 void gen_pass_0(AST *ast);
-void gen_pass_1(AST *ast);
+void gen_pass_1(AST *ast, bool in_call);
 void gen_pass_2();
 int count_locals(AST *ast);
 void generate_code(AST *root);

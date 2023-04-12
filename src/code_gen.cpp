@@ -86,7 +86,7 @@ void gen_pass_0(AST *ast) {
 	}
 }
 
-void gen_pass_1(AST *ast) {
+void gen_pass_1(AST *ast, bool in_call = false) {
 	if (ast->type == "program") {
 		for (auto child: ast->children) {
 			gen_pass_1(child);
@@ -128,7 +128,7 @@ void gen_pass_1(AST *ast) {
 		// Calculate parameters
 		int i = 0;
 		for(auto actual : ast->get_child(1)->children) {
-			gen_pass_1(actual);
+			gen_pass_1(actual, true);
 			i++;
 		}
 		for(auto actual : ast->get_child(1)->children) {
@@ -138,12 +138,14 @@ void gen_pass_1(AST *ast) {
 		// Save registers
 		auto saved_available = available_registers;
 		auto saved = used_registers;
-		emit("    subu $sp,$sp," + std::to_string(saved.size() * 4));
-		i = 0;
-		for(auto reg : saved) {
-			emit("    sw " + reg + "," + std::to_string(i * 4) + "($sp)");
-			freereg(reg);
-			i++;
+		if(in_call) {
+			emit("    subu $sp,$sp," + std::to_string(saved.size() * 4));
+			i = 0;
+			for(auto reg : saved) {
+				emit("    sw " + reg + "," + std::to_string(i * 4) + "($sp)");
+				freereg(reg);
+				i++;
+			}
 		}
 
 		// Store parameters
@@ -156,14 +158,16 @@ void gen_pass_1(AST *ast) {
 		emit("    jal " + ast->get_child(0)->attr);
 
 		// Load registers
-		i = 0;
-		available_registers = saved_available;
-		used_registers = saved;
-		for(auto reg : saved) {
-			emit("    lw " + reg + "," + std::to_string(i * 4) + "($sp)");
-			i++;
+		if(in_call) {
+			i = 0;
+			available_registers = saved_available;
+			used_registers = saved;
+			for (auto reg: saved) {
+				emit("    lw " + reg + "," + std::to_string(i * 4) + "($sp)");
+				i++;
+			}
+			emit("    addu $sp,$sp," + std::to_string(saved.size() * 4));
 		}
-		emit("    addu $sp,$sp," + std::to_string(saved.size() * 4));
 
 		auto reg = alloc_reg();
 		ast->reg = reg;
