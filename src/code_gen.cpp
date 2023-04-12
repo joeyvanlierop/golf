@@ -344,9 +344,9 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		}
 		auto reg = alloc_reg();
 		ast->reg = reg;
-		if (ast->attr == "true" || ast->attr == "$true") {
+		if ((ast->attr == "true" || ast->attr == "$true") && vars.count(ast->sym) == 0) {
 			emit("    li " + reg + ",Ltrue");
-		} else if (ast->attr == "false") {
+		} else if (ast->attr == "false" && vars.count(ast->sym) == 0) {
 			emit("    li " + reg + ",Lfalse");
 		} else {
 			emit("    lw " + reg + "," + vars[ast->sym]);
