@@ -120,15 +120,6 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "funccall") {
-		/**
-		 * funccall sig=void @ (2, 8)
-				id [foo] sig=f(int,int,int,int) sym=0x565087163f00 @ (2, 5)
-				actuals
-					int [10] sig=int @ (2, 9)
-					int [20] sig=int @ (2, 13)
-					int [30] sig=int @ (2, 17)
-					int [40] sig=int @ (2, 21)
-		 */
 		// Pass parameters
 		int i = 0;
 		for(auto actual : ast->get_child(1)->children) {
@@ -234,15 +225,41 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "*") {
-		emit("TODO MUL");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    mul " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "/") {
-		emit("TODO DIV");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		emit("    move $a0," + ast->get_child(0)->reg);
+		emit("    move $a1," + ast->get_child(1)->reg);
+		emit("    jal divmodchk");
+		emit("    move " + ast->get_child(1)->reg + ",$v0");
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    div " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "%") {
-		emit("TODO MOD");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		emit("    move $a0," + ast->get_child(0)->reg);
+		emit("    move $a1," + ast->get_child(1)->reg);
+		emit("    jal divmodchk");
+		emit("    move " + ast->get_child(1)->reg + ",$v0");
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    rem " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "+") {
@@ -258,7 +275,11 @@ void gen_pass_1(AST *ast) {
 	else if (ast->type == "-") {
 		gen_pass_1(ast->get_child(0));
 		gen_pass_1(ast->get_child(1));
-		emit("    subu $t4,$t1,$t3");
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    subu " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "!") {

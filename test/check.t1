@@ -1,9 +1,4 @@
 func main() {
-    var c int
-    c = 40
-    foo(10, 20 + 30, c)
-}
-
-func foo(a int, b int, c int) {
-    a = 20
+    var a int
+    a = 20 / 30
 }
