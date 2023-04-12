@@ -418,6 +418,7 @@ void gen_pass_2() {
 				escaping = true;
 			} else if(escaping && escapes.count(c)) {
 				emit("    .byte " + std::to_string(escapes[c]));
+				escaping = false;
 			} else {
 				emit("    .byte " + std::to_string(int(c)));
 			}
