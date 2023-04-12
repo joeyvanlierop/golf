@@ -6,6 +6,10 @@
 
 #include "code_gen.h"
 
+/**
+ * I'm sorry if you have to read this code
+ */
+
 int Label::counter = 0;
 int Global::counter = 0;
 int StrGlobal::counter = 0;
@@ -48,6 +52,17 @@ std::vector<std::string> all_registers {
 };
 std::map<std::string, std::vector<std::string>> available_registers {};
 std::vector<std::string> used_registers {};
+
+std::map<std::string, bool> redefined = {
+		{"getchar", false},
+		{"halt", false},
+		{"len", false},
+		{"printb", false},
+		{"printc", false},
+		{"printi", false},
+		{"prints", false},
+};
+
 
 void populate_registers(std::string func){
 	available_registers[func].clear();
@@ -115,7 +130,13 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "func") {
+		// Update current function
 		current_func = ast->get_child(0)->attr;
+
+		// Check if overwriting predefined function
+		if(redefined.count(ast->get_child(0)->attr)) {
+			redefined[ast->get_child(0)->attr] = true;
+		}
 
 		// Setup stack frame
 		emit(ast->get_child(0)->attr + ":");
@@ -582,6 +603,9 @@ void generate_code(AST *root) {
 }
 
 void get_char(){
+	if(redefined["getchar"])
+		return;
+
 	emit("    .data");
 	emit("    char: .space 2");
 	emit("    .text");
@@ -607,6 +631,9 @@ void get_char(){
 }
 
 void prints(){
+	if(redefined["prints"])
+		return;
+
 	emit("prints:");
 	emit("    li $v0,4");
 	emit("    syscall");
@@ -614,6 +641,9 @@ void prints(){
 }
 
 void printi(){
+	if(redefined["printi"])
+		return;
+
 	emit("printi:");
 	emit("    li $v0,1");
 	emit("    syscall");
@@ -622,6 +652,9 @@ void printi(){
 }
 
 void halt(){
+	if(redefined["halt"])
+		return;
+
 	emit("halt:");
 	emit("    li $v0,10");
 	emit("    syscall");
@@ -630,6 +663,9 @@ void halt(){
 }
 
 void printb(){
+	if(redefined["printb"])
+		return;
+
 	auto t = StrGlobal();
 	auto f = StrGlobal();
 
@@ -652,6 +688,9 @@ void printb(){
 }
 
 void printc(){
+	if(redefined["printc"])
+		return;
+
 	emit("printc:");
 	emit("    li $v0,11");
 	emit("    syscall");
@@ -659,6 +698,9 @@ void printc(){
 }
 
 void len(){
+	if(redefined["len"])
+		return;
+
 	emit("len:");
 	emit("    subu $sp,$sp,8");
 	emit("    sw $ra,0($sp)");
