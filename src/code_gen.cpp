@@ -589,6 +589,13 @@ void generate_code(AST *root) {
 	emit("    jal main");
 	emit("    j halt");
 
+	// Populate the globals
+	gen_pass_0(root);
+
+	// Majority of the code generation
+	gen_pass_1(root);
+
+	// Populate predefined functions
 	get_char();
 	prints();
 	printi();
@@ -597,8 +604,7 @@ void generate_code(AST *root) {
 	printc();
 	len();
 
-	gen_pass_0(root);
-	gen_pass_1(root);
+	// String tomfoolery
 	gen_pass_2();
 }
 
