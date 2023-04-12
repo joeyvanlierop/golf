@@ -191,9 +191,15 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 			emit("    addu $sp,$sp," + std::to_string(saved.size() * 4));
 		}
 
+		// Save output
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    move " + reg + ",$v0");
+
+		// Free register if not in call (holy smokes this is hot garbage
+		if(!in_call) {
+			freereg(reg);
+		}
 	}
 
 	else if (ast->type == "var") {
