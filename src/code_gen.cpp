@@ -221,7 +221,12 @@ void gen_pass_1(AST *ast) {
 	else if (ast->type == "u-") {
 		auto reg = alloc_reg();
 		ast->reg = reg;
-		emit("    li " + reg + "," + ast->get_child(0)->attr);
+
+		auto current = ast;
+		while(current->type != "int") {
+			current = current->get_child(0);
+		}
+		emit("    li " + reg + "," + current->attr);
 	}
 
 	else if (ast->type == "string") {
