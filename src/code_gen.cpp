@@ -294,7 +294,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "id") {
 		auto reg = alloc_reg();
 		ast->reg = reg;
-		if (ast->attr == "true") {
+		if (ast->attr == "true" || ast->attr == "$true") {
 			emit("    li " + reg + ",Ltrue");
 		} else if (ast->attr == "false") {
 			emit("    li " + reg + ",Lfalse");
