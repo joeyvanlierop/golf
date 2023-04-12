@@ -494,9 +494,20 @@ void gen_pass_2() {
 		return;
 	}
 
+	// Sort strings by length
+	std::vector<std::pair<std::string, std::string>> sorted;
+	for (auto it = global_to_string.begin(); it != global_to_string.end(); it++) {
+		sorted.push_back(*it);
+	}
+	std::sort(sorted.begin(), sorted.end(), [=](std::pair<std::string, std::string>& a, std::pair<std::string, std::string>& b)
+		 {
+			 return a.second.length() < b.second.length();
+		 }
+	);
+
 	emit("    .data");
 	auto escaping = false;
-	for (auto &[label, value]: global_to_string) {
+	for (auto &[label, value]: sorted) {
 		emit(label + ":");
 		for (char &c: value) {
 			if(c == 92 && !escaping) {
