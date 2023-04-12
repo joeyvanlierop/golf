@@ -601,6 +601,7 @@ void len(){
 	emit("    addi $t0,$t0,1");
 	emit("    j len_loop");
 	emit("len_epilogue:");
+	emit("    move $v0,$t0");
 	emit("    lw $ra 0($sp)");
 	emit("    addi $sp,$sp,8");
 	emit("    jr $ra ");
