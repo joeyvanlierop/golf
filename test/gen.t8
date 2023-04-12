@@ -1,0 +1,20 @@
+func main() {
+	var i int
+	var delta int
+	
+	delta = 1000000
+
+	// larger increments until we overshoot
+	for i >= 0 {
+		i = i + delta
+	}
+
+	// walk it back down
+	for i < 0 {
+		i = i - 1
+	}
+
+	prints("minint is ")
+	printi(i+1)
+	prints("\n")
+}

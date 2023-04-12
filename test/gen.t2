@@ -1,0 +1,15 @@
+var NL int
+
+func main() {
+	NL = 10
+
+	var i int
+	for i < 4 {
+		prints("start of loop\n")
+		var v int
+		printi(v) ; printc(NL)	// this should always print out 0
+		v = 42			// even after this change
+		i = i + 1
+	}
+	printi(i) ; printc(NL)
+}

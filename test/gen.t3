@@ -1,0 +1,75 @@
+// test zero values
+
+func main() {
+	NL = 10
+
+	prints("global zero values: \n")
+	printb(b0) ; printc(NL)
+	printi(i0) ; printc(NL)
+	prints(s0) ; printc(NL)
+
+	foo()
+	foo()
+
+	bar()
+}
+
+func foo() {
+	var s1 string
+	var b1 bool
+	var i1 int
+	
+	prints("local zero values: \n")
+	printb(b1) ; printc(NL)
+	printi(i1) ; printc(NL)
+	prints(s1) ; printc(NL)
+
+	i1 = 42
+	b1 = true
+	s1 = "blarg"
+}
+
+func bar() {
+	var s1 string
+	var b1 bool
+	var i1 int
+	{
+		s1 = "garble"
+		b1 = true
+		i1 = 123
+
+		var s1 string
+		var b1 bool
+		var i1 int
+		
+		prints("sub-block zero values: \n")
+		printb(b1) ; printc(NL)
+		printi(i1) ; printc(NL)
+		prints(s1) ; printc(NL)
+
+		i1 = 42
+		b1 = true
+		s1 = "blarg"
+	}
+	{
+		var s1 string
+		var b1 bool
+		var i1 int
+		
+		prints("sub-block zero values: \n")
+		printb(b1) ; printc(NL)
+		printi(i1) ; printc(NL)
+		prints(s1) ; printc(NL)
+	}
+	prints("post-sub-block zero values: \n")
+	printb(b1) ; printc(NL)
+	printi(i1) ; printc(NL)
+	prints(s1) ; printc(NL)
+
+}
+
+var s0 string
+var b0 bool
+var i0 int
+
+var NL int

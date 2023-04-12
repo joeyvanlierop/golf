@@ -1,0 +1,27 @@
+func main() {
+	var i int
+	var n int
+	var n_1 int
+	var n_2 int
+
+	i = 2
+	n_1 = 1
+	n_2 = 0
+
+	prints("fib(0) = 0\n")
+	prints("fib(1) = 1\n")
+
+	for i < 47 {
+		prints("fib(")
+		printi(i)
+		prints(") = ")
+
+		n = n_1 + n_2
+		printi(n)
+		n_2 = n_1
+		n_1 = n
+
+		prints("\n")
+		i = i + 1
+	}
+}

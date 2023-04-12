@@ -1,0 +1,11 @@
+// can pipe to hexdump -c to see what's really output
+
+func main() {
+	prints("backslash b = [\b]"); 		printc(10)
+	prints("backslash t = [\t]"); 		printc(10)
+	prints("backslash n = [\n]"); 		printc(10)
+	prints("backslash f = [\f]"); 		printc(10)
+	prints("backslash r = [\r]"); 		printc(10)
+	prints("backslash quote = [\"]"); 	printc(10)
+	prints("backslash backslash = [\\]"); 	printc(10)
+}

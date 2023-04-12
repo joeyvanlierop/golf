@@ -1,0 +1,7 @@
+func main() {
+        if false != !true {
+                prints("Oops!\n")
+        } else {
+                prints("OK\n")
+	}
+}

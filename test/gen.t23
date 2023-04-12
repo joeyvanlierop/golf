@@ -1,0 +1,17 @@
+// EOF and scope test
+
+func main() {
+	var i string
+	i = "\nEND\n"
+
+	for {
+		var i int
+		i = getchar()
+		if i == -1 {
+			break
+		}
+		printc(i)
+	}
+
+	prints(i)
+}

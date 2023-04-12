@@ -1,0 +1,130 @@
+func hi() string {
+	return "H"
+}
+
+func prlen(s string, label string, correct int) {
+	prints(label)
+	prints(": len(\"")
+	prints(s)
+	prints("\") = ")
+	printi(len(s))
+	prints(", correct answer is ")
+	printi(correct)
+	prints("\n")
+}
+
+func planet(n int) string {
+	if n == 1		{ return "Mercury"
+	} else if n == 2	{ return "Venus"
+	} else if n == 3	{ return "Earth"
+	} else if n == 4	{ return "Mars"
+	} else if n == 5	{ return "Jupiter"
+	} else if n == 6	{ return "Saturn"
+	} else if n == 7	{ return "Uranus"
+	} else if n == 8	{ return "Neptune"
+	} else if n == 9	{ return "Plato"
+	} else {
+		return "X"
+	}
+}
+
+func main() {
+	var z string
+	var twine string
+	twine = ""
+
+	prlen(z, "zero value", 0)
+	prlen("", "empty string", 0)
+	prlen(twine, "var assigned empty string", 0)
+
+	twine = "boring string"
+	prlen(twine, "yawn", 13)
+
+	var yarn string
+	yarn = "Hello, world!\n"
+	prlen(yarn, "string with \\n", 14)
+
+	prlen("\\\"\b\rescape th\tn(", "silly string", 16)
+
+	append(hi(), planet(3))
+	append(bye(), ", world!")
+
+	there_is_no_comparison_there_is_only_zuul("foo", "bar")
+}
+
+func there_is_no_comparison_there_is_only_zuul(a string, b string) {
+	var null string
+
+	if "" == null {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if "" != "" {
+		prints("incorrect\n")
+	} else {
+		prints("correct\n")
+	}
+
+	if bye() == "hello" {
+		prints("incorrect\n")
+	} else {
+		prints("correct\n")
+	}
+	if "Hello" == bye() {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+
+	if b < a {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if a > b {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if b < "barf" {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if b <= "bard" {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if b <= b {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if a >= a {
+		prints("correct\n")
+	} else {
+		prints("incorrect\n")
+	}
+	if "FOO" >= a {
+		prints("incorrect\n")
+	} else {
+		prints("correct\n")
+	}
+	if "	" != "\t" {
+		prints("incorrect\n")
+	} else {
+		prints("correct\n")
+	}
+}
+
+func append(s1 string, s2 string) {
+	prints(s1)
+	prints(s2)
+	prints("\n")
+}
+
+func bye() string {
+	return "Hello"
+}

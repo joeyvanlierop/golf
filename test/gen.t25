@@ -1,0 +1,21 @@
+// recreate table from GoLF spec
+
+func main() {
+	prints("x\ty\tx / y\tx % y\n")
+
+	prdivmod(5, 3)
+	prdivmod(-5, 3)
+	prdivmod(5, -3)
+	prdivmod(-5, -3)
+}
+
+func prdivmod(x int, y int) {
+	printi(x)
+	prints("\t")
+	printi(y)
+	prints("\t")
+	printi(x / y)
+	prints("\t")
+	printi(x % y)
+	prints("\n")
+}

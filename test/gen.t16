@@ -1,0 +1,11 @@
+// dynamic semantic check
+
+func foo(x int) int {
+	if x * x < 0 {
+		return 123
+	}
+}
+
+func main() {
+	foo(-1)
+}

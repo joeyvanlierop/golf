@@ -1,0 +1,37 @@
+// overriding built-ins, fun for the whole family
+
+func main() {
+	printi(len("blarg")) ; printc(10)
+	var len string
+	len = "garble\n"
+	prints(len)
+
+	printb(true) ; printc(10)
+	printb(false) ; printc(10)
+	var bool string
+	printb(true) ; printc(10)
+	printb(false) ; printc(10)
+	bool = "Why you'd want to do this, I have no idea...\n"
+	prints(bool)
+	var false string
+	false = "untrue"
+	prints(false) ; printc(10)
+
+	foo(true)
+	halt()
+}
+
+func halt() {
+	prints("IT CAN'T BE STOPPED!\n")
+}
+
+func foo(b bool) {
+	printb(b) ; printc(10)
+
+	var printc int
+	printc = 42
+	printi(
+		printc,
+	)
+	prints("\n")
+}

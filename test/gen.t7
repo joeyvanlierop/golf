@@ -1,0 +1,16 @@
+func reverse() {
+	var c int
+
+	c = getchar()
+	if c != NL {
+		reverse()
+		printc(c)
+	}
+}
+
+var NL int
+
+func main() {
+	NL = 10
+	reverse()
+}

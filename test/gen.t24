@@ -1,0 +1,100 @@
+var STAR int
+var SPACES string
+
+func top(n int) {
+	var i int
+
+	i = 0
+	for i < n {
+		printc(STAR)
+		i = i + 1
+	}
+	prints("\n")
+
+	printc(STAR)
+	i = 0
+	for i < n - 2 {
+		prints(" ")
+		i = i + 1
+	}
+	printc(STAR)
+	prints("\n")
+}
+
+func bottom(n int) {
+	var i int
+
+	printc(STAR)
+	i = 0
+	for i < n - 2 {
+		prints(" ")
+		i = i + 1
+	}
+	printc(STAR)
+	prints("\n")
+
+	i = 0
+	for i < n {
+		printc(STAR)
+		i = i + 1
+	}
+	prints("\n")
+}
+
+func prline(s string, n int) {
+	printc(STAR)
+	prints(SPACES)
+	prints(s)
+	if 1 + len(SPACES) + len(s) + len(SPACES) + 1 < n {
+		// pad the string on the right if necessary
+		var i int
+		i = n - (1 + len(SPACES) + len(s) + len(SPACES) + 1)
+		for i > 0 {
+			prints(" ")
+			i = i - 1
+		}
+	}
+	prints(SPACES)
+	printc(STAR)
+	prints("\n")
+}
+
+func banner(s string) {
+	var n int
+
+	n = 1 + len(SPACES) + len(s) + len(SPACES) + 1
+	top(n)
+	prline(s, n)
+	bottom(n)
+}
+
+func banner2(s1 string, s2 string) {
+	var n1 int
+	var n2 int
+
+	n1 = 1 + len(SPACES) + len(s1) + len(SPACES) + 1
+	n2 = 1 + len(SPACES) + len(s2) + len(SPACES) + 1
+
+	var n int
+	n = n1
+	if n1 < n2 {
+		n = n2
+	}
+
+	top(n)
+	prline(s1, n)
+	prline(s2, n)
+	bottom(n)
+}
+
+func main() {
+	STAR = 42
+	SPACES = "  "
+
+	banner("Hello, world!")
+	banner("")
+	banner("GoLF")
+
+	banner2("Compiler Construction", "CPSC 411")
+	banner2("Computer Science", "University of Calgary")
+}

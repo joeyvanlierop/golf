@@ -1,0 +1,9 @@
+// should be minint and 0, respectively, per GoLF spec
+
+func main() {
+	printi(-2147483648/-1)
+	prints("\n")
+
+	printi(-2147483648%-1)
+	prints("\n")
+}

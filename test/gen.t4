@@ -1,0 +1,23 @@
+// should be 2903040, in case you're wondering
+
+func foo(a int, b int, c int, d int) int {
+	return a * b * c * d
+}
+
+var d int
+
+func bar(a int, b int, c int) int {
+        return foo(a, b, c, d-3)
+}
+
+func baz(a int) int {
+	d = d + 1
+	return a
+}
+
+
+func main() {
+	d = 10
+	printi(foo(1, bar(2, baz(3), 4), bar(5, baz(6), 7), baz(8)))
+	prints("\n")
+}

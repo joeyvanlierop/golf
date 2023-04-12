@@ -1,0 +1,241 @@
+//
+//  A recursive-descent calculator.  Not particularly robust!
+//
+
+func main() {
+	init()
+	parser()
+}
+
+//
+//  Input wrappers, so we can push back a character.
+//
+
+var _havechar bool
+var _char int
+
+func getc() int {
+	if _havechar {
+		_havechar = false
+		return _char
+	}
+	return getchar()
+}
+
+func ungetc(ch int) {
+	if _havechar {
+		prints("Internal error: too many ungets!\n")
+		halt()
+	}
+	_havechar = true
+	_char = ch
+}
+
+//
+//  Scanner.
+//
+
+var _havetoken bool
+var _token int
+var attr int
+
+func peek() int {
+	if _havetoken {
+		return _token
+	}
+	_havetoken = true
+	_token = scanner()
+	return _token
+}
+
+func match(expect int) {
+	if peek() != expect {
+		prints("Error: expected ")
+		printc(expect)			// XXX - not always printable
+		prints("\n")
+		halt()
+	}
+	_havetoken = false
+}
+
+func scanner() int {
+	var ch int
+
+	for {
+		ch = getc()
+		if !isspace(ch) {
+			break
+		}
+	}
+
+	if ch == EOF			{ return TK_EOF }
+	if ch == ASCII_NL		{ return TK_EOLN }
+	if ch == ASCII_PLUS		{ return TK_ADD }
+	if ch == ASCII_MINUS		{ return TK_SUB }
+	if ch == ASCII_STAR		{ return TK_MUL }
+	if ch == ASCII_SLASH		{ return TK_DIV }
+	if ch == ASCII_LPAREN		{ return TK_LPAREN }
+	if ch == ASCII_RPAREN		{ return TK_RPAREN }
+
+	if isdigit(ch) {
+		attr = 0
+		for isdigit(ch) {
+			attr = attr * 10 + (ch - ASCII_0)
+			ch = getc()
+		}
+		ungetc(ch)
+		return TK_NUMBER
+	}
+
+	prints("Error: invalid character.\n")
+	halt()
+}
+
+func isdigit(ch int) bool {
+	return ch >= ASCII_0 && ch <= ASCII_9
+}
+
+func isspace(ch int) bool {
+	return ch == ASCII_SPACE ||
+	       ch == ASCII_TAB ||
+	       ch == ASCII_CR
+}
+
+//
+//  Parser.
+//
+
+func parser() {
+	var result int
+
+	for peek() != TK_EOF {
+		result = E()
+		match(TK_EOLN)
+
+		prints(" = ")
+		printi(result)
+		prints("\n")
+	}
+}
+
+func E() int {
+	var l int
+	var r int
+	var token int
+
+	l = T()
+	for peek() == TK_ADD || peek() == TK_SUB {
+		token = peek()
+		match(token)
+		r = T()
+
+		if token == TK_ADD {
+			l = l + r
+		} else {
+			l = l - r
+		}
+	}
+	return l
+}
+
+func T() int {
+	var l int
+	var r int
+	var token int
+
+	l = F()
+	for peek() == TK_MUL || peek() == TK_DIV {
+		token = peek()
+		match(token)
+		r = F()
+
+		if token == TK_MUL {
+			l = l * r
+		} else {
+			l = l / r
+		}
+	}
+	return l
+}
+
+func F() int {
+	var result int
+
+	var token int
+	token = peek()
+
+	if token == TK_LPAREN {
+		match(TK_LPAREN)
+		result = E()
+		match(TK_RPAREN)
+
+	} else if token == TK_SUB {
+		match(TK_SUB)
+		result = -F()
+
+	} else if token == TK_NUMBER {
+		match(TK_NUMBER)
+		result = attr
+
+	} else {
+		prints("Error: expected factor.\n")
+		halt()
+	}
+	return result
+}
+
+//
+//  Initialization.
+//
+
+var EOF int
+
+var TK_EOF int
+var TK_EOLN int
+var TK_NUMBER int
+var TK_ADD int
+var TK_SUB int
+var TK_MUL int
+var TK_DIV int
+var TK_LPAREN int
+var TK_RPAREN int
+
+var ASCII_0 int
+var ASCII_9 int
+var ASCII_PLUS int
+var ASCII_MINUS int
+var ASCII_STAR int
+var ASCII_SLASH int
+var ASCII_LPAREN int
+var ASCII_RPAREN int
+var ASCII_SPACE int
+var ASCII_TAB int
+var ASCII_CR int
+var ASCII_NL int
+
+func init() {
+	EOF = -1
+
+	ASCII_0 = 48
+	ASCII_9 = 57
+	ASCII_PLUS = 43
+	ASCII_MINUS = 45
+	ASCII_STAR = 42
+	ASCII_SLASH = 47
+	ASCII_LPAREN = 40
+	ASCII_RPAREN = 41
+	ASCII_SPACE = 32
+	ASCII_TAB = 9
+	ASCII_CR = 13
+	ASCII_NL = 10
+
+	TK_EOF = 256
+	TK_NUMBER = 257
+	TK_ADD = ASCII_PLUS
+	TK_SUB = ASCII_MINUS
+	TK_MUL = ASCII_STAR
+	TK_DIV = ASCII_SLASH
+	TK_LPAREN = ASCII_LPAREN
+	TK_RPAREN = ASCII_RPAREN
+	TK_EOLN = ASCII_NL
+}

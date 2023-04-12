@@ -1,0 +1,76 @@
+var a bool
+var b bool
+var c bool
+
+func A() bool {
+	prints("evaluated A\n")
+	return a
+}
+func B() bool {
+	prints("evaluated B\n")
+	return b
+}
+func C() bool {
+	prints("evaluated C\n")
+	return c
+}
+
+func eval(newa bool, n00b bool, newc bool) {
+	a = newa
+	b = n00b
+	c = newc
+
+	prints("if ((A && B) || C) {...} else {...}, with A=")
+	printb(a)
+	prints(" B=")
+	printb(b)
+	prints(" C=")
+	printb(c)
+	prints("\n")
+
+	if ((A() && B()) || C()) {
+		prints("if-part executed\n")
+	} else {
+		prints("else-part executed\n")
+	}
+}
+
+func assign(newa bool, newb bool, newc bool) {
+	a = newa
+	b = newb
+	c = newc
+
+	prints("x = (A && !B) || C, with A=")
+	printb(a)
+	prints(" B=")
+	printb(b)
+	prints(" C=")
+	printb(c)
+	prints("\n")
+
+	var x bool
+	x = (A() && !B()) || C()
+	prints("x=")
+	printb(x)
+	prints("\n")
+}
+
+func main() {
+	eval(false, false, false);	prints("\n")
+	eval(false, false, true);	prints("\n")
+	eval(false, true, false);	prints("\n")
+	eval(false, true, true);	prints("\n")
+	eval(true, false, false);	prints("\n")
+	eval(true, false, true);	prints("\n")
+	eval(true, true, false);	prints("\n")
+	eval(true, true, true);		prints("\n")
+
+	assign(false, false, false);	prints("\n")
+	assign(false, false, true);	prints("\n")
+	assign(false, true, false);	prints("\n")
+	assign(false, true, true);	prints("\n")
+	assign(true, false, false);	prints("\n")
+	assign(true, false, true);	prints("\n")
+	assign(true, true, false);	prints("\n")
+	assign(true, true, true)
+}

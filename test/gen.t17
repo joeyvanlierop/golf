@@ -1,0 +1,13 @@
+var j int
+
+func main() {
+	j = 12
+	foo()
+	printi(j / (i - 2))
+}
+
+var i int
+
+func foo() {
+	i = 2
+}

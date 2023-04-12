@@ -1,0 +1,21 @@
+func convert(n int, base int) {
+	if n == 0 {
+		printi(0)
+		return
+	}
+	convert(n / base, base)
+	printi(n % base)
+}
+
+func do(i int) {
+	printi(i);		prints(" = \n")
+	prints("\t");		convert(i, 2);		prints(" (base 2)\n")
+	prints("\t");		convert(i, 8);		prints(" (base 8)\n")
+	prints("\t");		convert(i, 10);		prints(" (base 10)\n")
+}
+
+func main() {
+	do(0)
+	do(17)
+	do(42)
+}
