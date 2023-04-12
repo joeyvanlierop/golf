@@ -10,6 +10,7 @@ int Label::counter = 0;
 int Global::counter = 0;
 int StrGlobal::counter = 0;
 
+std::string current_break;
 std::string current_func;
 int current_offset;
 
@@ -227,6 +228,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "for") {
 		auto start = Label();
 		auto end = Label();
+		current_break = end.to_string();
 
 		// Start of loop
 		emit(start.to_string() + ":");
@@ -245,7 +247,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "break") {
-		emit("TODO BREAK");
+		emit("    j " + current_break);
 	}
 
 	else if (ast->type == "return") {
