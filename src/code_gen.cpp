@@ -91,6 +91,8 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "func") {
+		current_func = ast->get_child(0)->attr;
+
 		// Setup stack frame
 		emit(ast->get_child(0)->attr + ":");
 		auto locals = count_locals(ast->get_child(2));
@@ -158,9 +160,21 @@ void gen_pass_1(AST *ast) {
 
 	else if (ast->type == "for") {
 		auto start = Label();
+		auto end = Label();
+
+		// Start of loop
 		emit(start.to_string() + ":");
 
-		auto end = Label();
+		// Condition
+		gen_pass_1(ast->get_child(0));
+		emit("    beqz " + ast->get_child(0)->reg + "," + end.to_string());
+		freereg(ast->get_child(0)->reg);
+
+		// Body
+		gen_pass_1(ast->get_child(1));
+		emit("    j " + start.to_string());
+
+		// End of loop
 		emit(end.to_string() + ":");
 	}
 
@@ -182,7 +196,7 @@ void gen_pass_1(AST *ast) {
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		auto str_global = StrGlobal();
-		emit("    la $t0," + str_global.to_string());
+		emit("    la " + reg + "," + str_global.to_string());
 		strings[str_global.to_string()] = ast->attr;
 	}
 
@@ -199,17 +213,31 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "&&") {
-		/**
-		 	li $t0,Ltrue
-		 	beqz $t1,L2
-			move $t1,$t0                                                                                                                                                   |~                                                                                li $t0,Lfalse                                                                        |~
-			move $t1,$t0
-		 */
-		emit("TODO AND");
+		gen_pass_1(ast->get_child(0));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    move " + reg + "," + ast->get_child(0)->reg);
+		auto skip = Label();
+		emit("    beqz " + reg + "," + skip.to_string());
+		freereg(ast->get_child(0)->reg);
+		gen_pass_1(ast->get_child(1));
+		emit("    move " + reg + "," + ast->get_child(0)->reg);
+		freereg(ast->get_child(1)->reg);
+		emit(skip.to_string() + ":");
 	}
 
 	else if (ast->type == "||") {
-		emit("TODO OR");
+		gen_pass_1(ast->get_child(0));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    move " + reg + "," + ast->get_child(0)->reg);
+		auto skip = Label();
+		emit("    bnez " + reg + "," + skip.to_string());
+		freereg(ast->get_child(0)->reg);
+		gen_pass_1(ast->get_child(1));
+		emit("    move " + reg + "," + ast->get_child(0)->reg);
+		freereg(ast->get_child(1)->reg);
+		emit(skip.to_string() + ":");
 	}
 
 	else if (ast->type == "==") {
@@ -386,15 +414,82 @@ void generate_code(AST *root) {
 	emit("    Lfalse = 0");
 	emit("    .text");
 	emit("    .globl _start");
-	emit("Lhalt:");
-	emit("    li $v0,10");
-	emit("    syscall");
-	emit("    jr $ra");
 	emit("_start:");
 	emit("    jal main");
 	emit("    j Lhalt");
 
+	get_char();
+	prints();
+	printi();
+	halt();
+	printb();
+	printc();
+
 	gen_pass_0(root);
 	gen_pass_1(root);
 	gen_pass_2();
+}
+
+void get_char(){
+	emit(".data");
+	emit("char: .space 2");
+	emit(".text");
+
+	emit("Lgetchar: ");
+	emit("  addi $sp,$sp,-4");
+	emit("  sw $s0,0($sp)");
+	emit("  li $v0,8");
+	emit("  la $a0,char");
+	emit("  la $a1,2");
+	emit("  syscall");
+	emit("  lb $v0,char");
+	emit("  li $s0,4");
+	emit("  beq $v0,$s0,Lgetchar_eof");
+	emit("  li $s0,0");
+	emit("  beq $v0,$s0,Lgetchar_eof");
+	emit("Lgetchar_return:");
+	emit("  lw $s0 0($sp)");
+	emit("  addi $sp,$sp,4");
+	emit("  jr $ra ");
+	emit("Lgetchar_eof:");
+	emit("  li $v0,-1");
+	emit("  j Lgetchar_return");
+}
+
+void prints(){
+	emit("Lprints: ");
+	emit("  li $v0,4");
+	emit("  syscall");
+	emit("  jr $ra ");
+}
+
+void printi(){
+	emit("Lprinti: ");
+	emit("    li $v0,1");
+	emit("    syscall");
+	emit("    jr $ra ");
+
+}
+
+void halt(){
+	emit("Lhalt: ");
+	emit("    li $v0,10");
+	emit("    syscall");
+	emit("    jr $ra ");
+
+}
+
+void printb(){
+	emit("Lprintb: ");
+	emit("  li $v0,1");
+	emit("  syscall");
+	emit("  jr $ra ");
+
+}
+
+void printc(){
+	emit("printc: ");
+	emit("  li $v0,11");
+	emit("  syscall");
+	emit("  jr $ra ");
 }

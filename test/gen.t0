@@ -1,5 +1,4 @@
 func main() {
 	var a bool
-	a = !false
-	//a = true && false
+	a = true && false
 }

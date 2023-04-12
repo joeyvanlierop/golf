@@ -53,3 +53,11 @@ void gen_pass_1(AST *ast);
 void gen_pass_2();
 int count_locals(AST *ast);
 void generate_code(AST *root);
+
+// Predefined functions
+void get_char();
+void prints();
+void printi();
+void halt();
+void printb();
+void printc();
