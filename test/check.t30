@@ -1,7 +1,0 @@
-// check that if expr type is boolean
-
-func main() {
-	if 1 {
-	} else {
-	}
-}

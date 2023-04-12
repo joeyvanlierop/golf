@@ -157,7 +157,11 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "for") {
-		emit("TODO FOR");
+		auto start = Label();
+		emit(start.to_string() + ":");
+
+		auto end = Label();
+		emit(end.to_string() + ":");
 	}
 
 	else if (ast->type == "break") {
@@ -170,11 +174,13 @@ void gen_pass_1(AST *ast) {
 
 	else if (ast->type == "int") {
 		auto reg = alloc_reg();
-		emit("    li " + reg + "," + ast->attr);
 		ast->reg = reg;
+		emit("    li " + reg + "," + ast->attr);
 	}
 
 	else if (ast->type == "string") {
+		auto reg = alloc_reg();
+		ast->reg = reg;
 		auto str_global = StrGlobal();
 		emit("    la $t0," + str_global.to_string());
 		strings[str_global.to_string()] = ast->attr;
@@ -193,6 +199,12 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "&&") {
+		/**
+		 	li $t0,Ltrue
+		 	beqz $t1,L2
+			move $t1,$t0                                                                                                                                                   |~                                                                                li $t0,Lfalse                                                                        |~
+			move $t1,$t0
+		 */
 		emit("TODO AND");
 	}
 
@@ -201,27 +213,63 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "==") {
-		emit("TODO EQUALS EQUALS");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    seq " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "!=") {
-		emit("TODO NOT EQUALS");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    sne " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == ">=") {
-		emit("TODO GTOE");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    sge " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == ">") {
-		emit("TODO GT");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    sgt " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "<=") {
-		emit("TODO LTOE");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    sle " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "<") {
-		emit("TODO LT");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    slt " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "*") {
@@ -283,7 +331,11 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "!") {
-		emit("TODO NOT");
+		gen_pass_1(ast->get_child(0));
+		freereg(ast->get_child(0)->reg);
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    xori " + reg + "," + ast->get_child(0)->reg + ",1");
 	}
 
 	else if (ast->type == "=") {
@@ -345,7 +397,4 @@ void generate_code(AST *root) {
 	gen_pass_0(root);
 	gen_pass_1(root);
 	gen_pass_2();
-//	root->pre([](auto ast) {
-//		gen_pass1(ast, false);
-//	});
 }

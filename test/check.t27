@@ -1,8 +1,0 @@
-// return type mismatch
-
-func main() {
-}
-
-func foo() bool {
-	return 123
-}

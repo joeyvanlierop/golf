@@ -1,7 +1,0 @@
-func foo() int {
-	return 42
-}
-
-func main() {
-	foo = 123
-}

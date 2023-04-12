@@ -1,7 +1,0 @@
-// break not inside for loop
-
-func main() {
-	{
-		break
-	}
-}

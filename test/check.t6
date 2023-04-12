@@ -1,7 +1,0 @@
-// a more complex loop error
-
-var int bool
-var bool int
-
-func main() {
-}

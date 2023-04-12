@@ -1,4 +1,0 @@
-func main() {
-    var a int
-    a = 20 / 30
-}

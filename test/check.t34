@@ -1,5 +1,0 @@
-// func arg type check
-
-func main() {
-	prints(main)
-}
