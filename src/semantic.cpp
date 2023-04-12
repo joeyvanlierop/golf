@@ -264,13 +264,13 @@ void Semantic::pass_4() {
 								 unreturned = "str";
 						 }
 					 } else if (ast->type == "return") {
-						 if (unreturned == "$void") {
+						 if (unreturned == "" && ast->children.size() > 0) {
 							 Logger::error(input, ast->line, ast->column, ast->attr.length(),
 										   "return statement in void function");
-						 } else if (ast->children.size() != 1) {
+						 } else if (unreturned != "" && ast->children.size() != 1) {
 							 Logger::error(input, ast->line, ast->column, ast->attr.length(),
 										   "non-void function must return a value");
-						 } else if (ast->get_child(0)->sig != unreturned) {
+						 } else if (unreturned != "" && ast->get_child(0)->sig != unreturned) {
 							 Logger::error(input, ast->get_child(0)->line, ast->get_child(0)->column,
 										   ast->get_child(0)->attr.length(),
 										   "incorrect return type");
