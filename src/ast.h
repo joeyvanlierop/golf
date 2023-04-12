@@ -10,6 +10,7 @@ public:
     std::string attr;
     std::string type;
 	std::string sig;
+	std::string reg;
 	Record* sym;
     int line;
     int column;

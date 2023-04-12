@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "code_gen.h"
 
@@ -7,12 +8,57 @@ int Label::counter = 0;
 int Global::counter = 0;
 int StrGlobal::counter = 0;
 
+std::string current_func;
 int current_offset;
 
 std::map<void*, std::string> vars = {};
 std::map<std::string, std::string> strings = {
 		{StrGlobal().to_string(), ""}
 };
+
+std::vector<std::string> all_registers {
+		"$t9",
+		"$t8",
+		"$t7",
+		"$t6",
+		"$t5",
+		"$t4",
+		"$t3",
+		"$t2",
+		"$t1",
+		"$t0",
+};
+std::map<std::string, std::vector<std::string>> available_registers {};
+
+void populate_registers(std::string func){
+	for (auto r : all_registers) {
+		available_registers[func].push_back(r);
+	}
+}
+
+std::string alloc_reg(){
+	if (available_registers.find(current_func) == available_registers.end()) {
+		populate_registers(current_func);
+	}
+
+	if (!available_registers[current_func].empty()) {
+		std::string available_reg = available_registers[current_func].back();
+		available_registers[current_func].pop_back();
+		return available_reg;
+	}
+
+	else {
+		std::cout << "error: not enough free registers" << std::endl;
+		exit(1);
+	}
+}
+
+void freereg(std::string reg){
+	if (reg != "" && reg.substr(0, 2) != "$v" && reg.substr(0, 2) != "$a") {
+		// cout << "    # Deallocated reg: " << reg << endl;
+		available_registers[current_func].push_back(reg);
+	}
+}
 
 void emit(std::string line) {
 	std::cout << line << std::endl;
@@ -74,7 +120,28 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "funccall") {
-		emit("TODO FUNCCALL");
+		/**
+		 * funccall sig=void @ (2, 8)
+				id [foo] sig=f(int,int,int,int) sym=0x565087163f00 @ (2, 5)
+				actuals
+					int [10] sig=int @ (2, 9)
+					int [20] sig=int @ (2, 13)
+					int [30] sig=int @ (2, 17)
+					int [40] sig=int @ (2, 21)
+		 */
+		// Pass parameters
+		int i = 0;
+		for(auto actual : ast->get_child(1)->children) {
+			gen_pass_1(actual);
+			i++;
+		}
+		i = 0;
+		for(auto actual : ast->get_child(1)->children) {
+			emit("    move $a" + std::to_string(i) + "," + actual->reg);
+			freereg(actual->reg);
+			i++;
+		}
+		emit("    jal " + ast->get_child(0)->attr);
 	}
 
 	else if (ast->type == "var") {
@@ -111,7 +178,9 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "int") {
-		emit("    li $t0," + ast->attr);
+		auto reg = alloc_reg();
+		emit("    li " + reg + "," + ast->attr);
+		ast->reg = reg;
 	}
 
 	else if (ast->type == "string") {
@@ -121,12 +190,14 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "id") {
+		auto reg = alloc_reg();
+		ast->reg = reg;
 		if (ast->attr == "true") {
-			emit("    li $t0,Ltrue");
+			emit("    li " + reg + ",Ltrue");
 		} else if (ast->attr == "false") {
-			emit("    li $t0,Lfalse");
+			emit("    li " + reg + ",Lfalse");
 		} else {
-			emit("    lw $t0," + vars[ast->sym]);
+			emit("    lw " + reg + "," + vars[ast->sym]);
 		}
 	}
 
@@ -175,7 +246,13 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "+") {
-		emit("TODO ADD");
+		gen_pass_1(ast->get_child(0));
+		gen_pass_1(ast->get_child(1));
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    addu " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
+		freereg(ast->get_child(1)->reg);
+		freereg(ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "-") {
@@ -190,8 +267,8 @@ void gen_pass_1(AST *ast) {
 
 	else if (ast->type == "=") {
 		gen_pass_1(ast->get_child(1));
-		emit("    sw $t0," + vars[ast->get_child(0)->sym]);
-//		emit("TODO ASSIGN");
+		emit("    sw " + ast->get_child(1)->reg + "," + vars[ast->get_child(0)->sym]);
+		freereg		(ast->get_child(1)->reg);
 	}
 }
 

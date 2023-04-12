@@ -1,7 +1,9 @@
 func main() {
-    foo(10, 20, 30, 40)
+    var c int
+    c = 40
+    foo(10, 20 + 30, c)
 }
 
-func foo(a int, b int, c int, d int) {
+func foo(a int, b int, c int) {
     a = 20
 }
