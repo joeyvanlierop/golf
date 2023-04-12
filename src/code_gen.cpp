@@ -501,7 +501,7 @@ void gen_pass_2() {
 	}
 	std::sort(sorted.begin(), sorted.end(), [=](std::pair<std::string, std::string>& a, std::pair<std::string, std::string>& b)
 		 {
-			 return a.second.length() < b.second.length();
+			 return a.second.length() <= b.second.length();
 		 }
 	);
 
