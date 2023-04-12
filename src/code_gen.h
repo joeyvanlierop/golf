@@ -62,3 +62,4 @@ void halt();
 void printb();
 void printc();
 void len();
+void divmodchk();

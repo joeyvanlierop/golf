@@ -61,6 +61,7 @@ std::map<std::string, bool> redefined = {
 		{"printc", false},
 		{"printi", false},
 		{"prints", false},
+		{"divmodchk", false},
 };
 
 
@@ -448,10 +449,10 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "/") {
 		gen_pass_1(ast->get_child(0), true);
 		gen_pass_1(ast->get_child(1), true);
-//		emit("    move $a0," + ast->get_child(0)->reg);
-//		emit("    move $a1," + ast->get_child(1)->reg);
-//		emit("    jal divmodchk");
-//		emit("    move " + ast->get_child(1)->reg + ",$v0");
+		emit("    move $a0," + ast->get_child(0)->reg);
+		emit("    move $a1," + ast->get_child(1)->reg);
+		emit("    jal divmodchk");
+		emit("    move " + ast->get_child(1)->reg + ",$v0");
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    div " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -462,10 +463,10 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	else if (ast->type == "%") {
 		gen_pass_1(ast->get_child(0), true);
 		gen_pass_1(ast->get_child(1), true);
-//		emit("    move $a0," + ast->get_child(0)->reg);
-//		emit("    move $a1," + ast->get_child(1)->reg);
-//		emit("    jal divmodchk");
-//		emit("    move " + ast->get_child(1)->reg + ",$v0");
+		emit("    move $a0," + ast->get_child(0)->reg);
+		emit("    move $a1," + ast->get_child(1)->reg);
+		emit("    jal divmodchk");
+		emit("    move " + ast->get_child(1)->reg + ",$v0");
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    rem " + reg + "," + ast->get_child(0)->reg + "," + ast->get_child(1)->reg);
@@ -607,6 +608,7 @@ void generate_code(AST *root) {
 	printb();
 	printc();
 	len();
+	divmodchk();
 
 	// String tomfoolery
 	gen_pass_2();
@@ -726,5 +728,35 @@ void len(){
 	emit("    move $v0,$t0");
 	emit("    lw $ra 0($sp)");
 	emit("    addi $sp,$sp,8");
+	emit("    jr $ra ");
+}
+
+void divmodchk(){
+	if(redefined["divmodchk"])
+		return;
+
+	auto err = StrGlobal();
+	global_to_string[err.to_string()] = "error: division by zero";
+
+	emit("divmodchk:");
+	emit("    subu $sp,$sp,12");
+	emit("    sw $ra,0($sp)");
+	emit("    sw $a0,4($sp)");
+	emit("    sw $a1,8($sp)");
+	emit("	   bne $a1,$zero,divmodchk_min");
+	emit("	   la $a0," + err.to_string());
+	emit("	   li $v0,4");
+	emit("	   syscall");
+	emit("	   j halt");
+	emit("divmodchk_min:");
+	emit("	   lw $t0,4($sp)");
+	emit("	   lw $t1,8($sp)");
+	emit("	   li $t2,-2147483648");
+	emit("	   ble $t1,$t2,divmodchk_epilogue");
+	emit("	   li $t0,1");
+	emit("divmodchk_epilogue:");
+	emit("    move $v0,$t0");
+	emit("    lw $ra 0($sp)");
+	emit("    addi $sp,$sp,12");
 	emit("    jr $ra ");
 }
