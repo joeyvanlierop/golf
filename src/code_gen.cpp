@@ -56,7 +56,6 @@ std::string alloc_reg(){
 
 void freereg(std::string reg){
 	if (reg != "" && reg.substr(0, 2) != "$v" && reg.substr(0, 2) != "$a") {
-		// cout << "    # Deallocated reg: " << reg << endl;
 		available_registers[current_func].push_back(reg);
 	}
 }
@@ -217,6 +216,12 @@ void gen_pass_1(AST *ast) {
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		emit("    li " + reg + "," + ast->attr);
+	}
+
+	else if (ast->type == "u-") {
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    li " + reg + "," + ast->get_child(0)->attr);
 	}
 
 	else if (ast->type == "string") {
