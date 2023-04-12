@@ -163,7 +163,11 @@ void gen_pass_1(AST *ast) {
 
 		// Condition
 		gen_pass_1(ast->get_child(0));
-		emit("    beqz " + ast->get_child(0)->reg + "," + end.to_string());
+		if(ast->children.size() == 3) {
+			emit("    beqz " + ast->get_child(0)->reg + "," + elze.to_string());
+		} else {
+			emit("    beqz " + ast->get_child(0)->reg + "," + end.to_string());
+		}
 		freereg(ast->get_child(0)->reg);
 
 		// If body
