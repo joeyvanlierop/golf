@@ -736,7 +736,7 @@ void divmodchk(){
 		return;
 
 	auto err = StrGlobal();
-	global_to_string[err.to_string()] = "error: division by zero";
+	global_to_string[err.to_string()] = "error: division by zero\n";
 
 	emit("divmodchk:");
 	emit("    subu $sp,$sp,12");
@@ -749,13 +749,11 @@ void divmodchk(){
 	emit("	   syscall");
 	emit("	   j halt");
 	emit("divmodchk_min:");
-	emit("	   lw $t0,4($sp)");
-	emit("	   lw $t1,8($sp)");
-	emit("	   li $t2,-2147483648");
-	emit("	   ble $t1,$t2,divmodchk_epilogue");
-	emit("	   li $t0,1");
+	emit("	   li $v0,-2147483648");
+	emit("	   ble $a0,$v0,divmodchk_epilogue");
+	emit("	   li $a1,1");
 	emit("divmodchk_epilogue:");
-	emit("    move $v0,$t0");
+	emit("    move $v0,$a1");
 	emit("    lw $ra 0($sp)");
 	emit("    addi $sp,$sp,12");
 	emit("    jr $ra ");
