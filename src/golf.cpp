@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
         // Analyze syntax
         Semantic semantic(input, *ast);
-        auto annotated_ast = semantic.analyze(true);
+        auto annotated_ast = semantic.analyze(false);
 
         // Generate code
 		generate_code(ast);
