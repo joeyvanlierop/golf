@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 #include "code_gen.h"
 
@@ -30,6 +31,7 @@ std::vector<std::string> all_registers {
 		"$t0",
 };
 std::map<std::string, std::vector<std::string>> available_registers {};
+std::vector<std::string> used_registers {};
 
 void populate_registers(std::string func){
 	for (auto r : all_registers) {
@@ -45,6 +47,7 @@ std::string alloc_reg(){
 	if (!available_registers[current_func].empty()) {
 		std::string available_reg = available_registers[current_func].back();
 		available_registers[current_func].pop_back();
+		used_registers.push_back(available_reg);
 		return available_reg;
 	}
 
@@ -55,9 +58,8 @@ std::string alloc_reg(){
 }
 
 void freereg(std::string reg){
-	if (reg != "" && reg.substr(0, 2) != "$v" && reg.substr(0, 2) != "$a") {
-		available_registers[current_func].push_back(reg);
-	}
+	available_registers[current_func].push_back(reg);
+	used_registers.erase(std::remove(used_registers.begin(), used_registers.end(), reg), used_registers.end());
 }
 
 void emit(std::string line) {
@@ -122,12 +124,23 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "funccall") {
-		// Pass parameters
+		// Calculate parameters
 		int i = 0;
 		for(auto actual : ast->get_child(1)->children) {
 			gen_pass_1(actual);
+			freereg(actual->reg);
 			i++;
 		}
+
+		// Save registers
+		emit("    subu $sp,$sp," + std::to_string(used_registers.size() * 4));
+		i = 0;
+		for(auto reg : used_registers) {
+			emit("    sw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
+			i++;
+		}
+
+		// Store parameters
 		i = 0;
 		for(auto actual : ast->get_child(1)->children) {
 			emit("    move $a" + std::to_string(i) + "," + actual->reg);
@@ -135,9 +148,18 @@ void gen_pass_1(AST *ast) {
 			i++;
 		}
 		emit("    jal " + ast->get_child(0)->attr);
-//		auto reg = alloc_reg();
-//		ast->reg = reg;
-//		emit("    move " + reg + ",$v0");
+
+		// Load registers
+		i = 0;
+		for(auto reg : used_registers) {
+			emit("    lw $t" + std::to_string(i) + "," + std::to_string(i * 4) + "($sp)");
+			i++;
+		}
+		emit("    addu $sp,$sp," + std::to_string(used_registers.size() * 4));
+
+		auto reg = alloc_reg();
+		ast->reg = reg;
+		emit("    move " + reg + ",$v0");
 	}
 
 	else if (ast->type == "var") {

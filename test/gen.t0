@@ -1,6 +1,7 @@
 func main() {
 	var a int
-	a = foo(10)
+	a = 42 + foo(foo(20 + foo(foo(40))))
+	printi(a)
 }
 
 func foo(a int) int {
