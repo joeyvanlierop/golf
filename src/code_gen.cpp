@@ -630,11 +630,25 @@ void halt(){
 }
 
 void printb(){
-	emit("printb:");
-	emit("    li $v0,1");
-	emit("    syscall");
-	emit("    jr $ra ");
+	auto t = StrGlobal();
+	auto f = StrGlobal();
 
+	string_to_global["true"] = t.to_string();
+	global_to_string[t.to_string()] = "true";
+	string_to_global["false"] = f.to_string();
+	global_to_string[f.to_string()] = "false";
+
+	emit("printb:");
+	emit("	  li $t0,1");
+	emit("	  beq $a0,$zero,printb_false");
+	emit("	  la $a0," + t.to_string());
+	emit("	  j printb_epilogue");
+	emit("printb_false:");
+	emit("	  la $a0," + f.to_string());
+	emit("printb_epilogue:");
+	emit("	  li $v0,4");
+	emit("	  syscall");
+	emit("	  jr $ra");
 }
 
 void printc(){
