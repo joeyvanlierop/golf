@@ -416,7 +416,7 @@ void gen_pass_2() {
 		for (char &c: value) {
 			if(c == 92) {
 				escaping = true;
-			} else if(escaping && escapes.contains(c)) {
+			} else if(escaping && escapes.count(c)) {
 				emit("    .byte " + std::to_string(escapes[c]));
 			} else {
 				emit("    .byte " + std::to_string(int(c)));
