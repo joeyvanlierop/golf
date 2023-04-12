@@ -61,10 +61,8 @@ void freereg(std::string reg){
 	}
 }
 
-std::ofstream source_file;
 void emit(std::string line) {
 	std::cout << line << std::endl;
-	source_file << line << std::endl;
 }
 
 void gen_pass_0(AST *ast) {
@@ -413,8 +411,6 @@ void gen_pass_2() {
 }
 
 void generate_code(AST *root) {
-	source_file.open("a.out", std::ofstream::out | std::ofstream::trunc);
-
 	emit("    Ltrue = 1");
 	emit("    Lfalse = 0");
 	emit("    .text");
@@ -433,8 +429,6 @@ void generate_code(AST *root) {
 	gen_pass_0(root);
 	gen_pass_1(root);
 	gen_pass_2();
-
-	source_file.close();
 }
 
 void get_char(){
