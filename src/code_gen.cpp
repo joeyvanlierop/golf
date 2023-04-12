@@ -277,13 +277,15 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		auto reg = alloc_reg();
 		ast->reg = reg;
 		std::string str_global;
-		if(string_to_global.count(ast->attr)) {
-			str_global = string_to_global[ast->attr];
+		auto normalized = (ast->attr == "\\t" || ast->attr == "\t") ? "\t" : ast->attr;
+		if(string_to_global.count(normalized)) {
+			str_global = string_to_global[normalized];
 		} else {
 			str_global = StrGlobal().to_string();
 		}
 		emit("    la " + reg + "," + str_global);
-		global_to_string[str_global] = ast->attr;
+		global_to_string[str_global] = normalized;
+		string_to_global[normalized] = str_global;
 	}
 
 	else if (ast->type == "id") {
