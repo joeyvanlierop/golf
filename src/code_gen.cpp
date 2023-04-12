@@ -156,7 +156,26 @@ void gen_pass_1(AST *ast) {
 	}
 
 	else if (ast->type == "if") {
-		emit("TODO IF");
+		auto elze = Label();
+		auto end = Label();
+
+		// Condition
+		gen_pass_1(ast->get_child(0));
+		emit("    beqz " + ast->get_child(0)->reg + "," + end.to_string());
+		freereg(ast->get_child(0)->reg);
+
+		// If body
+		gen_pass_1(ast->get_child(1));
+		emit("    j " + end.to_string());
+
+		// Else body
+		if(ast->children.size() == 3) {
+			emit(elze.to_string() + ":");
+			gen_pass_1(ast->get_child(2)->get_child(0));
+		}
+
+		// End of loop
+		emit(end.to_string() + ":");
 	}
 
 	else if (ast->type == "for") {

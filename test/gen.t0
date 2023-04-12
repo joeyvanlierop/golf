@@ -1,4 +1,9 @@
 func main() {
 	var a bool
-	a = true && false
+	a = true
+	if a {
+	    a = false
+	} else {
+	    a = true
+	}
 }
