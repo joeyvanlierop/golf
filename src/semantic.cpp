@@ -133,7 +133,10 @@ void Semantic::pass_2() {
 std::string Semantic::encode_func_decl(AST *ast) {
 	std::string sig = "f(";
 	for (int i = 0; i < ast->get_child(1)->get_child(0)->children.size(); i++) {
-		sig.append(ast->get_child(1)->get_child(0)->get_child(i)->get_child(1)->attr);
+		auto type = ast->get_child(1)->get_child(0)->get_child(i)->get_child(1)->attr;
+		if(type == "string")
+			type = "str";
+		sig.append(type);
 		if (i < ast->get_child(1)->get_child(0)->children.size() - 1)
 			sig.append(",");
 	}
@@ -257,6 +260,8 @@ void Semantic::pass_4() {
 							 main_count++;
 						 } else if (ast->get_child(1)->get_child(1)->attr != "$void") {
 							 unreturned = ast->get_child(1)->get_child(1)->attr;
+							 if(unreturned == "string")
+								 unreturned = "str";
 						 }
 					 } else if (ast->type == "return") {
 						 if (unreturned == "$void") {
