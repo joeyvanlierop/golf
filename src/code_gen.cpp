@@ -548,11 +548,21 @@ void gen_pass_2() {
 	for (auto it = global_to_string.begin(); it != global_to_string.end(); it++) {
 		sorted.push_back(*it);
 	}
-	std::sort(sorted.begin(), sorted.end(), [=](std::pair<std::string, std::string>& a, std::pair<std::string, std::string>& b)
-		 {
-			 return a.second.length() <= b.second.length();
-		 }
-	);
+	std::sort(sorted.begin(), sorted.end(), [](std::pair<std::string, std::string>& a, std::pair<std::string, std::string>& b)
+	{
+		if (a.second.length() == b.second.length()) { // If length is the same
+			int cmp = a.second.compare(b.second); // Compare alphabetically
+			if (cmp == 0) { // If they are the same alphabetically
+				// Compare case-insensitively
+				return std::lexicographical_compare(a.second.begin(), a.second.end(), b.second.begin(), b.second.end(),
+													[](char a, char b) { return std::tolower(a) < std::tolower(b); });
+			} else {
+				return cmp < 0;
+			}
+		} else {
+			return a.second.length() < b.second.length();
+		}
+	});
 
 	emit("    .data");
 	auto escaping = false;
