@@ -237,8 +237,9 @@ void Semantic::pass_4() {
 	int for_depth = 0;
 	int main_count = 0;
 	std::string unreturned = "";
+	bool has_returned = false;
 
-	ast.pre_post([this, &for_depth, &main_count, &unreturned](auto ast) {
+	ast.pre_post([this, &for_depth, &main_count, &unreturned, &has_returned](auto ast) {
 					 if (ast->type == "for") {
 						 for_depth++;
 					 } else if (ast->type == "break") {
@@ -269,7 +270,7 @@ void Semantic::pass_4() {
 										   ast->get_child(0)->attr.length(),
 										   "incorrect return type");
 						 } else {
-							 unreturned = "";
+							 has_returned = true;
 						 }
 					 } else if (ast->type == "=") {
 						 auto left = ast->get_child(0);
@@ -286,11 +287,11 @@ void Semantic::pass_4() {
 						 ast->sig = "void";
 					 }
 				 },
-				 [&for_depth, &unreturned, this](auto ast) {
+				 [&for_depth, &unreturned, this, &has_returned](auto ast) {
 					 if (ast->type == "for")
 						 for_depth--;
 					 else if (ast->type == "func")
-						 if (unreturned != "")
+						 if (unreturned != "" && has_returned == false)
 							 Logger::error(input, ast->line, ast->column, ast->attr.length(),
 										   "missing return statement in non-void function");
 
