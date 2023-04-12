@@ -108,7 +108,7 @@ void Semantic::pass_2() {
 					 } else if (ast->type == "formals") {
 						 for (auto formal: ast->children) {
 							 auto type = symbol_table.lookup(formal->get_child(1));
-							 ast->sym = symbol_table.define(formal->get_child(0), {type->sig, "", false, false});
+							 formal->get_child(0)->sym = symbol_table.define(formal->get_child(0), {type->sig, "", false, false});
 							 if (!type->is_type)
 								 Logger::error(input, formal->get_child(1)->line, formal->get_child(1)->column, formal->get_child(1)->attr.length(), "expected type");
 							 formal->get_child(1)->sym = type;
