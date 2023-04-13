@@ -755,6 +755,6 @@ void divmodchk(){
 	emit("divmodchk_epilogue:");
 	emit("    move $v0,$a1");
 	emit("    lw $ra,0($sp)");
-	emit("    addi $sp,$sp,12");
+	emit("    addu $sp,$sp,12");
 	emit("    jr $ra ");
 }
