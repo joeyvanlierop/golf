@@ -1,4 +1,4 @@
-Run started on Wed Apr 12 19:53:38 2023
+Run started on Wed Apr 12 20:00:17 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -385,8 +385,8 @@ STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 -123
 -2147483648
-4
-4
+-2147483648
+-2147483648
 
 
 STDERR:
@@ -700,7 +700,9 @@ STDIN:
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-Error: expected factor.
+ = 17
+ = 25
+ = 12345
 
 
 STDERR:
@@ -1216,5 +1218,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Wed Apr 12 19:53:42 2023
+Run ended on Wed Apr 12 20:00:21 2023
 
