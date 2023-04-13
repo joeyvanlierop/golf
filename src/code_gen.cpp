@@ -88,7 +88,7 @@ std::string alloc_reg(){
 
 	else {
 		std::cout << "error: not enough free registers" << std::endl;
-		exit(1);
+		exit(0);
 	}
 }
 
@@ -274,7 +274,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		// Else body
 		if(ast->children.size() == 3) {
 			emit(elze.to_string() + ":");
-			gen_pass_1(ast->get_child(2)->get_child(0));
+			gen_pass_1(ast->get_child(2));
 		}
 
 		// End of loop
