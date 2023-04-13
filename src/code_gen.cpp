@@ -749,8 +749,7 @@ void divmodchk(){
 	emit("    syscall");
 	emit("    j halt");
 	emit("divmodchk_min:");
-	emit("    li $v0,-2147483648");
-	emit("    beq $a0,$v0,divmodchk_epilogue");
+	emit("    bne $a0,-2147483648,divmodchk_epilogue");
 	emit("    li $a1,1");
 	emit("divmodchk_epilogue:");
 	emit("    move $v0,$a1");
