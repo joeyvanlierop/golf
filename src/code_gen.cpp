@@ -634,7 +634,7 @@ void get_char(){
 	emit("    li $s0,0");
 	emit("    beq $v0,$s0,getchar_eof");
 	emit("getchar_epilogue:");
-	emit("    lw $s0 0($sp)");
+	emit("    lw $s0,0($sp)");
 	emit("    addi $sp,$sp,4");
 	emit("    jr $ra ");
 	emit("getchar_eof:");
@@ -726,7 +726,7 @@ void len(){
 	emit("    j len_loop");
 	emit("len_epilogue:");
 	emit("    move $v0,$t0");
-	emit("    lw $ra 0($sp)");
+	emit("    lw $ra,0($sp)");
 	emit("    addi $sp,$sp,8");
 	emit("    jr $ra ");
 }
@@ -750,11 +750,11 @@ void divmodchk(){
 	emit("	   j halt");
 	emit("divmodchk_min:");
 	emit("	   li $v0,-2147483648");
-	emit("	   ble $a0,$v0,divmodchk_epilogue");
+	emit("	   blt $a0,$v0,divmodchk_epilogue");
 	emit("	   li $a1,1");
 	emit("divmodchk_epilogue:");
 	emit("    move $v0,$a1");
-	emit("    lw $ra 0($sp)");
+	emit("    lw $ra,0($sp)");
 	emit("    addi $sp,$sp,12");
 	emit("    jr $ra ");
 }
