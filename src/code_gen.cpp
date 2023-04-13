@@ -164,7 +164,7 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 
 		// Return validation
 		if(ast->get_child(1)->get_child(1)->attr != "$void") {
-			auto error_string = "error: function " + ast->get_child(0)->attr + "must return a value\n";
+			auto error_string = "error: function \'" + ast->get_child(0)->attr + "\' must return a value\n";
 			auto error_string_global = StrGlobal();
 			string_to_global[error_string] = error_string_global.to_string();
 			global_to_string[error_string_global.to_string()] = error_string;
