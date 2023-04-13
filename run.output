@@ -1,4 +1,4 @@
-Run started on Wed Apr 12 19:30:15 2023
+Run started on Wed Apr 12 19:53:38 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -385,8 +385,8 @@ STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 -123
 -2147483648
--2147483648
--2147483648
+4
+4
 
 
 STDERR:
@@ -456,6 +456,7 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+OK
 
 
 STDERR:
@@ -545,6 +546,7 @@ Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 if ((A && B) || C) {...} else {...}, with A=false B=false C=false
 evaluated A
 evaluated C
+else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=false B=false C=true
 evaluated A
@@ -554,6 +556,7 @@ if-part executed
 if ((A && B) || C) {...} else {...}, with A=false B=true C=false
 evaluated A
 evaluated C
+else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=false B=true C=true
 evaluated A
@@ -564,6 +567,7 @@ if ((A && B) || C) {...} else {...}, with A=true B=false C=false
 evaluated A
 evaluated B
 evaluated C
+else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=true B=false C=true
 evaluated A
@@ -682,13 +686,27 @@ Test: recursive-descent calculator |
 % ./golf /home/profs/aycock/411/TEST/final/gen.t18 > out.s
 
 STDERR:
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
 
 
-*** TERMINATION VIA SIGNAL: Aborted
+RETURN CODE: 0
 
-(GoLF compiler unsuccessful, skipping test)
+% /home/profs/aycock/411/bin/spim -file out.s < /home/profs/aycock/411/TEST/final/input/gen.t18.in
+
+STDIN:
+2 + 3 * 5
+(2 + 3) * 5
+(976 - -24 + 123 - 1000) * 100 + 45
+
+
+STDOUT:
+Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+Error: expected factor.
+
+
+STDERR:
+
+
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: string operations |
@@ -714,6 +732,10 @@ string with \n: len("Hello, world!
 silly string: len("\"escape th	n(") = 16, correct answer is 16
 HEarth
 Hello, world!
+correct
+correct
+correct
+correct
 correct
 correct
 correct
@@ -769,27 +791,12 @@ Test: register blow-out |
 % ./golf /home/profs/aycock/411/TEST/final/gen.t21 > out.s
 
 STDERR:
+error: not enough free registers
 
 
-RETURN CODE: 0
+RETURN CODE: 1
 
-% /home/profs/aycock/411/bin/spim -file out.s
-
-STDOUT:
-Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-halt
-
-
-
-STDERR:
-spim: (parser) syntax error on line 31 of file out.s
-	  li $s9,20
-	     ^
-Attempt to execute non-instruction at 0x00400084
-
-
-RETURN CODE: 0
+(GoLF compiler unsuccessful, skipping test)
 
 -------------------------------------------------------------------------------
 Test: nested "for" loops |
@@ -945,46 +952,46 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXX  XXXXXX    XXXXXX  XXXXXXXXXX
+XXXXXX          XXXXXXXX          XXXXXX
+XXXX    XXXX  XXXX    XXXX  XXXX    XXXX
+XXXXXXXX      XX        XX      XXXXXXXX
+XXXX  XX  XXXXXXXX    XXXXXXXX  XX  XXXX
+XXXX  XX    XX            XX    XX  XXXX
+XXXXXXXXXX  XX  XXXXXXXX  XX  XXXXXXXXXX
+XXXX    XX  XX  XX    XX  XX  XX    XXXX
+XXXX  XXXX  XX  XX    XX  XX  XXXX  XXXX
+XXXX    XX  XX  XX    XX  XX  XX    XXXX
+XXXXXXXXXX  XX  XX    XX  XX  XXXXXXXXXX
+XXXX  XX    XX  XXXXXXXX  XX    XX  XXXX
+XXXX  XX  XXXX  XX    XX  XXXX  XX  XXXX
+XXXXXXXX  XX    XXXXXXXX    XX  XXXXXXXX
+XXXX      XXXX    XXXX    XXXX      XXXX
+XXXXXXXX  XX    XXXXXXXX    XX  XXXXXXXX
+XXXXXX    XX  XXXX    XXXX  XX    XXXXXX
+XXXX    XXXX    XX    XX    XXXX    XXXX
+XXXXXXXXXX    XXXX    XXXX    XXXXXXXXXX
+XXXX    XXXX    XX    XX    XXXX    XXXX
+XXXX  XXXX    XXXXXXXXXXXX    XXXX  XXXX
+XXXX    XX  XXXX        XXXX  XX    XXXX
+XXXX  XXXX    XXXXXXXXXXXX    XXXX  XXXX
+XXXXXXXX    XXXX        XXXX    XXXXXXXX
+XXXX      XXXX    XXXX    XXXX      XXXX
+XXXX  XXXX      XXXXXXXX      XXXX  XXXX
+XXXXXXXX    XXXX        XXXX    XXXXXXXX
+XXXXXX    XXXX    XXXX    XXXX    XXXXXX
+XXXXXXXX        XXXXXXXX        XXXXXXXX
+XXXXXX    XXXX  XX    XX  XXXX    XXXXXX
+XXXX    XXXX    XX    XX    XXXX    XXXX
+XXXX  XXXX    XXXXXXXXXXXX    XXXX  XXXX
+XXXX    XX  XXXX        XXXX  XX    XXXX
+XXXX  XXXX    XXXXXXXXXXXX    XXXX  XXXX
+XXXXXXXX    XXXX        XXXX    XXXXXXXX
+XXXX      XXXX    XXXX    XXXX      XXXX
+XXXX  XXXX      XXXXXXXX      XXXX  XXXX
+XXXXXXXX    XXXX        XXXX    XXXXXXXX
+XXXXXX    XXXX    XXXX    XXXX    XXXXXX
+XXXXXXXX        XXXXXXXX        XXXXXXXX
 
 
 STDERR:
@@ -1008,115 +1015,115 @@ RETURN CODE: 0
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 Generation 1:
-0 1 1 0 0 0 1 0 1 0 
+0 1 1 1 0 1 1 0 1 0 
 0 0 1 0 0 0 1 0 1 0 
 0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
+0 1 0 1 0 0 1 0 0 0 
+0 1 1 0 0 0 0 1 0 0 
 0 0 1 1 1 1 1 1 0 0 
 0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 0 0 1 0 1 1 0 0 
+0 1 1 1 0 0 0 1 0 1 
+0 1 1 0 1 1 0 0 1 1 
 Generation 2:
-0 1 1 0 0 0 1 0 1 0 
+0 1 1 1 0 1 1 0 1 0 
 0 0 1 0 0 0 1 0 1 0 
 0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
+1 1 0 1 0 0 1 1 0 0 
+0 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
 0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+0 1 1 0 1 1 0 0 1 1 
 Generation 3:
-0 1 1 0 0 0 1 0 1 0 
+0 1 1 1 0 1 1 0 1 0 
 0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 4:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 5:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 6:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 7:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 8:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 9:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 Generation 10:
-0 1 1 0 0 0 1 0 1 0 
-0 0 1 0 0 0 1 0 1 0 
-0 1 0 1 1 1 1 0 0 0 
-0 0 0 1 0 0 1 0 0 0 
-0 0 1 0 0 0 0 0 0 0 
-0 0 1 1 1 1 1 1 0 0 
-0 1 1 0 0 1 1 0 1 0 
-0 0 0 0 1 0 1 1 0 0 
-0 0 1 1 0 0 0 1 0 1 
-0 0 1 0 1 1 0 0 0 1 
+0 1 1 1 0 1 1 0 1 0 
+1 0 1 0 0 0 1 0 1 0 
+1 1 0 1 1 1 1 0 0 0 
+1 1 0 1 0 0 1 1 0 0 
+1 1 1 0 0 0 0 1 0 0 
+0 0 1 1 1 1 1 1 1 0 
+1 1 1 0 0 1 1 0 1 0 
+1 1 0 0 1 0 1 1 0 0 
+1 1 1 1 0 0 0 1 0 1 
+1 1 1 0 1 1 0 0 1 1 
 
 
 STDERR:
@@ -1209,5 +1216,5 @@ STDERR:
 
 RETURN CODE: 0
 
-Run ended on Wed Apr 12 19:30:18 2023
+Run ended on Wed Apr 12 19:53:42 2023
 
