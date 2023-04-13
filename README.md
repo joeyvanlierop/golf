@@ -94,10 +94,10 @@ while true {
 
 GoLF programs get executed in four separate steps: lexing, parsing, semantic analysis, and code generation.
 
-- [**Lexing**](./src/lexer.cpp): The lexer matches global_to_string in the source code and groups them into tokens.
+- [**Lexing**](./src/lexer.cpp): The process of breaking down the source code into a stream of tokens, which represent the smallest units of meaning in the programming language.
 
-- [**Parsing**](./src/parser.cpp): The parser organizes tokens into an abstract syntax tree of the source code.
+- [**Parsing**](./src/parser.cpp): The process of analyzing the sequence of tokens to construct an abstract syntax tree, which represents the structure of the program according to the rules of the programming language's grammar.
 
-- **Semantic Analysis**: (TODO)
+- [**Semantic Analysis**](./src/semantic.cpp): Performs a series of checks on the abstract syntax tree to ensure that it conforms to the rules of the programming language, such as type checking, scoping, and name resolution.
 
-- **Code Generation**: (TODO)
+- [**Code Generation**](./src/code-gen.cpp): Transforms the abstract syntax tree into executable code, generating machine instructions or bytecode for a virtual machine.
