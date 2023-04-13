@@ -1,4 +1,4 @@
-Run started on Wed Apr 12 18:59:11 2023
+Run started on Wed Apr 12 19:06:51 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -680,15 +680,27 @@ Test: recursive-descent calculator |
 % ./golf /home/profs/aycock/411/TEST/final/gen.t18 > out.s
 
 STDERR:
---> /home/profs/aycock/411/TEST/final/gen.t18:61:1
-   | 
-61 | func scanner() int {
-   | ^ error: function must return a value
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
-(GoLF compiler unsuccessful, skipping test)
+% /home/profs/aycock/411/bin/spim -file out.s < /home/profs/aycock/411/TEST/final/input/gen.t18.in
+
+STDIN:
+2 + 3 * 5
+(2 + 3) * 5
+(976 - -24 + 123 - 1000) * 100 + 45
+
+
+STDOUT:
+Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+error: division by zero
+
+
+STDERR:
+
+
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: string operations |
@@ -1093,5 +1105,5 @@ RETURN CODE: 0
 
 *** TERMINATION VIA TIMEOUT
 
-Run ended on Wed Apr 12 18:59:22 2023
+Run ended on Wed Apr 12 19:07:02 2023
 
