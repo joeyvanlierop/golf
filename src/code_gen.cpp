@@ -281,6 +281,11 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		emit(end.to_string() + ":");
 	}
 
+	else if (ast->type == "else") {
+		// Condition
+		gen_pass_1(ast->get_child(0));
+	}
+
 	else if (ast->type == "for") {
 		auto start = Label();
 		auto end = Label();
