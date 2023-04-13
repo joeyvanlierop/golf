@@ -727,7 +727,7 @@ void len(){
 	emit("len_epilogue:");
 	emit("    move $v0,$t0");
 	emit("    lw $ra,0($sp)");
-	emit("    addi $sp,$sp,8");
+	emit("    addu $sp,$sp,8");
 	emit("    jr $ra ");
 }
 
@@ -743,15 +743,15 @@ void divmodchk(){
 	emit("    sw $ra,0($sp)");
 	emit("    sw $a0,4($sp)");
 	emit("    sw $a1,8($sp)");
-	emit("	   bne $a1,$zero,divmodchk_min");
-	emit("	   la $a0," + err.to_string());
-	emit("	   li $v0,4");
-	emit("	   syscall");
-	emit("	   j halt");
+	emit("    bne $a1,$zero,divmodchk_min");
+	emit("    la $a0," + err.to_string());
+	emit("    li $v0,4");
+	emit("    syscall");
+	emit("    j halt");
 	emit("divmodchk_min:");
-	emit("	   li $v0,-2147483648");
-	emit("	   blt $a0,$v0,divmodchk_epilogue");
-	emit("	   li $a1,1");
+	emit("    li $v0,-2147483648");
+	emit("    blt $a0,$v0,divmodchk_epilogue");
+	emit("    li $a1,1");
 	emit("divmodchk_epilogue:");
 	emit("    move $v0,$a1");
 	emit("    lw $ra,0($sp)");
