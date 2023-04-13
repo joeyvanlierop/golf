@@ -330,11 +330,8 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 		auto reg = alloc_reg();
 		ast->reg = reg;
 
-		auto current = ast;
-		while(current->type != "int") {
-			current = current->get_child(0);
-		}
-		emit("    li " + reg + "," + current->attr);
+		gen_pass_1(ast->get_child(0));
+		emit("    negu " + ast->get_child(0)->reg + "," + ast->get_child(0)->reg);
 	}
 
 	else if (ast->type == "string") {
