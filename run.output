@@ -1,4 +1,4 @@
-Run started on Wed Apr 12 18:57:04 2023
+Run started on Wed Apr 12 18:59:11 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -10,7 +10,18 @@ Running make |
 
 STDOUT:
 g++ -c src/golf.cpp
+g++ -c src/lexer.cpp
+g++ -c src/token.cpp
+g++ -c src/logger.cpp
+g++ -c src/input.cpp
+g++ -c src/file_input.cpp
+g++ -c src/repl_input.cpp
+g++ -c src/ast.cpp
+g++ -c src/parser.cpp
 g++ -c src/semantic.cpp
+g++ -c src/symbol_table.cpp
+g++ -c src/record.cpp
+g++ -c src/code_gen.cpp
 g++ -g golf.o lexer.o token.o logger.o input.o file_input.o repl_input.o ast.o parser.o semantic.o symbol_table.o record.o code_gen.o -o golf
 
 
@@ -85,18 +96,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+Hello, world!
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -116,18 +119,18 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+start of loop
+0
+start of loop
+0
+start of loop
+0
+start of loop
+0
+4
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -147,18 +150,33 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
+global zero values: 
+false
+0
 
+local zero values: 
+false
+0
+
+local zero values: 
+false
+0
+
+sub-block zero values: 
+false
+0
+
+sub-block zero values: 
+false
+0
+
+post-sub-block zero values: 
+true
+123
+garble
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -178,18 +196,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+2903040
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -209,18 +219,33 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+fib(0) = 0
+fib(1) = 1
+fib(2) = 1
+fib(3) = 2
+fib(4) = 3
+fib(5) = 5
+fib(6) = 8
+fib(7) = 13
+fib(8) = 21
+fib(9) = 34
+fib(10) = 55
+fib(11) = 89
+fib(12) = 144
+fib(13) = 233
+fib(14) = 377
+fib(15) = 610
+fib(16) = 987
+fib(17) = 1597
+fib(18) = 2584
+fib(19) = 4181
+fib(20) = 6765
+fib(21) = 10946
+fib(22) = 17711
+fib(23) = 28657
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -240,18 +265,56 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+fib(0) = 0
+fib(1) = 1
+fib(2) = 1
+fib(3) = 2
+fib(4) = 3
+fib(5) = 5
+fib(6) = 8
+fib(7) = 13
+fib(8) = 21
+fib(9) = 34
+fib(10) = 55
+fib(11) = 89
+fib(12) = 144
+fib(13) = 233
+fib(14) = 377
+fib(15) = 610
+fib(16) = 987
+fib(17) = 1597
+fib(18) = 2584
+fib(19) = 4181
+fib(20) = 6765
+fib(21) = 10946
+fib(22) = 17711
+fib(23) = 28657
+fib(24) = 46368
+fib(25) = 75025
+fib(26) = 121393
+fib(27) = 196418
+fib(28) = 317811
+fib(29) = 514229
+fib(30) = 832040
+fib(31) = 1346269
+fib(32) = 2178309
+fib(33) = 3524578
+fib(34) = 5702887
+fib(35) = 9227465
+fib(36) = 14930352
+fib(37) = 24157817
+fib(38) = 39088169
+fib(39) = 63245986
+fib(40) = 102334155
+fib(41) = 165580141
+fib(42) = 267914296
+fib(43) = 433494437
+fib(44) = 701408733
+fib(45) = 1134903170
+fib(46) = 1836311903
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -275,18 +338,9 @@ A man, a plan, a canal: Panama.
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
-
+.amanaP :lanac a ,nalp a ,nam A
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -306,18 +360,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+minint is -2147483648
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -337,18 +383,13 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+-123
+-2147483648
+-2147483648
+-2147483648
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -368,18 +409,11 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+-2147483648
+0
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -399,18 +433,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+error: division by zero
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -430,18 +456,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+OK
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -461,18 +479,17 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+backslash b = []
+backslash t = [	]
+backslash n = [
+]
+backslash f = []
+backslash r = []
+backslash quote = ["]
+backslash backslash = [\]
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -492,18 +509,21 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+0 = 
+	0 (base 2)
+	0 (base 8)
+	0 (base 10)
+17 = 
+	010001 (base 2)
+	021 (base 8)
+	017 (base 10)
+42 = 
+	0101010 (base 2)
+	052 (base 8)
+	042 (base 10)
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -523,18 +543,92 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
+if ((A && B) || C) {...} else {...}, with A=false B=false C=false
+evaluated A
+evaluated C
+else-part executed
 
+if ((A && B) || C) {...} else {...}, with A=false B=false C=true
+evaluated A
+evaluated C
+if-part executed
+
+if ((A && B) || C) {...} else {...}, with A=false B=true C=false
+evaluated A
+evaluated C
+else-part executed
+
+if ((A && B) || C) {...} else {...}, with A=false B=true C=true
+evaluated A
+evaluated C
+if-part executed
+
+if ((A && B) || C) {...} else {...}, with A=true B=false C=false
+evaluated A
+evaluated B
+evaluated C
+else-part executed
+
+if ((A && B) || C) {...} else {...}, with A=true B=false C=true
+evaluated A
+evaluated B
+evaluated C
+if-part executed
+
+if ((A && B) || C) {...} else {...}, with A=true B=true C=false
+evaluated A
+evaluated B
+if-part executed
+
+if ((A && B) || C) {...} else {...}, with A=true B=true C=true
+evaluated A
+evaluated B
+if-part executed
+
+x = (A && !B) || C, with A=false B=false C=false
+evaluated A
+evaluated C
+x=false
+
+x = (A && !B) || C, with A=false B=false C=true
+evaluated A
+evaluated C
+x=true
+
+x = (A && !B) || C, with A=false B=true C=false
+evaluated A
+evaluated C
+x=false
+
+x = (A && !B) || C, with A=false B=true C=true
+evaluated A
+evaluated C
+x=true
+
+x = (A && !B) || C, with A=true B=false C=false
+evaluated A
+evaluated B
+x=true
+
+x = (A && !B) || C, with A=true B=false C=true
+evaluated A
+evaluated B
+x=true
+
+x = (A && !B) || C, with A=true B=true C=false
+evaluated A
+evaluated B
+evaluated C
+x=false
+
+x = (A && !B) || C, with A=true B=true C=true
+evaluated A
+evaluated B
+evaluated C
+x=true
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -571,18 +665,10 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+error: division by zero
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -636,18 +722,20 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+5
+garble
+true
+false
+true
+false
+Why you'd want to do this, I have no idea...
+untrue
+true
+42
+IT CAN'T BE STOPPED!
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -680,18 +768,21 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+0
+100 101 102 103 104 105 
+1
+100 101 102 103 104 105 
+2
+100 101 102 103 104 105 
+3
+100 101 102 103 104 105 
+4
+100 101 102 103 104 105 
+5
+100 101 102 103 104 105 
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -715,18 +806,12 @@ The quick brown fox jumps over the lazy dog.
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
+The quick brown fox jumps over the lazy dog.
 
+END
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -746,18 +831,36 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+*******************
+*                 *
+*  Hello, world!  *
+*                 *
+*******************
+******
+*    *
+*    *
+*    *
+******
+**********
+*        *
+*  GoLF  *
+*        *
+**********
+***************************
+*                         *
+*  Compiler Construction  *
+*  CPSC 411               *
+*                         *
+***************************
+***************************
+*                         *
+*  Computer Science       *
+*  University of Calgary  *
+*                         *
+***************************
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -777,18 +880,14 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+x	y	x / y	x % y
+5	3	1	2
+-5	3	-1	-2
+5	-3	-1	2
+-5	-3	1	-2
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -825,18 +924,119 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
+Generation 1:
+0 
+
+
+
+
+
+
+
+
+
+Generation 2:
+0 
+
+
+
+
+
+
+
+
+
+Generation 3:
+0 
+
+
+
+
+
+
+
+
+
+Generation 4:
+0 
+
+
+
+
+
+
+
+
+
+Generation 5:
+0 
+
+
+
+
+
+
+
+
+
+Generation 6:
+0 
+
+
+
+
+
+
+
+
+
+Generation 7:
+0 
+
+
+
+
+
+
+
+
+
+Generation 8:
+0 
+
+
+
+
+
+
+
+
+
+Generation 9:
+0 
+
+
+
+
+
+
+
+
+
+Generation 10:
+0 
+
+
+
+
+
+
+
+
 
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -856,18 +1056,24 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
-
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
 
 
 STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
 
 
 RETURN CODE: 0
@@ -885,23 +1091,7 @@ RETURN CODE: 0
 
 % /home/profs/aycock/411/bin/spim -file out.s
 
-STDOUT:
-Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-The following symbols are undefined:
-main
+*** TERMINATION VIA TIMEOUT
 
-
-
-STDERR:
-spim: (parser) syntax error on line 2 of file out.s
-	  program
-
-	         ^
-Instruction references undefined symbol at 0x00400014
-  [0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
-
-
-RETURN CODE: 0
-
-Run ended on Wed Apr 12 18:57:07 2023
+Run ended on Wed Apr 12 18:59:22 2023
 
