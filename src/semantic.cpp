@@ -268,6 +268,8 @@ void Semantic::pass_4() {
 							 for(auto child : ast->get_child(2)->children) {
 								 if(child->type == "return") {
 									 has_return = true;
+								 } else if(child->type == "funccall" && child->get_child(0)->attr == "halt") {
+									 has_return = true;
 								 }
 							 }
 							 if(!has_return) {
