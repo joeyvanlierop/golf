@@ -1,4 +1,4 @@
-Run started on Wed Apr 12 19:20:17 2023
+Run started on Wed Apr 12 19:30:15 2023
 
 Hostname: csx2.cs.ucalgary.ca
 
@@ -456,7 +456,6 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-OK
 
 
 STDERR:
@@ -546,7 +545,6 @@ Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 if ((A && B) || C) {...} else {...}, with A=false B=false C=false
 evaluated A
 evaluated C
-else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=false B=false C=true
 evaluated A
@@ -556,7 +554,6 @@ if-part executed
 if ((A && B) || C) {...} else {...}, with A=false B=true C=false
 evaluated A
 evaluated C
-else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=false B=true C=true
 evaluated A
@@ -567,7 +564,6 @@ if ((A && B) || C) {...} else {...}, with A=true B=false C=false
 evaluated A
 evaluated B
 evaluated C
-else-part executed
 
 if ((A && B) || C) {...} else {...}, with A=true B=false C=true
 evaluated A
@@ -686,27 +682,13 @@ Test: recursive-descent calculator |
 % ./golf /home/profs/aycock/411/TEST/final/gen.t18 > out.s
 
 STDERR:
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
 
 
-RETURN CODE: 0
+*** TERMINATION VIA SIGNAL: Aborted
 
-% /home/profs/aycock/411/bin/spim -file out.s < /home/profs/aycock/411/TEST/final/input/gen.t18.in
-
-STDIN:
-2 + 3 * 5
-(2 + 3) * 5
-(976 - -24 + 123 - 1000) * 100 + 45
-
-
-STDOUT:
-Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-error: division by zero
-
-
-STDERR:
-
-
-RETURN CODE: 0
+(GoLF compiler unsuccessful, skipping test)
 
 -------------------------------------------------------------------------------
 Test: string operations |
@@ -730,7 +712,16 @@ yawn: len("boring string") = 13, correct answer is 13
 string with \n: len("Hello, world!
 ") = 14, correct answer is 14
 silly string: len("\"escape th	n(") = 16, correct answer is 16
-error: function 'planet' must return a value
+HEarth
+Hello, world!
+correct
+correct
+correct
+correct
+correct
+correct
+correct
+correct
 
 
 STDERR:
@@ -780,9 +771,25 @@ Test: register blow-out |
 STDERR:
 
 
-RETURN CODE: 1
+RETURN CODE: 0
 
-(GoLF compiler unsuccessful, skipping test)
+% /home/profs/aycock/411/bin/spim -file out.s
+
+STDOUT:
+Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+The following symbols are undefined:
+halt
+
+
+
+STDERR:
+spim: (parser) syntax error on line 31 of file out.s
+	  li $s9,20
+	     ^
+Attempt to execute non-instruction at 0x00400084
+
+
+RETURN CODE: 0
 
 -------------------------------------------------------------------------------
 Test: nested "for" loops |
@@ -938,46 +945,46 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXX
-XXXX    XXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 STDERR:
@@ -1001,115 +1008,115 @@ RETURN CODE: 0
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
 Generation 1:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 2:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 3:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 4:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 5:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 6:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 7:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 8:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 9:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 Generation 10:
-0 
-
-
-
-
-
-
-
-
-
+0 1 1 0 0 0 1 0 1 0 
+0 0 1 0 0 0 1 0 1 0 
+0 1 0 1 1 1 1 0 0 0 
+0 0 0 1 0 0 1 0 0 0 
+0 0 1 0 0 0 0 0 0 0 
+0 0 1 1 1 1 1 1 0 0 
+0 1 1 0 0 1 1 0 1 0 
+0 0 0 0 1 0 1 1 0 0 
+0 0 1 1 0 0 0 1 0 1 
+0 0 1 0 1 1 0 0 0 1 
 
 
 STDERR:
@@ -1132,21 +1139,21 @@ RETURN CODE: 0
 
 STDOUT:
 Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
-30 
+30 23 4 9 86 63 48 61 98 39 8 73 18 35 0 
+0 23 4 9 86 63 48 61 98 39 8 73 18 35 30 
+0 4 23 9 86 63 48 61 98 39 8 73 18 35 30 
+0 4 8 9 86 63 48 61 98 39 23 73 18 35 30 
+0 4 8 9 86 63 48 61 98 39 23 73 18 35 30 
+0 4 8 9 18 63 48 61 98 39 23 73 86 35 30 
+0 4 8 9 18 23 48 61 98 39 63 73 86 35 30 
+0 4 8 9 18 23 30 61 98 39 63 73 86 35 48 
+0 4 8 9 18 23 30 35 98 39 63 73 86 61 48 
+0 4 8 9 18 23 30 35 39 98 63 73 86 61 48 
+0 4 8 9 18 23 30 35 39 48 63 73 86 61 98 
+0 4 8 9 18 23 30 35 39 48 61 73 86 63 98 
+0 4 8 9 18 23 30 35 39 48 61 63 86 73 98 
+0 4 8 9 18 23 30 35 39 48 61 63 73 86 98 
+0 4 8 9 18 23 30 35 39 48 61 63 73 86 98 
 
 
 STDERR:
@@ -1167,7 +1174,40 @@ RETURN CODE: 0
 
 % /home/profs/aycock/411/bin/spim -file out.s
 
-*** TERMINATION VIA TIMEOUT
+STDOUT:
+Loaded: /home/profs/aycock/411/sw/share/spim/exceptions.s
+2
+3
+5
+7
+11
+13
+17
+19
+23
+29
+31
+37
+41
+43
+47
+53
+59
+61
+67
+71
+73
+79
+83
+89
+97
+25 prime numbers <= 100
 
-Run ended on Wed Apr 12 19:20:28 2023
+
+STDERR:
+
+
+RETURN CODE: 0
+
+Run ended on Wed Apr 12 19:30:18 2023
 
