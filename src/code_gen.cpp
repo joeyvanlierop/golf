@@ -87,8 +87,8 @@ std::string alloc_reg(){
 	}
 
 	else {
-		std::cout << "error: not enough free registers" << std::endl;
-		exit(0);
+		std::cerr << "error: not enough free registers" << std::endl;
+		exit(1);
 	}
 }
 
