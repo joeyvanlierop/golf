@@ -327,11 +327,9 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 	}
 
 	else if (ast->type == "u-") {
-		auto reg = alloc_reg();
-		ast->reg = reg;
-
 		gen_pass_1(ast->get_child(0));
 		emit("    negu " + ast->get_child(0)->reg + "," + ast->get_child(0)->reg);
+		ast->reg = ast->get_child(0)->reg;
 	}
 
 	else if (ast->type == "string") {
