@@ -620,6 +620,7 @@ void generate_code(AST *root) {
 	printc();
 	len();
 	divmodchk();
+	error();
 
 	// String tomfoolery
 	gen_pass_2();
