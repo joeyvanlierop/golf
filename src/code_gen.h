@@ -63,3 +63,4 @@ void printb();
 void printc();
 void len();
 void divmodchk();
+void error();

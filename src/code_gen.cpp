@@ -62,6 +62,7 @@ std::map<std::string, bool> redefined = {
 		{"printi", false},
 		{"prints", false},
 		{"divmodchk", false},
+		{"error", false},
 };
 
 
@@ -160,6 +161,16 @@ void gen_pass_1(AST *ast, bool in_call = false) {
 
 		// Body
 		gen_pass_1(ast->get_child(2));
+
+		// Return validation
+		if(ast->get_child(1)->get_child(1)->attr != "void") {
+			auto error_string = "error: function " + ast->get_child(0)->attr + "must return a value";
+			auto error_string_global = StrGlobal();
+			string_to_global[error_string] = error_string_global.to_string();
+			global_to_string[error_string_global.to_string()] = error_string;
+			emit("    la $a0," + error_string_global.to_string());
+			emit("    j error");
+		}
 
 		// Epilogue
 		emit(ast->get_child(0)->attr + "_epilogue:");
@@ -756,4 +767,14 @@ void divmodchk(){
 	emit("    lw $ra,0($sp)");
 	emit("    addu $sp,$sp,12");
 	emit("    jr $ra ");
+}
+
+void error(){
+	if(redefined["error"])
+		return;
+
+	emit("error:");
+	emit("    li $v0,4");
+	emit("    syscall");
+	emit("    j halt");
 }

@@ -262,20 +262,6 @@ void Semantic::pass_4() {
 							 unreturned = ast->get_child(1)->get_child(1)->attr;
 							 if(unreturned == "string")
 								 unreturned = "str";
-
-							 // Ensure there is at least 1 return statement in the body
-							 auto has_return = false;
-							 for(auto child : ast->get_child(2)->children) {
-								 if(child->type == "return") {
-									 has_return = true;
-								 } else if(child->type == "funccall" && child->get_child(0)->attr == "halt") {
-									 has_return = true;
-								 }
-							 }
-							 if(!has_return) {
-								 Logger::error(input, ast->line, ast->column, ast->attr.length(),
-											   "function must return a value");
-							 }
 						 }
 					 } else if (ast->type == "return") {
 						 if (unreturned == "" && ast->children.size() > 0) {
