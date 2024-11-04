@@ -100,4 +100,4 @@ GoLF programs get executed in four separate steps: lexing, parsing, semantic ana
 
 - [**Semantic Analysis**](./src/semantic.cpp): Performs a series of checks on the abstract syntax tree to ensure that it conforms to the rules of the programming language, such as type checking, scoping, and name resolution.
 
-- [**Code Generation**](./src/code-gen.cpp): Transforms the abstract syntax tree into executable code, generating machine instructions or bytecode for a virtual machine.
+- [**Code Generation**](./src/code_gen.cpp): Transforms the abstract syntax tree into executable code, generating machine instructions or bytecode for a virtual machine.
